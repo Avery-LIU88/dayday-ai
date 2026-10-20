@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "知更 AI · 少一点噪声，多一点洞见",
-  description: "在一个地方阅读 AI 资讯、发现深度节目、追踪值得关注的更新。",
+  title: "DayDay AI · 每天一点，跟上 AI。",
+  description: "免费，无需注册。聚合 AI 公司动态、论文、媒体、Newsletter、开发者平台和行业事件。",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",

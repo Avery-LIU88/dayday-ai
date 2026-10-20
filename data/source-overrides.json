@@ -1,0 +1,11 @@
+{
+  "sensetime": {
+    "adapter": "html",
+    "feed": "https://www.sensetime.com/cn/news",
+    "linkPattern": "/(?:news|blog|articles?|posts?|research|insights|content|info)/.+|/\\d{4}/\\d{2}/"
+  },
+  "information": {
+    "adapter": "rss",
+    "feed": "https://www.theinformation.com/feed"
+  }
+}

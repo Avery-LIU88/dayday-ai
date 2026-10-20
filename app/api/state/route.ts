@@ -1,7 +1,3 @@
-import { snapshot } from "../../../lib/store";
-import { getChatGPTUser } from "../../chatgpt-auth";
-export const dynamic = "force-dynamic";
-export async function GET() {
-  const [data,user]=await Promise.all([snapshot(),getChatGPTUser()]);
-  return Response.json({...data,user:user?.email??null},{headers:{"Cache-Control":"no-store"}});
-}
+import {publicState} from '../../../lib/news-store';
+export const dynamic='force-dynamic';
+export async function GET(){return Response.json(await publicState(),{headers:{'Cache-Control':'public, max-age=60, stale-while-revalidate=120'}});}
