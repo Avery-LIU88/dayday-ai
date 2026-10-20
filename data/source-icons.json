@@ -363,5 +363,40 @@
     "path": "/source-icons/sequoia.png",
     "source": "https://framerusercontent.com/images/ItZ3Og0z4GahXe5uWHqwk69EPRw.png",
     "website": "https://www.sequoiacap.com/"
+  },
+  "sail": {
+    "path": "/source-icons/sail.png",
+    "source": "https://ai.stanford.edu/blog/assets/img/favicon-32x32.png",
+    "website": "https://ai.stanford.edu/blog/"
+  },
+  "openai": {
+    "path": "/source-icons/openai.png",
+    "source": "https://github.com/openai.png",
+    "website": "https://github.com/openai"
+  },
+  "microsoft": {
+    "path": "/source-icons/microsoft.png",
+    "source": "https://github.com/microsoft.png",
+    "website": "https://github.com/microsoft"
+  },
+  "information": {
+    "path": "/source-icons/information.png",
+    "source": "https://www.google.com/s2/favicons?sz=128&domain_url=https://www.theinformation.com/",
+    "website": "https://www.theinformation.com/"
+  },
+  "infoq": {
+    "path": "/source-icons/infoq.png",
+    "source": "https://www.google.com/s2/favicons?sz=128&domain_url=https://www.infoq.cn/",
+    "website": "https://www.infoq.cn/"
+  },
+  "ft": {
+    "path": "/source-icons/ft.png",
+    "source": "https://www.google.com/s2/favicons?sz=128&domain_url=https://www.ft.com/artificial-intelligence",
+    "website": "https://www.ft.com/artificial-intelligence"
+  },
+  "geekpark": {
+    "path": "/source-icons/geekpark.png",
+    "source": "https://www.google.com/s2/favicons?sz=128&domain_url=https://www.geekpark.net/",
+    "website": "https://www.geekpark.net/"
   }
 }
