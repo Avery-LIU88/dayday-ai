@@ -405,16 +405,14 @@
     "publisher": "techweb",
     "section": "媒体资讯",
     "website": "https://www.techweb.com.cn/",
-    "feed": "https://www.techweb.com.cn/",
-    "adapter": "html",
+    "feed": "https://www.techweb.com.cn/rss/hotnews.xml",
+    "adapter": "rss",
     "kind": "news",
     "language": "en",
     "primary": false,
     "scope": "截图指定",
     "filterAI": true,
-    "notice": "",
-    "linkPattern": "/\\d{4}-\\d{2}-\\d{2}/\\d+\\.shtml$",
-    "maxArticles": 10
+    "notice": "官网订阅中心公布的每日热点 RSS；筛选 AI 相关内容"
   },
   {
     "id": "sspai",
@@ -624,7 +622,7 @@
     "primary": false,
     "scope": "截图指定",
     "filterAI": false,
-    "notice": "与用户 Dify 一致的官方 AI 专栏 RSS；请求限流时保留历史内容",
+    "notice": "与用户 Dify 一致的官方 AI 专栏 RSS；当前返回 HTTP 429 访问验证页，尚未稳定接通",
     "readerHeaders": true
   },
   {

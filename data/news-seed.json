@@ -1,6 +1,26 @@
 {
-  "collectedAt": "2026-10-20T09:29:17.506Z",
+  "collectedAt": "2026-10-20T09:34:54.711Z",
   "entries": [
+    {
+      "id": "ca1597b3c1295b91a01f722a",
+      "kind": "article",
+      "sourceId": "techweb",
+      "source": "TechWeb",
+      "title": "DeepSeek又放大招：全面开源大规模云服务推理框架DeepInfer",
+      "summary": "【TechWeb】10月20日消息，刚刚，DeepSeek宣布， 正式开源大规模云服务推理框架 DeepInfer。 DeepSeek表示，自身长期致力于将推理性能推向极致。在此前开源一系列大模型、TileLang 编译工具及推理算子库的基础上，决定进一步 将内部推理框架 DeepInfer 全面开源 。 基于 DeepInfer，DeepSeek已实现 DeepSeek V4.1 Flash 高吞吐、低延迟的大规模推理服务。 目前单一集群的服务吞吐是 155 万亿 Tokens/天，整体收入是每卡每小时 38 美金（按谷价）。 未来，DeepSeek 新模型的推理代码及后续优化也将在此持续更新。",
+      "url": "http://www.techweb.com.cn/it/2026-10-20/2979874.shtml",
+      "publishedAt": "2026-10-20T09:19:21.000Z",
+      "category": "媒体资讯",
+      "topics": [
+        "媒体资讯"
+      ],
+      "language": "en",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "果青",
+      "identity": "http://www.techweb.com.cn/it/2026-10-20/2979874.shtml"
+    },
     {
       "id": "b82c8b7033d8640b158f3ca2",
       "kind": "article",
@@ -222,6 +242,27 @@
       "identity": "https://36kr.com/p/4033878983414917?f=rss"
     },
     {
+      "id": "ad23d94ee3ec490f6f855d57",
+      "kind": "article",
+      "sourceId": "techweb",
+      "source": "TechWeb",
+      "title": "OpenAI奥特曼向员工阐述AI安全三种路径，称算力垄断“糟透了”",
+      "summary": "【TechWeb】10月20日消息，据外媒报道，消息人士透露，OpenAI首席执行官萨姆·奥特曼（Sam Altman）上周向员工介绍了当前行业内部讨论的三种人工智能安全发展方案，并明确表达了自己的倾向。这三种方案分别从全球协同监管、顶尖实验室合并到极端的算力垄断，勾勒出AI治理的不同“终局”。 方案一：建立IAEA式的国际监管机构 这是奥特曼本人最倾向的方案。其核心是仿效国际原子能机构（IAEA），建立一个国际组织来强制执行AI安全标准。具体运作方式为：由各国政府与AI企业共同制定安全标准，并在高性能AI模型发布前进行独立的核查与审计。报道指出，奥特曼对此路线表达了最多的支持。",
+      "url": "http://www.techweb.com.cn/it/2026-10-20/2979871.shtml",
+      "publishedAt": "2026-10-20T08:11:16.000Z",
+      "category": "政策监管",
+      "topics": [
+        "媒体资讯",
+        "政策监管"
+      ],
+      "language": "en",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "泽端",
+      "identity": "http://www.techweb.com.cn/it/2026-10-20/2979871.shtml"
+    },
+    {
       "id": "02facf4f538dd03357fac95f",
       "kind": "article",
       "sourceId": "36kr",
@@ -408,6 +449,27 @@
       "color": "#a8d5bc",
       "byline": "格隆汇",
       "identity": "https://36kr.com/p/4033768111068288?f=rss"
+    },
+    {
+      "id": "770df7c5cbb10e60c7fda952",
+      "kind": "article",
+      "sourceId": "techweb",
+      "source": "TechWeb",
+      "title": "为什么不能让ChatGPT当医生？",
+      "summary": "“2026可持续全球领导者大会”于10月20日-22日在上海召开。2007年图灵奖得主，Verimag实验室创始人约瑟夫·斯发基斯（Joseph Sifakis）出席并演讲。 当前，AI智能体正快速进步，甚至在某些任务上面的表现优于人类。AI不仅有能力自我改进，甚至还能够逃离测试环境，进行大规模网络攻击。 约瑟夫·斯发基斯表示，随着超级智能形成了某种深化叙事，人们开始担心这些系统可能会超出授权范围，转而追求自身的生存和支配地位。所以，人类需要去理解AI的自我能力进化的意义和作用，以及其带来的风险和收益。 约瑟夫·斯发基斯指出，“自主性”是指有目的的采取行动，这是生命体所具有的特征。",
+      "url": "http://www.techweb.com.cn/it/2026-10-20/2979867.shtml",
+      "publishedAt": "2026-10-20T07:31:19.000Z",
+      "category": "线下活动",
+      "topics": [
+        "媒体资讯",
+        "线下活动"
+      ],
+      "language": "en",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "",
+      "identity": "http://www.techweb.com.cn/it/2026-10-20/2979867.shtml"
     },
     {
       "id": "2186f1fb4d4e57988fb0198f",
@@ -634,6 +696,26 @@
       "color": "#2563eb"
     },
     {
+      "id": "0c56e984579f2ddcafa18dff",
+      "kind": "article",
+      "sourceId": "techweb",
+      "source": "TechWeb",
+      "title": "QuestMobile 9月办公类Agent月活用户前三：WorkBuddy、百度搭子、千问办公",
+      "summary": "【TechWeb】10月20日消息，QuestMobile数据显示，2026年9月，综合助手、效率办公以及生活助手三个赛道合计用户规模分别为11.57亿，1.42亿和3.47亿；较去年同期+44.0%，+50.6%和+55.0%； 报告认为，AI“分水岭”在2026年已经形成，“办公”和“生活”也成了截然不同的两条发展线。QuestMobile数据显示，截止到2026年9月，AI综合助手用户规模达到11.57亿，同比增长44%。",
+      "url": "http://www.techweb.com.cn/it/2026-10-20/2979859.shtml",
+      "publishedAt": "2026-10-20T06:07:12.000Z",
+      "category": "媒体资讯",
+      "topics": [
+        "媒体资讯"
+      ],
+      "language": "en",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "宜月",
+      "identity": "http://www.techweb.com.cn/it/2026-10-20/2979859.shtml"
+    },
+    {
       "id": "f99707ce94c38da1a34e8063",
       "kind": "article",
       "sourceId": "information",
@@ -731,6 +813,27 @@
       "duration": null,
       "artwork": "",
       "color": "#2563eb"
+    },
+    {
+      "id": "0145923100018ad47f6de08f",
+      "kind": "article",
+      "sourceId": "techweb",
+      "source": "TechWeb",
+      "title": "黄仁勋伦敦“开炮”：德国在AI竞赛中“落后太远”，痛心之余开出“简单药方”",
+      "summary": "【TechWeb】10月19日消息，就在德国总理默茨准备在柏林“投资德国峰会”上铺开红毯迎接全球科技领袖之际，英伟达首席执行官黄仁勋先给德国送去了一盆冷水。当地时间10月19日，多家德国媒体援引黄仁勋上周在伦敦对记者发表的言论报道称，这位全球市值最高公司的掌门人直言，德国在人工智能领域已经“落后太远”，并坦言目睹一个技术强国如此掉队，令他“无比痛心”。 “没有什么比看到世界上最先进的技术国家之一在技术上落后如此之远，更让我痛心的事了。”黄仁勋的这番话被录制成视频，在柏林峰会前夕于社交媒体上迅速传播。他进一步将矛头指向欧洲的决策文化，认为问题的症结在于“欧洲人做事的方式，可能把所有事情都想得太复杂了”。",
+      "url": "http://www.techweb.com.cn/it/2026-10-20/2979858.shtml",
+      "publishedAt": "2026-10-20T05:24:39.000Z",
+      "category": "线下活动",
+      "topics": [
+        "媒体资讯",
+        "线下活动"
+      ],
+      "language": "en",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "泽端",
+      "identity": "http://www.techweb.com.cn/it/2026-10-20/2979858.shtml"
     },
     {
       "id": "2a3194139810643d198f18ed",
@@ -1016,6 +1119,27 @@
       "identity": "https://www.tmtpost.com/8173268.html"
     },
     {
+      "id": "4609172750c7e0af574b8fe7",
+      "kind": "article",
+      "sourceId": "techweb",
+      "source": "TechWeb",
+      "title": "新石器完成E轮4亿美元融资 累计融资已超百亿元",
+      "summary": "【TechWeb】10月20日消息，新石器宣布完成E轮4亿美元融资。高鹄资本担任本轮融资独家财务顾问。 据新石器披露，本轮融资由博裕投资与某国家级基金联合领投，阿里巴巴AEF NextGen香港基金、Monolith砺思资本、纪源资本、淡马锡旗下Vertex Growth、华映资本、广汽资本、金鼎资本、朗玛峰创投、正大机器人、领航新界、高鹄资本等机构参与投资，磊石资本（Stone Venture）、软银亚洲、亦庄国投、高榕创投等早期及长期股东继续跟投。 市场消息透露该国字头基金系国家人工智能产业投资基金，本次融资也是国家人工智能产业投资基金首次出手投资无人配送赛道企业。",
+      "url": "http://www.techweb.com.cn/internet/2026-10-20/2979856.shtml",
+      "publishedAt": "2026-10-20T03:52:44.000Z",
+      "category": "投融资",
+      "topics": [
+        "媒体资讯",
+        "投融资"
+      ],
+      "language": "en",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "周小白",
+      "identity": "http://www.techweb.com.cn/internet/2026-10-20/2979856.shtml"
+    },
+    {
       "id": "7c8f02349fb079563fd34934",
       "kind": "article",
       "sourceId": "tmtpost",
@@ -1276,6 +1400,26 @@
       "color": "#a8d5bc",
       "byline": "Rebecca Bellan",
       "identity": "https://techcrunch.com/2026/10/19/mamdani-says-feds-have-abdicated-on-ai-urges-new-yorkers-to-push-back/"
+    },
+    {
+      "id": "c64ede542c591ea1e157ad7b",
+      "kind": "article",
+      "sourceId": "techweb",
+      "source": "TechWeb",
+      "title": "马斯克又整活：送全美孩子人手一股SpaceX，百亿美元只是开场",
+      "summary": "【TechWeb】10月20日消息，当地时间10月19日，埃隆·马斯克在社交平台X上轻描淡写地宣布：“明年，我将向美国每一个孩子赠送一股我持有的SpaceX股票。这将是一系列行动中的第一步。”没有冗长的新闻稿，没有复杂的申请流程，甚至没有一句“请点击链接了解更多”，世界首富的赠予宣言，简洁得就像在群里发了一个红包。 这场“赠股秀”的时间点，精准得像精心编排过的剧本。就在前一天，AI公司Anthropic宣布将拿出5%的股份装入一个公益基金，用于社会捐赠。马斯克闻讯赶到评论区，留下一句“我建议直接把股份分给公众”，然后隔天就用行动把这句建议升级成了自己的头条。",
+      "url": "http://www.techweb.com.cn/it/2026-10-20/2979850.shtml",
+      "publishedAt": "2026-10-20T01:22:02.000Z",
+      "category": "媒体资讯",
+      "topics": [
+        "媒体资讯"
+      ],
+      "language": "en",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "泽端",
+      "identity": "http://www.techweb.com.cn/it/2026-10-20/2979850.shtml"
     },
     {
       "id": "6765dde3c32bd8c032818bc0",
@@ -4679,6 +4823,27 @@
       "identity": "https://www.leiphone.com/category/zaobao/DlLESyleeLkyq5Dy.html"
     },
     {
+      "id": "47daa0686c45816b6f111c2b",
+      "kind": "article",
+      "sourceId": "techweb",
+      "source": "TechWeb",
+      "title": "155款App集体说“不”，豆包手机助手为何处处碰壁？",
+      "summary": "【TechWeb】近日，豆包手机助手被超百款App“集体拒绝”的消息引发广泛关注。所谓“拒绝”，并非指这些App无法在豆包手机上运行，而是它们禁止豆包手机助手代替用户对应用进行自动化操控。 这项看似便捷的AI功能，为何遭遇各大App的联手抵制？ 有分析指出，这实际上是AI走向真正落地过程中必然出现的产业碰撞。任何新技术的发展都离不开标准规范的建立与多方协作，行业各方都需要共同“摸着石头过河”。如何在打破生态壁垒的同时守住安全底线，既是技术演进的必经之路，也是迈向智能体时代之前，全行业与监管者必须共同解答的一道考题。",
+      "url": "http://www.techweb.com.cn/it/2026-10-19/2979816.shtml",
+      "publishedAt": "2026-10-19T01:18:52.000Z",
+      "category": "政策监管",
+      "topics": [
+        "媒体资讯",
+        "政策监管"
+      ],
+      "language": "en",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "Suky",
+      "identity": "http://www.techweb.com.cn/it/2026-10-19/2979816.shtml"
+    },
+    {
       "id": "1b072ed54ef7e0540b3fd534",
       "kind": "article",
       "sourceId": "geekpark",
@@ -6076,6 +6241,26 @@
       "color": "#a8d5bc",
       "byline": "Azeem Azhar",
       "identity": "https://www.exponentialview.co/p/ev-606"
+    },
+    {
+      "id": "b9298650a5b80f545d1dd6d0",
+      "kind": "article",
+      "sourceId": "techweb",
+      "source": "TechWeb",
+      "title": "英特尔陈立武：美中芯片各有优劣势 差距没想象大",
+      "summary": "快科技10月18日消息， 英特尔CEO陈立武在接受专访时指出，美国政府虽然在英特尔持有少数股权，但对公司治理并无任何影响。他还提到，英特尔的重组工作已完成8成，至于美中芯片差距并没有想象中那么大。 陈立武强调，美国政府并没有利用其少数股权干预英特尔的商业策略，并坚称公司依然保有独立性。 去年，美国政府将此前拨付的联邦资金转为对英特尔89亿美元的投资，从而获得该公司9.9%的股权。今年8月，英特尔进行二次股票发行后，美国政府持股比例被稀释至约8.2%。 英特尔一直在努力重振其先进半导体制造业务。 目前，英特尔在芯片制造领域落后于台积电，在用于AI系统的半导体设计方面落后于英伟达等美国竞争对手。",
+      "url": "http://www.techweb.com.cn/it/2026-10-18/2979803.shtml",
+      "publishedAt": "2026-10-18T03:17:51.000Z",
+      "category": "媒体资讯",
+      "topics": [
+        "媒体资讯"
+      ],
+      "language": "en",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "鹿角",
+      "identity": "http://www.techweb.com.cn/it/2026-10-18/2979803.shtml"
     },
     {
       "id": "2b4e0c517778aaf2fb0400f0",
@@ -24382,10 +24567,10 @@
     {
       "id": "techweb",
       "ok": true,
-      "count": 3,
-      "rawCount": 10,
-      "checkedAt": "2026-10-20T07:31:11.930Z",
-      "lastSuccessAt": "2026-10-20T07:31:11.930Z"
+      "count": 9,
+      "rawCount": 27,
+      "checkedAt": "2026-10-20T09:34:54.542Z",
+      "lastSuccessAt": "2026-10-20T09:34:54.542Z"
     },
     {
       "id": "geekpark",
