@@ -26,6 +26,8 @@ add(company,'baidu','百度','https://yiyan.baidu.com/','',{primary:true});
 add(company,'minimax','MiniMax','https://www.minimax.io/news','',{primary:true,language:'en'});
 add(company,'stepfun','阶跃星辰','https://www.stepfun.com/','',{primary:true});
 add(company,'sensetime','商汤科技','https://www.sensetime.com/cn/news','',{primary:true});
+add(company,'xai-updates','xAI · 产品更新','https://docs.x.ai/developers/release-notes','https://docs.x.ai/developers/release-notes',{adapter:'xai-updates',publisher:'xai',primary:true,language:'en',scope:'截图公司官方更新端点',notice:'官方产品更新日志；新闻 Blog 仍单独核验'});
+add(company,'zai-updates','智谱 Z.ai · 产品更新','https://docs.z.ai/release-notes/new-released','https://docs.z.ai/release-notes/new-released.md',{adapter:'zai-updates',publisher:'zai',primary:true,language:'en',scope:'截图公司官方更新端点',notice:'官方产品发布日志；Blog 仍单独核验'});
 
 const media='媒体资讯';
 const mediaRows=[

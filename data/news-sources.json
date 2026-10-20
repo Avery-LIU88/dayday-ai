@@ -111,13 +111,14 @@
     "name": "月之暗面",
     "publisher": "moonshot",
     "section": "公司动态",
-    "website": "https://www.kimi.com/",
-    "feed": "",
-    "adapter": "directory",
+    "website": "https://www.kimi.com/en/blog/",
+    "feed": "https://www.kimi.com/en/blog/",
+    "adapter": "kimi",
     "kind": "news",
-    "language": "zh",
+    "language": "en",
     "primary": true,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "notice": "官方研究博客；文章标题、日期与原文入口"
   },
   {
     "id": "zai",
@@ -138,12 +139,13 @@
     "publisher": "bytedance",
     "section": "公司动态",
     "website": "https://seed.bytedance.com/zh/",
-    "feed": "",
-    "adapter": "directory",
+    "feed": "https://seed.bytedance.com/zh/",
+    "adapter": "seed-list",
     "kind": "news",
     "language": "zh",
     "primary": true,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "notice": "Seed 官网最新动态；不等于字节全部业务"
   },
   {
     "id": "alibaba",
@@ -163,13 +165,14 @@
     "name": "腾讯",
     "publisher": "tencent",
     "section": "公司动态",
-    "website": "https://hunyuan.tencent.com/",
-    "feed": "",
-    "adapter": "directory",
+    "website": "https://hunyuan.tencent.com/blog",
+    "feed": "https://api.hunyuan.tencent.com/api/blog/publicList",
+    "adapter": "tencent-blog",
     "kind": "news",
     "language": "zh",
     "primary": true,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "notice": "混元官方公开研究博客接口；不等于腾讯全部业务"
   },
   {
     "id": "baidu",
@@ -182,7 +185,8 @@
     "kind": "news",
     "language": "zh",
     "primary": true,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "notice": "文心官网为动态页面；另查百度研究院官网显示维护中，现仅官方模型记录"
   },
   {
     "id": "minimax",
@@ -203,13 +207,14 @@
     "name": "阶跃星辰",
     "publisher": "stepfun",
     "section": "公司动态",
-    "website": "https://www.stepfun.com/",
-    "feed": "",
-    "adapter": "directory",
+    "website": "https://www.stepfun.com/news",
+    "feed": "https://www.stepfun.com/news",
+    "adapter": "stepfun",
     "kind": "news",
     "language": "zh",
     "primary": true,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "notice": "官网公开新闻数据；自动定位当前数据文件，不执行网页脚本"
   },
   {
     "id": "sensetime",
@@ -224,6 +229,34 @@
     "primary": true,
     "scope": "截图指定",
     "linkPattern": "/(?:news|blog|articles?|posts?|research|insights|content|info)/.+|/\\d{4}/\\d{2}/"
+  },
+  {
+    "id": "xai-updates",
+    "name": "xAI · 产品更新",
+    "publisher": "xai",
+    "section": "公司动态",
+    "website": "https://docs.x.ai/developers/release-notes",
+    "feed": "https://docs.x.ai/developers/release-notes",
+    "adapter": "xai-updates",
+    "kind": "news",
+    "language": "en",
+    "primary": true,
+    "scope": "截图公司官方更新端点",
+    "notice": "官方产品更新日志；新闻 Blog 仍单独核验"
+  },
+  {
+    "id": "zai-updates",
+    "name": "智谱 Z.ai · 产品更新",
+    "publisher": "zai",
+    "section": "公司动态",
+    "website": "https://docs.z.ai/release-notes/new-released",
+    "feed": "https://docs.z.ai/release-notes/new-released.md",
+    "adapter": "zai-updates",
+    "kind": "news",
+    "language": "en",
+    "primary": true,
+    "scope": "截图公司官方更新端点",
+    "notice": "官方产品发布日志；Blog 仍单独核验"
   },
   {
     "id": "36kr",
@@ -291,14 +324,16 @@
     "publisher": "latepost",
     "section": "媒体资讯",
     "website": "https://www.latepost.com/",
-    "feed": "",
-    "adapter": "directory",
+    "feed": "https://www.latepost.com/news/get-news-data",
+    "adapter": "latepost-api",
     "kind": "news",
     "language": "zh",
     "primary": false,
     "scope": "截图指定",
     "filterAI": true,
-    "notice": ""
+    "notice": "公开新闻列表接口＋文章页原始发布日期",
+    "linkPattern": "^/news/dj_detail$",
+    "maxArticles": 6
   },
   {
     "id": "jazzyear",
@@ -306,14 +341,16 @@
     "publisher": "jazzyear",
     "section": "媒体资讯",
     "website": "https://www.jazzyear.com/",
-    "feed": "",
-    "adapter": "directory",
+    "feed": "https://www.jazzyear.com/",
+    "adapter": "html",
     "kind": "news",
     "language": "zh",
     "primary": false,
     "scope": "截图指定",
     "filterAI": true,
-    "notice": ""
+    "notice": "",
+    "linkPattern": "^/article_info\\.html$",
+    "maxArticles": 12
   },
   {
     "id": "jiqizhixin",
@@ -328,7 +365,7 @@
     "primary": false,
     "scope": "截图指定",
     "filterAI": false,
-    "notice": ""
+    "notice": "原 RSS 入口返回数据服务介绍；需核实官方订阅授权方式"
   },
   {
     "id": "qbit",
@@ -350,15 +387,15 @@
     "name": "新智元",
     "publisher": "xinzhiyuan",
     "section": "媒体资讯",
-    "website": "https://www.ai-era.com/",
-    "feed": "",
-    "adapter": "directory",
+    "website": "https://www.aiera.com.cn/",
+    "feed": "https://www.aiera.com.cn/asi-articles.html",
+    "adapter": "aiera",
     "kind": "news",
     "language": "zh",
     "primary": false,
     "scope": "截图指定",
-    "filterAI": true,
-    "notice": ""
+    "filterAI": false,
+    "notice": "已更正官网；公开文章目录标题、日期与摘要"
   },
   {
     "id": "techweb",
@@ -366,14 +403,16 @@
     "publisher": "techweb",
     "section": "媒体资讯",
     "website": "https://www.techweb.com.cn/",
-    "feed": "https://www.techweb.com.cn/rss/all.xml",
-    "adapter": "rss",
+    "feed": "https://www.techweb.com.cn/",
+    "adapter": "html",
     "kind": "news",
     "language": "en",
     "primary": false,
     "scope": "截图指定",
     "filterAI": true,
-    "notice": ""
+    "notice": "",
+    "linkPattern": "/\\d{4}-\\d{2}-\\d{2}/\\d+\\.shtml$",
+    "maxArticles": 10
   },
   {
     "id": "sspai",
@@ -820,7 +859,8 @@
     "kind": "news",
     "language": "en",
     "primary": false,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "notice": "原域名当前跳转 Hugging Face Papers；本站已另接 HF 每日论文，不重复计数"
   },
   {
     "id": "scholar",
@@ -841,12 +881,13 @@
     "publisher": "semantic",
     "section": "论文与研究",
     "website": "https://www.semanticscholar.org/",
-    "feed": "",
-    "adapter": "directory",
+    "feed": "https://api.semanticscholar.org/graph/v1/paper/search/bulk?query=artificial%20intelligence&fields=title,url,publicationDate,abstract&sort=publicationDate:desc",
+    "adapter": "semantic",
     "kind": "news",
     "language": "en",
     "primary": false,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "notice": "公开论文检索 API；AI 关键词结果，非平台全量"
   },
   {
     "id": "aipapers",
@@ -854,12 +895,13 @@
     "publisher": "aipapers",
     "section": "论文与研究",
     "website": "https://aipapers.ai/",
-    "feed": "",
-    "adapter": "directory",
+    "feed": "https://aipapers.ai/blogs",
+    "adapter": "aipapers-list",
     "kind": "news",
     "language": "en",
     "primary": false,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "notice": "公开学术简报标题、日期与链接，内容为二次整理"
   },
   {
     "id": "sail",
@@ -950,7 +992,8 @@
     "kind": "news",
     "language": "en",
     "primary": true,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "notice": "论文目录含会议月份而非统一发布日期，尚未作为实时新闻源启用"
   },
   {
     "id": "mit",
@@ -1008,16 +1051,18 @@
   },
   {
     "id": "thu-dai",
-    "name": "清华 · 戴琼海相关实验室",
+    "name": "清华 · 成像与智能技术实验室",
     "publisher": "thu-dai",
     "section": "论文与研究",
-    "website": "",
-    "feed": "",
-    "adapter": "directory",
+    "website": "https://media.au.tsinghua.edu.cn/cn/xwtz/xw.htm",
+    "feed": "https://media.au.tsinghua.edu.cn/cn/xwtz/xw.htm",
+    "adapter": "html",
     "kind": "news",
     "language": "zh",
     "primary": true,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "linkPattern": "/info/1016/\\d+\\.htm$",
+    "notice": "戴琼海相关实验室官方新闻"
   },
   {
     "id": "pku-wang",
@@ -1025,25 +1070,30 @@
     "publisher": "pku-wang",
     "section": "论文与研究",
     "website": "https://www.wict.pku.edu.cn/",
-    "feed": "",
-    "adapter": "directory",
+    "feed": "https://www.wict.pku.edu.cn/",
+    "adapter": "html",
     "kind": "news",
     "language": "zh",
     "primary": true,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "linkPattern": "^/xwgg/xwdt/\\d{4}/[^/]+\\.htm$",
+    "maxArticles": 8,
+    "filterAI": true,
+    "notice": "王选所官网动态，筛选 AI 相关研究"
   },
   {
     "id": "pku-lin",
     "name": "北大 · 林宙辰相关研究",
     "publisher": "pku-lin",
     "section": "论文与研究",
-    "website": "",
+    "website": "https://www.ai.pku.edu.cn/kxyj1/tyrgznyjs/jqxxyznkxllyjzx.htm",
     "feed": "",
     "adapter": "directory",
     "kind": "news",
     "language": "zh",
     "primary": true,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "notice": "已确认林宙辰相关研究中心，当前为机构介绍页，尚无独立更新源"
   },
   {
     "id": "sjtu-lu",
@@ -1077,12 +1127,14 @@
     "publisher": "cas",
     "section": "论文与研究",
     "website": "https://ia.cas.cn/",
-    "feed": "",
-    "adapter": "directory",
+    "feed": "https://ia.cas.cn/",
+    "adapter": "html",
     "kind": "news",
     "language": "zh",
     "primary": true,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "linkPattern": "^/xwzx/(?:ttxw|kyjz)/.*\\.html$",
+    "notice": "自动化所官方科研动态；尚非模式识别实验室独立源"
   },
   {
     "id": "mmlab",
@@ -1095,7 +1147,8 @@
     "kind": "news",
     "language": "zh",
     "primary": true,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "notice": "官网公开新闻页较旧，未作为持续更新源启用"
   },
   {
     "id": "cadcg",
@@ -1103,12 +1156,13 @@
     "publisher": "cadcg",
     "section": "论文与研究",
     "website": "http://www.cad.zju.edu.cn/",
-    "feed": "",
-    "adapter": "directory",
+    "feed": "http://www.cad.zju.edu.cn/feed",
+    "adapter": "rss",
     "kind": "news",
     "language": "zh",
     "primary": true,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "filterAI": true
   },
   {
     "id": "huggingface",
@@ -1263,27 +1317,27 @@
     "publisher": "acl",
     "section": "线下活动",
     "website": "https://www.aclweb.org/portal/",
-    "feed": "",
-    "adapter": "directory",
+    "feed": "https://www.aclweb.org/portal/?q=rss.xml",
+    "adapter": "rss",
     "kind": "news",
     "language": "en",
     "primary": true,
     "scope": "截图指定",
-    "notice": "官方会议入口；时间、地点与报名信息仅在取得有效记录后展示"
+    "notice": "ACL 官方 RSS；最近记录日期以原文为准，不代表今年所有会议"
   },
   {
     "id": "emnlp",
     "name": "EMNLP",
     "publisher": "emnlp",
     "section": "线下活动",
-    "website": "https://www.aclweb.org/portal/",
-    "feed": "",
-    "adapter": "directory",
+    "website": "https://2026.emnlp.org/",
+    "feed": "https://2026.emnlp.org/",
+    "adapter": "emnlp-news",
     "kind": "news",
     "language": "en",
     "primary": true,
     "scope": "截图指定",
-    "notice": "官方会议入口；时间、地点与报名信息仅在取得有效记录后展示"
+    "notice": "EMNLP 2026 官方公告；后续届次需更新入口"
   },
   {
     "id": "naacl",
@@ -1291,13 +1345,13 @@
     "publisher": "naacl",
     "section": "线下活动",
     "website": "https://naacl.org/",
-    "feed": "",
-    "adapter": "directory",
+    "feed": "https://naacl.org/",
+    "adapter": "naacl-news",
     "kind": "news",
     "language": "en",
     "primary": true,
     "scope": "截图指定",
-    "notice": "官方会议入口；时间、地点与报名信息仅在取得有效记录后展示"
+    "notice": "官方新闻列表；旧 RSS 停留于 2021 年，改用带日期的公告链接"
   },
   {
     "id": "cvpr",
@@ -1451,7 +1505,8 @@
     "language": "en",
     "primary": true,
     "scope": "截图指定",
-    "filterAI": true
+    "filterAI": true,
+    "notice": "公开报告目录动态加载，当前未取得可持续的带日期文章列表"
   },
   {
     "id": "contrary",
@@ -1459,13 +1514,14 @@
     "publisher": "contrary",
     "section": "投融资",
     "website": "https://research.contrary.com/",
-    "feed": "",
-    "adapter": "directory",
+    "feed": "https://research.contrary.com/",
+    "adapter": "html",
     "kind": "news",
     "language": "en",
     "primary": true,
     "scope": "截图指定",
-    "filterAI": true
+    "filterAI": true,
+    "linkPattern": "^/report/[^/]+$"
   },
   {
     "id": "anthropic-jobs",

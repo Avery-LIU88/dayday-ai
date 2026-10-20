@@ -4,8 +4,11 @@ import {promisify} from 'node:util';
 import {collectSource,readBounded} from '../lib/news-collector.mjs';
 const run=promisify(execFile);
 // curl uses the host's configured network path; runtime collection uses fetch.
-async function network(url){
- const {stdout}=await run('curl',['-L','--compressed','--max-redirs','3','--proto','=https,http','--max-time','22','--max-filesize','4000000','-sS','-A','DayDayAI/1.0 (public information reader)','-w','\n%{http_code}',url],{maxBuffer:4_100_000});
+async function network(url,options={}){
+ const args=['-L','--compressed','--max-redirs','3','--proto','=https,http','--max-time','22','--max-filesize','4000000','-sS','-A','DayDayAI/1.0 (public information reader)','-w','\n%{http_code}'];
+ if(options.method==='POST')args.push('-X','POST','--data',options.body||'');
+ for(const [key,value] of Object.entries(options.headers||{}))args.push('-H',`${key}: ${value}`);
+ const {stdout}=await run('curl',[...args,url],{maxBuffer:4_100_000});
  const i=stdout.lastIndexOf('\n');return new Response(stdout.slice(0,i),{status:Number(stdout.slice(i+1))||502});
 }
 const sources=JSON.parse(await fs.readFile('data/news-sources.json','utf8'));

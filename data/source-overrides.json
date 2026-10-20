@@ -7,5 +7,138 @@
   "information": {
     "adapter": "rss",
     "feed": "https://www.theinformation.com/feed"
+  },
+  "moonshot": {
+    "website": "https://www.kimi.com/en/blog/",
+    "feed": "https://www.kimi.com/en/blog/",
+    "adapter": "kimi",
+    "language": "en",
+    "notice": "官方研究博客；文章标题、日期与原文入口"
+  },
+  "bytedance": {
+    "feed": "https://seed.bytedance.com/zh/",
+    "adapter": "seed-list",
+    "notice": "Seed 官网最新动态；不等于字节全部业务"
+  },
+  "stepfun": {
+    "website": "https://www.stepfun.com/news",
+    "feed": "https://www.stepfun.com/news",
+    "adapter": "stepfun",
+    "notice": "官网公开新闻数据；自动定位当前数据文件，不执行网页脚本"
+  },
+  "latepost": {
+    "website": "https://www.latepost.com/",
+    "feed": "https://www.latepost.com/news/get-news-data",
+    "adapter": "latepost-api",
+    "linkPattern": "^/news/dj_detail$",
+    "maxArticles": 6,
+    "notice": "公开新闻列表接口＋文章页原始发布日期"
+  },
+  "jazzyear": {
+    "feed": "https://www.jazzyear.com/",
+    "adapter": "html",
+    "linkPattern": "^/article_info\\.html$",
+    "maxArticles": 12
+  },
+  "techweb": {
+    "feed": "https://www.techweb.com.cn/",
+    "adapter": "html",
+    "linkPattern": "/\\d{4}-\\d{2}-\\d{2}/\\d+\\.shtml$",
+    "maxArticles": 10
+  },
+  "cas": {
+    "feed": "https://ia.cas.cn/",
+    "adapter": "html",
+    "linkPattern": "^/xwzx/(?:ttxw|kyjz)/.*\\.html$",
+    "notice": "自动化所官方科研动态；尚非模式识别实验室独立源"
+  },
+  "cadcg": {
+    "feed": "http://www.cad.zju.edu.cn/feed",
+    "adapter": "rss",
+    "filterAI": true
+  },
+  "acl": {
+    "feed": "https://www.aclweb.org/portal/?q=rss.xml",
+    "adapter": "rss",
+    "notice": "ACL 官方 RSS；最近记录日期以原文为准，不代表今年所有会议"
+  },
+  "naacl": {
+    "website": "https://naacl.org/",
+    "feed": "https://naacl.org/",
+    "adapter": "naacl-news",
+    "notice": "官方新闻列表；旧 RSS 停留于 2021 年，改用带日期的公告链接"
+  },
+  "contrary": {
+    "feed": "https://research.contrary.com/",
+    "adapter": "html",
+    "linkPattern": "^/report/[^/]+$"
+  },
+  "semantic": {
+    "feed": "https://api.semanticscholar.org/graph/v1/paper/search/bulk?query=artificial%20intelligence&fields=title,url,publicationDate,abstract&sort=publicationDate:desc",
+    "adapter": "semantic",
+    "language": "en",
+    "notice": "公开论文检索 API；AI 关键词结果，非平台全量"
+  },
+  "aipapers": {
+    "feed": "https://aipapers.ai/blogs",
+    "adapter": "aipapers-list",
+    "notice": "公开学术简报标题、日期与链接，内容为二次整理"
+  },
+  "xinzhiyuan": {
+    "website": "https://www.aiera.com.cn/",
+    "feed": "https://www.aiera.com.cn/asi-articles.html",
+    "adapter": "aiera",
+    "filterAI": false,
+    "notice": "已更正官网；公开文章目录标题、日期与摘要"
+  },
+  "paperswithcode": {
+    "notice": "原域名当前跳转 Hugging Face Papers；本站已另接 HF 每日论文，不重复计数"
+  },
+  "mmlab": {
+    "notice": "官网公开新闻页较旧，未作为持续更新源启用"
+  },
+  "jiqizhixin": {
+    "notice": "原 RSS 入口返回数据服务介绍；需核实官方订阅授权方式"
+  },
+  "tencent": {
+    "website": "https://hunyuan.tencent.com/blog",
+    "feed": "https://api.hunyuan.tencent.com/api/blog/publicList",
+    "adapter": "tencent-blog",
+    "notice": "混元官方公开研究博客接口；不等于腾讯全部业务"
+  },
+  "pku-wang": {
+    "feed": "https://www.wict.pku.edu.cn/",
+    "adapter": "html",
+    "linkPattern": "^/xwgg/xwdt/\\d{4}/[^/]+\\.htm$",
+    "maxArticles": 8,
+    "filterAI": true,
+    "notice": "王选所官网动态，筛选 AI 相关研究"
+  },
+  "thu-dai": {
+    "name": "清华 · 成像与智能技术实验室",
+    "website": "https://media.au.tsinghua.edu.cn/cn/xwtz/xw.htm",
+    "feed": "https://media.au.tsinghua.edu.cn/cn/xwtz/xw.htm",
+    "adapter": "html",
+    "linkPattern": "/info/1016/\\d+\\.htm$",
+    "notice": "戴琼海相关实验室官方新闻"
+  },
+  "emnlp": {
+    "website": "https://2026.emnlp.org/",
+    "feed": "https://2026.emnlp.org/",
+    "adapter": "emnlp-news",
+    "notice": "EMNLP 2026 官方公告；后续届次需更新入口"
+  },
+  "pku-lin": {
+    "website": "https://www.ai.pku.edu.cn/kxyj1/tyrgznyjs/jqxxyznkxllyjzx.htm",
+    "notice": "已确认林宙辰相关研究中心，当前为机构介绍页，尚无独立更新源"
+  },
+  "baidu": {
+    "notice": "文心官网为动态页面；另查百度研究院官网显示维护中，现仅官方模型记录"
+  },
+  "sacra": {
+    "notice": "公开报告目录动态加载，当前未取得可持续的带日期文章列表"
+  },
+  "nvresearch": {
+    "notice": "论文目录含会议月份而非统一发布日期，尚未作为实时新闻源启用"
   }
 }
