@@ -21,6 +21,7 @@ test('policy and security have their own category; persisted event classificatio
   assert.equal(briefSection({title,topic:title.startsWith('联邦')?'政策监管':'媒体资讯'}),'policy');
  }
  assert.equal(briefSection({title:'New benchmark evaluation for privacy',topic:'论文与研究'}),'research');
+ assert.equal(briefSection({title:'Balancing regulatory risk with AI',topic:'论文与研究'}),'research');
  assert.equal(briefSection({title:'模型发布',section:'products'}),'products');
  const group=groupBriefArticles([{title:'AI bill introduced',topic:'媒体资讯'}]);
  assert.equal(group[0].id,'policy');assert.equal(group[0].articles.length,1);
