@@ -6,11 +6,11 @@ const now=Date.parse('2026-10-20T08:00:00Z');
 const base={kind:'article',id:'a',title:'OpenAI releases a new open source model for coding',summary:'Research benchmark for AI agents.',url:'https://example.com/news/a',publishedAt:'2026-10-20T06:00:00Z',sourceId:'a',source:'A',language:'en',topics:['公司动态']};
 test('tracking links merge while preserving distinct publishers and all original links',()=>{
  const stories=clusterEntries([base,{...base,id:'b',sourceId:'b',source:'B',url:base.url+'?utm_source=mail'}],[{id:'a',publisher:'a',primary:true,section:'公司动态'},{id:'b',publisher:'b',section:'媒体资讯'}],now);
- assert.equal(stories.length,1);assert.equal(stories[0].coverage,2);assert.equal(stories[0].links.length,2);assert.ok(stories[0].tags.includes('媒体资讯'));assert.equal(stories[0].scoreParts.breadth,5);
+ assert.equal(stories.length,1);assert.equal(stories[0].coverage,2);assert.equal(stories[0].links.length,2);assert.ok(stories[0].tags.includes('媒体资讯'));assert.equal(stories[0].heatEvidence.independentReports,1);
 });
 test('multiple endpoints from one publisher cannot inflate breadth',()=>{
  const [s]=clusterEntries([base,{...base,id:'b',sourceId:'b'}],[{id:'a',publisher:'same'},{id:'b',publisher:'same'}],now);
- assert.equal(s.coverage,1);assert.equal(s.scoreParts.breadth,0);
+ assert.equal(s.coverage,1);assert.equal(s.heatEvidence.independentReports,1);
 });
 test('model versions stay separate',()=>{
  assert.equal(similarTitle('OpenAI introduces model GPT 5.1 for all coding developers','OpenAI introduces model GPT 5.2 for all coding developers'),false);
