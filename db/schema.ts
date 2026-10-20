@@ -34,3 +34,30 @@ export const runs = sqliteTable("runs", {
   added: integer("added").notNull().default(0),
   details: text("details").notNull(),
 });
+export const readers = sqliteTable("readers", {
+  id: text("id").primaryKey(),
+  preferences: text("preferences").notNull(),
+  bot: text("bot"),
+  createdAt: text("created_at").notNull(),
+});
+export const shows = sqliteTable("shows", {
+  id: text("id").primaryKey(),
+  data: text("data").notNull(),
+  checkedAt: text("checked_at").notNull(),
+  error: text("error"),
+});
+export const subscriptions = sqliteTable("subscriptions", {
+  id: text("id").primaryKey(),
+  readerId: text("reader_id").notNull(),
+  showId: text("show_id").notNull(),
+  followedAt: text("followed_at").notNull(),
+  mode: text("mode").notNull().default("instant"),
+});
+export const notices = sqliteTable("notices", {
+  id: text("id").primaryKey(),
+  readerId: text("reader_id").notNull(),
+  kind: text("kind").notNull(),
+  status: text("status").notNull(),
+  createdAt: text("created_at").notNull(),
+  message: text("message").notNull(),
+});

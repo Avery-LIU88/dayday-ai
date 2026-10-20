@@ -2,10 +2,13 @@ import handler from "vinext/server/fetch-handler";
 import { runWithConnectorBinding } from "../lib/connector-context";
 import type { ConnectorBinding } from "../lib/connector-contract.mjs";
 import { refreshNews } from "../lib/news-store";
+import { runSubscriptionJob } from "../lib/subscription-store";
 
 export default {
   async scheduled(_event: ScheduledController, _env: Cloudflare.Env, ctx: ExecutionContext) {
-    ctx.waitUntil(refreshNews());
+    ctx.waitUntil(Promise.all([refreshNews(),(async()=>{
+      for(let i=0;i<30;i++){const result=await runSubscriptionJob();if(result.busy||result.complete)break;}
+    })()]));
   },
   fetch(request: Request, env: Cloudflare.Env, ctx: ExecutionContext<{ CONNECTORS?: ConnectorBinding }>) {
     let binding = ctx.props?.CONNECTORS;
