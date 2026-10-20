@@ -59,7 +59,7 @@ npm run build
 
 ### 已有云任务的执行说明
 
-仅更新第一阶段公共资讯，不采集节目，不发送提醒。先 GET `/api/refresh` 读取当前说明；从本站 `get_site` 获取服务凭证，仅对本站发送 `OAI-Sites-Authorization: Bearer ...` 和 `Authorization: Bearer ...`。依次 POST，直到 `complete=true`（上限 20 次）；遇 `busy=true` 停止，遇错误保留原数据并报告。最后 GET `/api/state`，报告检查结果。不要记录凭证，不重复部署，不修改源清单。
+仅更新第一阶段公共资讯，不采集节目，不发送提醒。先 GET `/api/refresh` 读取当前说明；从本站 `get_site` 获取服务凭证，仅对本站发送 `OAI-Sites-Authorization: Bearer ...` 和 `Authorization: Bearer ...`。依次 POST，直到 `complete=true` 且全部配置来源本次都已检查（上限 24 次；若接续上次中断的轮次，完成后再跑完整一轮）；遇 `busy=true` 停止，遇错误保留原数据并报告。最后 GET `/api/state`，报告检查结果。不要记录凭证，不重复部署，不修改源清单。
 
 ## 接入证据与限制
 
@@ -112,3 +112,7 @@ npm run build
 ### 36氪 RSS 修复
 
 官方订阅中心：`https://www.36kr.com/rss-center`。使用带 `www` 的 `feed-article` 和 `feed-newsflash`，分别获取文章与快讯，发布者统一为 `36kr`。裸域 `36kr.com/feed` 在本次环境返回安全检测页；`www` 的压缩响应虽含完整 RSS，curl 仍报传输错误，指定 `Accept-Encoding: identity` 后可完整读取。仅这两个来源设置 `uncompressed: true`；不跳过 TLS 校验，不使用登录 Cookie，不将阅读器缓存当作在线采集结果。线上是否成功以最新 `health` 为准。
+
+## 资讯采集时间
+
+北京时间（Asia/Shanghai）每天 08:00、20:00 启动公共资讯采集，每次按每批 8 个端点完成全部已配置来源检查。失败来源保留旧数据和异常状态。只有游标回到 0，才写入本轮完成时间 collectedAt；页面顶部显示该采集时间，而不是访问页面时间。滚动24小时仍按原始发布时间判断，抓取不刷新新闻年龄。节目订阅与已授权提醒沿用独立任务。
