@@ -1,6 +1,126 @@
 {
-  "collectedAt": "2026-10-20T08:27:30.098Z",
+  "collectedAt": "2026-10-20T09:29:17.506Z",
   "entries": [
+    {
+      "id": "b82c8b7033d8640b158f3ca2",
+      "kind": "article",
+      "sourceId": "36kr-flashes",
+      "source": "36氪 · 快讯",
+      "title": "DeepSeek：进一步将内部推理框架DeepInfer全面开源",
+      "summary": "36氪获悉，DeepSeek表示，在此前开源一系列大模型、TileLang编译工具及推理算子库的基础上，决定进一步将内部推理框架DeepInfer全面开源。基于DeepInfer，已实现DeepSeek V4.1 Flash高吞吐、低延迟的大规模推理服务。未来，DeepSeek新模型的推理代码及后续优化也将在此持续更新。",
+      "url": "https://36kr.com/newsflashes/4033986510099335?f=rss",
+      "publishedAt": "2026-10-20T09:03:16.000Z",
+      "category": "媒体资讯",
+      "topics": [
+        "媒体资讯"
+      ],
+      "language": "zh",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "",
+      "identity": "https://36kr.com/newsflashes/4033986510099335?f=rss"
+    },
+    {
+      "id": "7202ca15244295f4899c5356",
+      "kind": "article",
+      "sourceId": "36kr",
+      "source": "36氪",
+      "title": "DeepSeek：进一步将内部推理框架DeepInfer全面开源",
+      "summary": "36氪获悉，DeepSeek表示，在此前开源一系列大模型、TileLang编译工具及推理算子库的基础上，决定进一步将内部推理框架DeepInfer全面开源。基于DeepInfer，已实现DeepSeek V4.1 Flash高吞吐、低延迟的大规模推理服务。未来，DeepSeek新模型的推理代码及后续优化也将在此持续更新。",
+      "url": "https://36kr.com/newsflashes/4033986510099335?f=rss",
+      "publishedAt": "2026-10-20T09:03:16.000Z",
+      "category": "媒体资讯",
+      "topics": [
+        "媒体资讯"
+      ],
+      "language": "zh",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "",
+      "identity": "https://36kr.com/newsflashes/4033986510099335?f=rss"
+    },
+    {
+      "id": "8940582501fa41b6bde26b89",
+      "kind": "article",
+      "sourceId": "36kr-flashes",
+      "source": "36氪 · 快讯",
+      "title": "软通动力等在西藏合设智算公司，注册资本6500万元",
+      "summary": "36氪获悉，天眼查App显示，近日，西藏宜通智算科技有限公司成立，法定代表人为刘雪飞，注册资本6500万人民币，经营范围包括大数据服务、人工智能公共数据平台、人工智能应用软件开发、网络与信息安全软件开发等。股东信息显示，该公司由宜通世纪（广东）产业投资有限公司、软通智算科技（广东）集团有限公司、陕西星墨控股（集团）有限公司共同持股，持股比例分别为45%、40%、15%。",
+      "url": "https://36kr.com/newsflashes/4033975846081665?f=rss",
+      "publishedAt": "2026-10-20T08:52:26.000Z",
+      "category": "媒体资讯",
+      "topics": [
+        "媒体资讯"
+      ],
+      "language": "zh",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "",
+      "identity": "https://36kr.com/newsflashes/4033975846081665?f=rss"
+    },
+    {
+      "id": "4b8fff11053e32517e7ab4f6",
+      "kind": "article",
+      "sourceId": "36kr",
+      "source": "36氪",
+      "title": "软通动力等在西藏合设智算公司，注册资本6500万元",
+      "summary": "36氪获悉，天眼查App显示，近日，西藏宜通智算科技有限公司成立，法定代表人为刘雪飞，注册资本6500万人民币，经营范围包括大数据服务、人工智能公共数据平台、人工智能应用软件开发、网络与信息安全软件开发等。股东信息显示，该公司由宜通世纪（广东）产业投资有限公司、软通智算科技（广东）集团有限公司、陕西星墨控股（集团）有限公司共同持股，持股比例分别为45%、40%、15%。",
+      "url": "https://36kr.com/newsflashes/4033975846081665?f=rss",
+      "publishedAt": "2026-10-20T08:52:26.000Z",
+      "category": "媒体资讯",
+      "topics": [
+        "媒体资讯"
+      ],
+      "language": "zh",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "",
+      "identity": "https://36kr.com/newsflashes/4033975846081665?f=rss"
+    },
+    {
+      "id": "fc0ce87671140d6838f63fb8",
+      "kind": "article",
+      "sourceId": "36kr-flashes",
+      "source": "36氪 · 快讯",
+      "title": "三星研发24小时工作的机器人",
+      "summary": "统管三星电子机器人业务的RX业务推进室正在首尔牛眠洞首尔R&D园区验证可在产业现场24小时运转的机器人性能。这款机器人在执行搬运货物等制造、物流现场重复作业的同时，也在学习周边环境和作业方式。一位业界人士表示，“三星电子和合作公司员工正按24小时三班倒，检查机器人工作的过程”。据悉，三星电子正以包括这款机器人在内的多个候选产品为对象，研究是否参展CES。（新浪财经）",
+      "url": "https://36kr.com/newsflashes/4033960900121731?f=rss",
+      "publishedAt": "2026-10-20T08:37:13.000Z",
+      "category": "媒体资讯",
+      "topics": [
+        "媒体资讯"
+      ],
+      "language": "zh",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "",
+      "identity": "https://36kr.com/newsflashes/4033960900121731?f=rss"
+    },
+    {
+      "id": "4cda3af1749ed8edc948ba1d",
+      "kind": "article",
+      "sourceId": "36kr",
+      "source": "36氪",
+      "title": "三星研发24小时工作的机器人",
+      "summary": "统管三星电子机器人业务的RX业务推进室正在首尔牛眠洞首尔R&D园区验证可在产业现场24小时运转的机器人性能。这款机器人在执行搬运货物等制造、物流现场重复作业的同时，也在学习周边环境和作业方式。一位业界人士表示，“三星电子和合作公司员工正按24小时三班倒，检查机器人工作的过程”。据悉，三星电子正以包括这款机器人在内的多个候选产品为对象，研究是否参展CES。（新浪财经）",
+      "url": "https://36kr.com/newsflashes/4033960900121731?f=rss",
+      "publishedAt": "2026-10-20T08:37:13.000Z",
+      "category": "媒体资讯",
+      "topics": [
+        "媒体资讯"
+      ],
+      "language": "zh",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "",
+      "identity": "https://36kr.com/newsflashes/4033960900121731?f=rss"
+    },
     {
       "id": "73820a0d47b3fb67e011ba5d",
       "kind": "article",
@@ -453,6 +573,48 @@
       "identity": "https://36kr.com/newsflashes/4033889695896454?f=rss"
     },
     {
+      "id": "c1be99eca648d48807731e63",
+      "kind": "article",
+      "sourceId": "36kr",
+      "source": "36氪",
+      "title": "前苹果工程师、Jackery联创做宠物健康硬件，年营收超10亿，获红杉投资｜硬氪专访",
+      "summary": "摘要：从自动化工具进化为能感知、判断、通知、行动的智能终端。 作者｜黄楠 编辑｜袁斯来 Petlibro的创始人伍昱某种程度上是个幸运的人。他在20多岁的时候，赶上了中国消费硬件出海的黄金时代。 他2007年加入苹果做工程师，参与过早期iPod、初代iPhone的产研工作。2012年开始创业、联合成立储能品牌Jackery，瞄准用户的用电焦虑与充电安全痛点，希望补上苹果产品没能覆盖的空白需求。2016年，伍昱加入泽宝任CEO，参与并见证了泽宝的销售额从十亿级别飙升到五十亿人民币体量。 2019年，伍昱决定再次下场，做宠物智能硬件生意。 这在当时算不上是一个热门赛道。",
+      "url": "https://36kr.com/p/4026637554963074?f=rss",
+      "publishedAt": "2026-10-20T06:48:37.000Z",
+      "category": "投融资",
+      "topics": [
+        "媒体资讯",
+        "投融资"
+      ],
+      "language": "zh",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "",
+      "identity": "https://36kr.com/p/4026637554963074?f=rss"
+    },
+    {
+      "id": "582128db29b34a71b55600dd",
+      "kind": "article",
+      "sourceId": "36kr",
+      "source": "36氪",
+      "title": "硬氪首发丨虚拟电厂公司完成数亿元融资，预计2027年盈利",
+      "summary": "作者 | 杨媛 编辑 | 彭孝秋 硬氪获悉，近日，合肥原力众合能源科技有限公司（以下简称“原力能源”）完成新一轮融资。据公司披露，本轮融资金额数亿元，投资方包括合肥仁创四期创业投资合伙企业（有限合伙）、合肥仁新创业投资合伙企业（有限合伙）。本轮资金将主要用于产品及能源垂直模型研发、区域市场拓展，以及部分能源资产投资。 成立于2021年的原力能源，主要围绕虚拟电厂及综合能源服务开展业务，通过自研DAO OS连接光伏、储能、充电设施及工商业负荷等分布式能源资源，并参与后续资产运营和电力市场交易。",
+      "url": "https://36kr.com/p/4033817271866244?f=rss",
+      "publishedAt": "2026-10-20T06:11:57.000Z",
+      "category": "投融资",
+      "topics": [
+        "媒体资讯",
+        "投融资"
+      ],
+      "language": "zh",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "",
+      "identity": "https://36kr.com/p/4033817271866244?f=rss"
+    },
+    {
       "id": "55ea37694a6ece9461eb4568",
       "kind": "article",
       "sourceId": "techweb",
@@ -589,6 +751,27 @@
       "color": "#a8d5bc",
       "byline": "",
       "identity": "https://www.latent.space/p/ainews-not-much-happened-today-f09"
+    },
+    {
+      "id": "ea84011a5272be91c48a2fb0",
+      "kind": "article",
+      "sourceId": "36kr",
+      "source": "36氪",
+      "title": "在人人都能做漫剧之后，阅文打开了自己的版权库",
+      "summary": "当一个人一天能制造一部短剧，这会给一家掌握海量IP的公司带来什么？ 在2026阅文创作大会上，这家老牌网文公司公布了一组数据。 上半年，阅文短剧和漫剧收入4.3亿元，是去年同期三倍多。截至目前，阅文已有660部漫剧播放破千万，107部破亿；签约个人及个人工作室5000多个，前十大OPC创作者年收入过百万，头部团队分成破600万。 OPC，（指一人公司，One Person Company）是本次大会上最重要的关键词之一。",
+      "url": "https://36kr.com/p/4032661941883525?f=rss",
+      "publishedAt": "2026-10-20T05:18:41.000Z",
+      "category": "线下活动",
+      "topics": [
+        "媒体资讯",
+        "线下活动"
+      ],
+      "language": "zh",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "",
+      "identity": "https://36kr.com/p/4032661941883525?f=rss"
     },
     {
       "id": "022649a886020a633afbb8d4",
@@ -1095,6 +1278,27 @@
       "identity": "https://techcrunch.com/2026/10/19/mamdani-says-feds-have-abdicated-on-ai-urges-new-yorkers-to-push-back/"
     },
     {
+      "id": "6765dde3c32bd8c032818bc0",
+      "kind": "article",
+      "sourceId": "36kr",
+      "source": "36氪",
+      "title": "硬氪首发｜用AI智能体辅助新材料研发，睿质科技完成数千万元天使轮融资",
+      "summary": "文｜杨媛 编辑｜彭孝秋 硬氪获悉，北京睿质科技有限公司（以下简称“睿质科技”）近日完成数千万元天使轮融资，本轮由中关村资本领投，中关村科学城公司跟投，中关村产业研究院担任独家财务顾问。目前，公司正在推进新一轮融资。 睿质科技是一家从事AI材料研发软件及平台开发的科技企业，由院士、长江学者团队领衔，主要面向科研机构及工业企业提供材料计算、性能预测和研发服务。 公司目前围绕科研智能体、材料计算和数据管理等方向开发AI材料研发平台，业务涉及先进功能陶瓷、合金、新能源材料等领域。 与直接生产、销售材料的企业不同，睿质科技主要将材料研发过程中的计算模拟、数据分析等能力转化为软件产品和研发服务，供科研机构及工业企业使用。",
+      "url": "https://36kr.com/p/4033523733042053?f=rss",
+      "publishedAt": "2026-10-20T01:12:47.000Z",
+      "category": "投融资",
+      "topics": [
+        "媒体资讯",
+        "投融资"
+      ],
+      "language": "zh",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "",
+      "identity": "https://36kr.com/p/4033523733042053?f=rss"
+    },
+    {
       "id": "90adb9d69a3f4a8f7d2af917",
       "kind": "article",
       "sourceId": "qbit",
@@ -1154,6 +1358,26 @@
       "color": "#a8d5bc",
       "byline": "",
       "identity": "http://www.geekpark.net/news/372568"
+    },
+    {
+      "id": "b9acd09d33092ec95fa56cc7",
+      "kind": "article",
+      "sourceId": "36kr",
+      "source": "36氪",
+      "title": "顺为投了一位北大PI，想用AI“解密”人脑",
+      "summary": "人脑从万维空间中涌现（图源：格原万维） 文｜胡香赟 编辑｜海若镜 人脑，是自然界演化出的最复杂的系统之一。 成年人脑只有两个拳头大小，但容纳了近860亿个神经元及同等数量的非神经元细胞，它们彼此连通，织就庞大繁复的脑网络，承载起人类全部的智能、情感、记忆和自我意识。这套系统如此精妙，以至于人脑最大的悖论是，我们的大脑不够聪明去理解如此聪明的大脑。 那么，AI能做得更好吗？ 这是卢萌过去15年来一直想做的事。从2011年赴剑桥大学读博,到2024年回国前担任高级研究员，卢萌一直主攻神经退行性疾病研究。",
+      "url": "https://36kr.com/p/4032248929686151?f=rss",
+      "publishedAt": "2026-10-20T01:00:00.000Z",
+      "category": "媒体资讯",
+      "topics": [
+        "媒体资讯"
+      ],
+      "language": "zh",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "",
+      "identity": "https://36kr.com/p/4032248929686151?f=rss"
     },
     {
       "id": "99fb4914130056293cddc3b6",
@@ -1235,6 +1459,27 @@
       "color": "#a8d5bc",
       "byline": "Maria Deutscher",
       "identity": "https://siliconangle.com/2026/10/19/amazon-introduces-toolkit-for-running-pytorch-workloads-on-aws-trainium-chips/"
+    },
+    {
+      "id": "07a96b569ff429f8baaf50c2",
+      "kind": "article",
+      "sourceId": "36kr",
+      "source": "36氪",
+      "title": "8点1氪丨被指品质暴跌，山姆回应；宇树科技市值重回2000亿，人形机器人股批量涨停；马斯克承诺给“美国每个孩子”1股SpaceX股份",
+      "summary": "今日热点导览 长鑫科技旗下北京集电存储技术公司增资至约601.8亿 为什么有些功能微信鸿蒙版上还没有？微信回应 股票ETF上周净流入885亿元，为年内第四高 西贝否认“漫迩朵鲜羊肉铺”为旗下新品牌 国家税务总局发布关于离岸信托纳税申报的提示提醒 TOP3大新闻 被指品质暴跌，山姆回应 10月18日，“山姆品质暴跌你还敢去吗”话题登上热搜引发热议。10月19日，山姆会员商店发布声明称：近日，我们关注到在多个社交媒体平台上集中出现数千条针对山姆的恶意攻击及虚假营销信息。",
+      "url": "https://36kr.com/p/4033470689268610?f=rss",
+      "publishedAt": "2026-10-20T00:20:39.000Z",
+      "category": "政策监管",
+      "topics": [
+        "媒体资讯",
+        "政策监管"
+      ],
+      "language": "zh",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "",
+      "identity": "https://36kr.com/p/4033470689268610?f=rss"
     },
     {
       "id": "2ecc4fb31def190f08fc2c3f",
@@ -4150,6 +4395,26 @@
       "dateLabel": "模型创建"
     },
     {
+      "id": "ffc30ce0175c1818687b7f12",
+      "kind": "article",
+      "sourceId": "36kr",
+      "source": "36氪",
+      "title": "36氪报告图解 | 《2026年中国AI Agent行业发展研究报告》",
+      "summary": "2026年，随着基础模型能力持续成熟、推理成本下降，AI的价值重心正在从“简单对话”转向“决策执行”。AI Agent以大模型为决策大脑，集成环境感知、长期记忆、规划推理与工具调用能力，能够在较少人工干预下自主理解目标、拆解任务、调用工具并交付结果，当前AI Agent市场已从概念验证迈向生产力验证。 近期，36氪研究院发布了《2026年中国AI Agent行业发展研究报告》（以下简称“报告”）。中国AI Agent行业正在进入生产力验证与商业化放量的早期阶段：企业通用Agent率先落地，行业垂直Agent加速规模化，个人消费Agent快速探索，端侧与具身Agent仍处生态布局和早期验证。",
+      "url": "https://36kr.com/p/4032427409609096?f=rss",
+      "publishedAt": "2026-10-19T06:49:04.000Z",
+      "category": "媒体资讯",
+      "topics": [
+        "媒体资讯"
+      ],
+      "language": "zh",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "",
+      "identity": "https://36kr.com/p/4032427409609096?f=rss"
+    },
+    {
       "id": "ca9e2d04f3e2ca892f40478d",
       "kind": "article",
       "sourceId": "leiphone",
@@ -4189,6 +4454,27 @@
       "color": "#a8d5bc",
       "byline": "",
       "identity": "https://www.leiphone.com/category/chips/56PWzwTNdteGx04q.html"
+    },
+    {
+      "id": "0f38d463d3be01510a906ad0",
+      "kind": "article",
+      "sourceId": "36kr",
+      "source": "36氪",
+      "title": "36氪首发丨覆盖半导体产业链多环节，这家国产碳化硅材料企业完成超亿元C轮融资",
+      "summary": "作者 | 乔钰杰 编辑 | 袁斯来 本文约1500字，建议阅读4分钟 硬氪获悉，浙江六方半导体有限公司（以下简称“六方半导体”）近日完成超亿元C1轮股权融资，本轮由北京仓廪资本与诸暨产业投资集团有限公司联合出资。 六方半导体成立于2018年，专注于半导体新材料的研发与生产，业务覆盖半导体长晶、外延、刻蚀等关键工艺环节，为下游客户提供核心材料及精密零部件解决方案。 公司掌握CVD‑SiC碳化硅材料合成核心技术，依托该技术推出导流桶、单晶硅外延托盘、LED芯片外延托盘、SiC聚焦环等产品，覆盖半导体产业链多个环节。 在碳化硅长晶原料制备方面，六方半导体采用气相法制备高纯碳化硅粉料，具备高纯度、高密度、低氮含量等特性。",
+      "url": "https://36kr.com/p/4032376052372097?f=rss",
+      "publishedAt": "2026-10-19T05:46:10.000Z",
+      "category": "投融资",
+      "topics": [
+        "媒体资讯",
+        "投融资"
+      ],
+      "language": "zh",
+      "duration": null,
+      "artwork": "",
+      "color": "#a8d5bc",
+      "byline": "",
+      "identity": "https://36kr.com/p/4032376052372097?f=rss"
     },
     {
       "id": "d96796d650173c31c768f97d",
@@ -24034,10 +24320,10 @@
     {
       "id": "36kr",
       "ok": true,
-      "count": 16,
-      "rawCount": 35,
-      "checkedAt": "2026-10-20T08:27:29.334Z",
-      "lastSuccessAt": "2026-10-20T08:27:29.334Z"
+      "count": 11,
+      "rawCount": 30,
+      "checkedAt": "2026-10-20T09:29:16.684Z",
+      "lastSuccessAt": "2026-10-20T09:29:16.684Z"
     },
     {
       "id": "microsoft",
@@ -24201,7 +24487,7 @@
       "id": "venturebeat",
       "ok": false,
       "error": "HTTP 429",
-      "checkedAt": "2026-10-20T06:55:50.210Z"
+      "checkedAt": "2026-10-20T09:29:16.686Z"
     },
     {
       "id": "siliconangle",
@@ -24782,10 +25068,18 @@
     {
       "id": "36kr-flashes",
       "ok": true,
-      "count": 6,
+      "count": 3,
       "rawCount": 20,
-      "checkedAt": "2026-10-20T08:27:29.335Z",
-      "lastSuccessAt": "2026-10-20T08:27:29.335Z"
+      "checkedAt": "2026-10-20T09:29:16.686Z",
+      "lastSuccessAt": "2026-10-20T09:29:16.686Z"
+    },
+    {
+      "id": "reuters-video",
+      "ok": true,
+      "count": 0,
+      "rawCount": 15,
+      "checkedAt": "2026-10-20T09:29:16.687Z",
+      "lastSuccessAt": "2026-10-20T09:29:16.687Z"
     }
   ]
 }

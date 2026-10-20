@@ -143,9 +143,14 @@
   },
   "36kr": {
     "website": "https://www.36kr.com/",
-    "feed": "https://www.36kr.com/feed-article",
+    "feed": "http://www.36kr.com/feed",
     "adapter": "rss",
     "uncompressed": true,
-    "notice": "官方文章 RSS；使用 www 域名并请求不压缩的响应，避免裸域安全检测页和压缩传输错误"
+    "readerHeaders": true,
+    "notice": "对照用户 Feedly 的官方综合 RSS；包含文章与快讯，使用 Dify 同款请求头"
+  },
+  "venturebeat": {
+    "readerHeaders": true,
+    "notice": "与用户 Dify 一致的官方 AI 专栏 RSS；请求限流时保留历史内容"
   }
 }

@@ -54,6 +54,16 @@ test('36kr official RSS can request identity encoding without changing other sou
  assert.equal(result.items.length,1);assert.equal(requests[0].url,'https://www.36kr.com/feed-article');
  assert.equal(requests[0].headers['Accept-Encoding'],'identity');assert.equal(requests[1].headers['Accept-Encoding'],undefined);
 });
+test('Feedly-compatible media requests and YouTube entries retain dates, links and video labels',async()=>{
+ const source={id:'reuters-video',name:'Reuters · YouTube 视频',website:'https://www.youtube.com/channel/example',feed:'https://www.youtube.com/feeds/videos.xml?channel_id=example',adapter:'rss',section:'媒体资讯',language:'en',filterAI:true,contentLabel:'视频报道',readerHeaders:true};
+ let headers;
+ const xml='<feed xmlns:media="http://search.yahoo.com/mrss/"><entry><title>Markets update</title><published>2026-10-19T08:00:00Z</published><link rel="alternate" href="https://www.youtube.com/watch?v=example"/><media:group><media:description>AI investment changes the economy.</media:description></media:group></entry><entry><title>Undated AI news</title></entry></feed>';
+ const {items}=await collectSource(source,async(url,options)=>{headers=options.headers;return new Response(xml);});
+ assert.equal(headers['User-Agent'],'Mozilla/5.0');
+ assert.equal(items.length,1);assert.equal(items[0].url,'https://www.youtube.com/watch?v=example');
+ assert.equal(items[0].publishedAt,'2026-10-19T08:00:00.000Z');
+ assert.equal(items[0].summary,'AI investment changes the economy.');assert.ok(items[0].topics.includes('视频报道'));
+});
 test('dated newsletter links retain the real issue title and date',()=>{
  const [item]=parseDatedList('<a href=\"/ai/2026-10-19\"><div><time dateTime=\"2026-10-19\">Oct 19, 2026</time>New AI model</div></a>',{id:'tldr',name:'TLDR',adapter:'tldr',website:'https://tldr.tech',section:'Newsletter'});
  assert.equal(item.title,'New AI model');assert.equal(item.publishedAt,'2026-10-19T00:00:00.000Z');

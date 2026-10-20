@@ -264,15 +264,16 @@
     "publisher": "36kr",
     "section": "媒体资讯",
     "website": "https://www.36kr.com/",
-    "feed": "https://www.36kr.com/feed-article",
+    "feed": "http://www.36kr.com/feed",
     "adapter": "rss",
     "kind": "news",
     "language": "zh",
     "primary": false,
     "scope": "截图指定",
     "filterAI": true,
-    "notice": "官方文章 RSS；使用 www 域名并请求不压缩的响应，避免裸域安全检测页和压缩传输错误",
-    "uncompressed": true
+    "notice": "对照用户 Feedly 的官方综合 RSS；包含文章与快讯，使用 Dify 同款请求头",
+    "uncompressed": true,
+    "readerHeaders": true
   },
   {
     "id": "tmtpost",
@@ -623,7 +624,8 @@
     "primary": false,
     "scope": "截图指定",
     "filterAI": false,
-    "notice": ""
+    "notice": "与用户 Dify 一致的官方 AI 专栏 RSS；请求限流时保留历史内容",
+    "readerHeaders": true
   },
   {
     "id": "axios",
@@ -661,7 +663,7 @@
     "publisher": "36kr",
     "section": "媒体资讯",
     "website": "https://www.36kr.com/",
-    "feed": "https://www.36kr.com/feed-newsflash",
+    "feed": "http://www.36kr.com/feed-newsflash",
     "adapter": "rss",
     "kind": "news",
     "language": "zh",
@@ -669,7 +671,24 @@
     "scope": "截图媒体官方快讯端点",
     "filterAI": true,
     "uncompressed": true,
-    "notice": "官方快讯 RSS；与文章源按发布者合并计数"
+    "readerHeaders": true,
+    "notice": "官方快讯 RSS；与综合源按发布者合并计数"
+  },
+  {
+    "id": "reuters-video",
+    "name": "Reuters · YouTube 视频",
+    "publisher": "reuters",
+    "section": "媒体资讯",
+    "website": "https://www.youtube.com/channel/UChqUTb7kYRX8-EiaN3XFrSQ",
+    "feed": "https://www.youtube.com/feeds/videos.xml?channel_id=UChqUTb7kYRX8-EiaN3XFrSQ",
+    "adapter": "rss",
+    "kind": "news",
+    "language": "en",
+    "primary": false,
+    "scope": "截图媒体视频端点",
+    "filterAI": true,
+    "contentLabel": "视频报道",
+    "notice": "用户 Feedly 中的 Reuters 视频订阅；仅筛选 AI 相关视频，不等同于路透社官网文章"
   },
   {
     "id": "importai",
