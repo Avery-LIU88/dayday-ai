@@ -56,16 +56,9 @@ export default function DailyBrief({data}:{data:NewsState}){
    </nav>
   </aside>
   <section className="daily-newspaper" aria-label="AI 日报">
-   <nav className="brief-navigation" aria-label="简报日期">
-    <div className="brief-date-controls">
-     <button disabled={!older} aria-label="上一期" onClick={()=>older&&choose(older.date)}><ChevronLeft size={18}/></button>
-     <CalendarDays size={17} aria-hidden="true"/>
-     <input type="date" aria-label="日历选择日报日期" value={date} max={editions[0]?.date} min={editions.at(-1)?.date} onChange={e=>e.target.value&&choose(e.target.value)}/>
-     <button disabled={!newer} aria-label="下一期" onClick={()=>newer&&choose(newer.date)}><ChevronRight size={18}/></button>
-    </div>
-    {date!==latest&&<button className="brief-latest" onClick={()=>choose('')}>最新一期</button>}
+   <div className="brief-navigation">
     {issue?.updatedAt&&<time className="brief-updated" dateTime={issue.updatedAt}>{updateText(issue.updatedAt)}</time>}
-   </nav>
+   </div>
    <header className="brief-masthead">
     <div><div className="brief-name">DayDay AI</div><h1>AI 日报</h1><div className="brief-edition-date">{date&&<time dateTime={date}>{formattedDate(date)}</time>}</div></div>
     {date&&<div className="brief-calendar-stamp" aria-hidden="true"><span>{Number(date.slice(5,7))} 月</span><strong>{date.slice(8)}</strong><small>{weekday(date)}</small></div>}
@@ -78,7 +71,7 @@ export default function DailyBrief({data}:{data:NewsState}){
     {sections.length>0&&<nav className="brief-contents" aria-label="本期分类"><h2>本期分类</h2><div>{sections.map((section,index)=><button key={section.id} onClick={()=>jumpTo(`daily-section-${section.id}`)}><span className="brief-section-number">{String(index+1).padStart(2,'0')}</span><span>{section.label}</span><small>{section.articles.length} 件</small><ArrowDown size={14}/></button>)}</div></nav>}
     <div className="brief-sections">{sections.map((section,index)=><section key={section.id} id={`daily-section-${section.id}`} className="brief-category" tabIndex={-1} aria-labelledby={`daily-section-title-${section.id}`}><header><span>{String(index+1).padStart(2,'0')}</span><h2 id={`daily-section-title-${section.id}`}>{section.label}</h2></header>{section.articles.map(({article,index:articleIndex}:{article:Article;index:number})=>articleIndex===0?<button key={article.id} className="brief-lead-reference" onClick={()=>jumpTo('daily-article-0')}><span>本期头条</span><strong>{article.title}</strong><ChevronRight size={16}/></button>:<BriefArticle key={article.id} article={article} index={articleIndex}/>)}</section>)}</div>
     <div className="brief-end"><span>本期完</span></div>
-   </>:<div className="brief-empty"><h2>{date===editions[0]?.date?'本期简报待更新':'这一天暂无简报'}</h2><p>可以从往期或日历选择其他日期。</p>{older&&<button onClick={()=>choose(older.date)}>阅读上一期 <ChevronRight size={15}/></button>}</div>}
+   </>:<div className="brief-empty"><h2>{date===editions[0]?.date?'本期简报待更新':'这一天暂无简报'}</h2><p>可以从往期选择其他日期。</p>{older&&<button onClick={()=>choose(older.date)}>阅读上一期 <ChevronRight size={15}/></button>}</div>}
    <nav className="brief-pagination" aria-label="翻阅日报"><button disabled={!older} onClick={()=>older&&choose(older.date)}><ChevronLeft size={17}/>上一期{older&&<span>{older.date.slice(5).replace('-','/')}</span>}</button><button disabled={!newer} onClick={()=>newer&&choose(newer.date)}>下一期{newer&&<span>{newer.date.slice(5).replace('-','/')}</span>}<ChevronRight size={17}/></button></nav>
   </section>
  </div>;
