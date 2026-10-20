@@ -1,0 +1,17 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { createHmac } from "node:crypto";
+import { parseFeed, plain, safeUrl, readSource, stableId } from "../lib/feed.mjs";
+import { sendFeishu, signature, validateWebhook } from "../lib/feishu.mjs";
+const source={id:"test",name:"Test Podcast",kind:"podcast",website:"https://example.org",feed:"https://example.org/rss"};
+const valid=`<rss><channel><item><title><![CDATA[One &amp; Two]]></title><link>https://example.org/episode?x=1&amp;y=2</link><description><![CDATA[<p>Summary</p><script>alert(1)</script>]]></description><pubDate>Tue, 01 Sep 2026 08:00:00 GMT</pubDate><itunes:duration>01:15:30</itunes:duration></item></channel></rss>`;
+test("RSS titles, CDATA, entities, timestamps and duration",()=>{const [e]=parseFeed(valid,source,new Date("2026-10-20"));assert.equal(e.title,"One & Two");assert.equal(e.summary,"Summary");assert.equal(e.duration,76);assert.equal(e.url,"https://example.org/episode?x=1&y=2");});
+test("Invalid or future dates do not appear as new today",()=>{assert.equal(parseFeed(valid.replace("Tue, 01 Sep 2026 08:00:00 GMT","not a date"),source).length,0);assert.equal(parseFeed(valid,source,new Date("2020-01-01")).length,0);});
+test("HTML errors are not mistaken for feeds",()=>{assert.throws(()=>parseFeed("<html>Access denied</html>",source));});
+test("Atom feed alternate links",()=>{const [e]=parseFeed('<feed><entry><title>Research</title><published>2026-09-01T00:00:00Z</published><link rel=\"alternate\" href=\"https://example.org/paper\"/><summary>Result</summary></entry></feed>',{...source,kind:"news"});assert.equal(e.url,"https://example.org/paper");assert.equal(e.kind,"article");});
+test("URL schemes and embedded scripts are never executable",()=>{assert.equal(safeUrl("javascript:alert(1)"),"");assert.equal(safeUrl("data:text/html,test"),"");assert.equal(plain("<script>bad()</script>Hello &#999999999;"),"Hello");});
+test("Episode identity deduplicates punctuation variants",async()=>{const a=await readSource(source,async()=>new Response(valid));const b=await readSource(source,async()=>new Response(valid.replace("One &amp; Two","One: Two")));assert.equal(a[0].id,b[0].id);assert.equal((await stableId("x")).length,24);});
+test("Webhook only allows the exact Feishu bot destination",()=>{assert.equal(validateWebhook("https://open.feishu.cn/open-apis/bot/v2/hook/test-id"),true);for(const url of ["http://open.feishu.cn/open-apis/bot/v2/hook/x","https://open.feishu.cn.evil.com/open-apis/bot/v2/hook/x","https://127.0.0.1/open-apis/bot/v2/hook/x","https://open.feishu.cn:444/open-apis/bot/v2/hook/x"])assert.equal(validateWebhook(url),false);});
+test("Feishu HMAC matches the official timestamp-newline-secret algorithm",async()=>{const expected=createHmac("sha256","1599360473\nsecret").update("").digest("base64");assert.equal(await signature("1599360473","secret"),expected);});
+test("HTTP 200 business errors are reported as failures",async()=>{const r=await sendFeishu("https://open.feishu.cn/open-apis/bot/v2/hook/test","secret","test",async()=>Response.json({code:19021,msg:"bad sign"}));assert.equal(r.status,"failed");});
+test("Success requires an explicit successful Feishu receipt",async()=>{const r=await sendFeishu("https://open.feishu.cn/open-apis/bot/v2/hook/test","secret","test",async()=>Response.json({code:0}));assert.equal(r.status,"sent");const unknown=await sendFeishu("https://open.feishu.cn/open-apis/bot/v2/hook/test","secret","test",async()=>new Response("invalid"));assert.equal(unknown.status,"unknown");});
