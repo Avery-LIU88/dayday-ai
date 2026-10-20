@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {appendSnapshot,trendFor,trendGeometry} from '../lib/event-trends.mjs';
+const at='2026-10-21T00:00:00Z';
+const event={publishedAt:'2026-10-20T21:00:00Z',links:[{url:'https://example.com/event'}],scoreParts:{heat:8}};
+test('history starts with one real observation and never fabricates a curve',()=>{const h=appendSnapshot([], [event],at);const p=trendFor(event,h);assert.equal(p.length,1);assert.equal(p[0].at,at);assert.equal(trendGeometry(p).path,'');assert.equal(trendFor(event,[]).length,0);});
+test('new lead and tracking URLs preserve event history, split clusters never double heat',()=>{let h=appendSnapshot([],[event,{...event,links:[{url:'https://other.example/event'}],scoreParts:{heat:12}}],at);const merged={...event,links:[{url:'https://other.example/event'},{url:'https://example.com/event?utm_source=reader'}],scoreParts:{heat:20}};h=appendSnapshot(h,[merged],'2026-10-21T12:00:00Z');assert.deepEqual(trendFor(merged,h).map(p=>p.heat),[12,20]);assert.equal(trendGeometry(trendFor(merged,h)).direction,'rising');});
+test('retries within six hours do not add artificial data points',()=>{const h=appendSnapshot([],[event],at);assert.equal(appendSnapshot(h,[event],'2026-10-21T00:10:00Z').length,1);});
+test('missing snapshots stay missing and long gaps break the line',()=>{let h=appendSnapshot([],[event],at);h=appendSnapshot(h,[],'2026-10-21T12:00:00Z');h=appendSnapshot(h,[event],'2026-10-22T00:00:00Z');const p=trendFor(event,h),g=trendGeometry(p);assert.equal(p.length,2);assert.equal(g.path.includes('L'),false);assert.equal(g.direction,'steady');});
+test('trend uses timestamp spacing, fixed heat scale, and retains at most seven days',()=>{const g=trendGeometry([{at,heat:8},{at:'2026-10-21T06:00:00Z',heat:4},{at:'2026-10-21T18:00:00Z',heat:0}]);assert.equal(g.direction,'falling');assert.ok(g.points[1].x<60);assert.equal(g.points[2].y,38);const old=appendSnapshot([],[event],at);assert.equal(appendSnapshot(old,[],'2026-10-29T00:00:00Z').length,1);});

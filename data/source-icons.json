@@ -1,0 +1,367 @@
+{
+  "deepseek": {
+    "path": "/source-icons/deepseek.ico",
+    "source": "https://www.deepseek.com/favicon.ico",
+    "website": "https://www.deepseek.com/"
+  },
+  "moonshot": {
+    "path": "/source-icons/moonshot.ico",
+    "source": "https://www.kimi.com/favicon.ico?favicon.36c2dc54.ico",
+    "website": "https://www.kimi.com/en/blog/"
+  },
+  "xai": {
+    "path": "/source-icons/xai.ico",
+    "source": "https://x.ai/favicon.ico",
+    "website": "https://x.ai/"
+  },
+  "bytedance": {
+    "path": "/source-icons/bytedance.ico",
+    "source": "https://lf3-static.bytednsdoc.com/obj/eden-cn/lapzild-tss/ljhwZthlaukjlkulzlp/favicon_1/favicon.ico",
+    "website": "https://seed.bytedance.com/"
+  },
+  "nvidia": {
+    "path": "/source-icons/nvidia.ico",
+    "source": "https://blogs.nvidia.com/favicon.ico",
+    "website": "https://blogs.nvidia.com/"
+  },
+  "baidu": {
+    "path": "/source-icons/baidu.ico",
+    "source": "https://www.baidu.com/favicon.ico",
+    "website": "https://www.baidu.com/"
+  },
+  "tencent": {
+    "path": "/source-icons/tencent.svg",
+    "source": "https://hunyuan-blog-web-prod-1258344703.cos.ap-guangzhou.myqcloud.com/logo.svg",
+    "website": "https://hunyuan.tencent.com/blog"
+  },
+  "stepfun": {
+    "path": "/source-icons/stepfun.svg",
+    "source": "https://www.stepfun.com/step_favicon.svg",
+    "website": "https://www.stepfun.com/news"
+  },
+  "anthropic": {
+    "path": "/source-icons/anthropic.ico",
+    "source": "https://www.anthropic.com/favicon.ico",
+    "website": "https://www.anthropic.com/news"
+  },
+  "deepmind": {
+    "path": "/source-icons/deepmind.ico",
+    "source": "https://deepmind.google/favicon.ico",
+    "website": "https://deepmind.google/discover/blog/"
+  },
+  "36kr": {
+    "path": "/source-icons/36kr.png",
+    "source": "https://www.36kr.com/favicon.ico",
+    "website": "https://www.36kr.com/"
+  },
+  "meta": {
+    "path": "/source-icons/meta.webp",
+    "source": "https://static.xx.fbcdn.net/rsrc.php/yv/r/-kpAMqWYv41.webp",
+    "website": "https://ai.meta.com/blog/"
+  },
+  "sensetime": {
+    "path": "/source-icons/sensetime.png",
+    "source": "https://oss.sensetime.com/strapi/uploads/logo_23148bbf8d.png",
+    "website": "https://www.sensetime.com/cn/news"
+  },
+  "tmtpost": {
+    "path": "/source-icons/tmtpost.ico",
+    "source": "https://images.tmtpost.com/uploads/images/zhaopian/nuxtpic/change_logo3/favicon.ico",
+    "website": "https://www.tmtpost.com/"
+  },
+  "jiqizhixin": {
+    "path": "/source-icons/jiqizhixin.ico",
+    "source": "https://www.jiqizhixin.com/favicon.ico",
+    "website": "https://www.jiqizhixin.com/"
+  },
+  "zai": {
+    "path": "/source-icons/zai.svg",
+    "source": "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    "website": "https://z.ai/"
+  },
+  "qbit": {
+    "path": "/source-icons/qbit.ico",
+    "source": "https://www.qbitai.com/wp-content/themes/liangziwei/imgnew/favicon.ico",
+    "website": "https://www.qbitai.com/"
+  },
+  "xinzhiyuan": {
+    "path": "/source-icons/xinzhiyuan.ico",
+    "source": "https://www.aiera.com.cn/favicon.ico?v=20260909-s",
+    "website": "https://www.aiera.com.cn/"
+  },
+  "leiphone": {
+    "path": "/source-icons/leiphone.ico",
+    "source": "https://www.leiphone.com/favicon.ico",
+    "website": "https://www.leiphone.com/"
+  },
+  "jazzyear": {
+    "path": "/source-icons/jazzyear.png",
+    "source": "https://www.jazzyear.com/statics/image/x-icon.png",
+    "website": "https://www.jazzyear.com/"
+  },
+  "alibaba": {
+    "path": "/source-icons/alibaba.png",
+    "source": "https://img.alicdn.com/imgextra/i4/O1CN01OXv3EM1FN8t9W4P79_!!6000000000474-2-tps-80-80.png",
+    "website": "https://qwen.ai/"
+  },
+  "sspai": {
+    "path": "/source-icons/sspai.ico",
+    "source": "https://cdn-static.sspai.com/favicon/sspai.ico",
+    "website": "https://sspai.com/"
+  },
+  "minimax": {
+    "path": "/source-icons/minimax.ico",
+    "source": "https://www.minimax.io/favicon.ico",
+    "website": "https://www.minimax.io/news"
+  },
+  "reuters": {
+    "path": "/source-icons/reuters.ico",
+    "source": "https://www.reuters.com/favicon.ico",
+    "website": "https://www.reuters.com/"
+  },
+  "techweb": {
+    "path": "/source-icons/techweb.ico",
+    "source": "https://www.techweb.com.cn/favicon.ico",
+    "website": "https://www.techweb.com.cn/"
+  },
+  "bloomberg": {
+    "path": "/source-icons/bloomberg.ico",
+    "source": "https://www.bloomberg.com/favicon.ico",
+    "website": "https://www.bloomberg.com/technology"
+  },
+  "techcrunch": {
+    "path": "/source-icons/techcrunch.png",
+    "source": "https://techcrunch.com/wp-content/uploads/2015/02/cropped-cropped-favicon-gradient.png?w=32",
+    "website": "https://techcrunch.com/category/artificial-intelligence/"
+  },
+  "wired": {
+    "path": "/source-icons/wired.ico",
+    "source": "https://www.wired.com/favicon.ico",
+    "website": "https://www.wired.com/tag/artificial-intelligence/"
+  },
+  "wsj": {
+    "path": "/source-icons/wsj.ico",
+    "source": "https://www.wsj.com/favicon.ico",
+    "website": "https://www.wsj.com/tech/ai"
+  },
+  "404media": {
+    "path": "/source-icons/404media.png",
+    "source": "https://storage.ghost.io/c/0f/76/0f76b548-bc58-4f25-abc3-3f5ebca07da4/content/images/size/w256h256/format/png/2023/08/favicon-3.svg",
+    "website": "https://www.404media.co/"
+  },
+  "venturebeat": {
+    "path": "/source-icons/venturebeat.png",
+    "source": "https://venturebeat.com/favicon.ico",
+    "website": "https://venturebeat.com/category/ai/"
+  },
+  "semafor": {
+    "path": "/source-icons/semafor.ico",
+    "source": "https://www.semafor.com/favicon.ico",
+    "website": "https://www.semafor.com/vertical/technology"
+  },
+  "siliconangle": {
+    "path": "/source-icons/siliconangle.png",
+    "source": "https://siliconangle.com/wp-content/themes/siliconangle/img/favicon-SA.png",
+    "website": "https://siliconangle.com/category/ai/"
+  },
+  "importai": {
+    "path": "/source-icons/importai.png",
+    "source": "https://substackcdn.com/image/fetch/$s_!ksbh!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F031520ec-8765-4d1b-a233-67c6fdb6258a%2Ffavicon.ico",
+    "website": "https://importai.substack.com/"
+  },
+  "arstechnica": {
+    "path": "/source-icons/arstechnica.png",
+    "source": "https://cdn.arstechnica.net/wp-content/uploads/2016/10/cropped-ars-logo-512_480-60x60.png",
+    "website": "https://arstechnica.com/ai/"
+  },
+  "axios": {
+    "path": "/source-icons/axios.ico",
+    "source": "https://www.axios.com/favicon.ico",
+    "website": "https://www.axios.com/technology"
+  },
+  "ieee": {
+    "path": "/source-icons/ieee.png",
+    "source": "https://assets.rebelmouse.io/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbWFnZSI6Imh0dHBzOi8vYXNzZXRzLnJibC5tcy8yNjU5NjY0OS9vcmlnaW4ucG5nIiwiZXhwaXJlc19hdCI6MTg0ODgxODUwNn0.1LlzHtxZSVXyzapxWjeSrRIRu5qo3CeB8FaWpd2tl_o/img.png?width=192&height=192",
+    "website": "https://spectrum.ieee.org/artificial-intelligence"
+  },
+  "thebatch": {
+    "path": "/source-icons/thebatch.ico",
+    "source": "https://www.deeplearning.ai/favicon.ico",
+    "website": "https://www.deeplearning.ai/the-batch/"
+  },
+  "bensbites": {
+    "path": "/source-icons/bensbites.jpg",
+    "source": "https://substackcdn.com/image/fetch/$s_!Sj_2!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F36e304b6-6e83-407a-a86c-65309de4b67d%2Ffavicon.ico",
+    "website": "https://www.bensbites.com/"
+  },
+  "stratechery": {
+    "path": "/source-icons/stratechery.ico",
+    "source": "https://stratechery.com/favicon.ico",
+    "website": "https://stratechery.com/"
+  },
+  "exponentialview": {
+    "path": "/source-icons/exponentialview.png",
+    "source": "https://substackcdn.com/image/fetch/$s_!3KoR!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Faa7453ed-eb02-46d7-b523-74d86b1c1e24%2Ffavicon.ico",
+    "website": "https://www.exponentialview.co/"
+  },
+  "latent-articles": {
+    "path": "/source-icons/latent-articles.jpg",
+    "source": "https://substackcdn.com/image/fetch/$s_!gm_B!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ffeff84b7-b3cb-4c54-95d5-bd2a208f3f6d%2Ffavicon.ico",
+    "website": "https://www.latent.space/"
+  },
+  "tldr": {
+    "path": "/source-icons/tldr.svg",
+    "source": "https://tldr.tech/favicon-kf.svg",
+    "website": "https://tldr.tech/ai"
+  },
+  "oneusefulthing": {
+    "path": "/source-icons/oneusefulthing.jpg",
+    "source": "https://substackcdn.com/image/fetch/$s_!nznl!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2F233e9990-95ea-44ab-afc4-5abfe44f24d4%2Ffavicon.ico",
+    "website": "https://www.oneusefulthing.org/"
+  },
+  "semianalysis": {
+    "path": "/source-icons/semianalysis.png",
+    "source": "https://i0.wp.com/semianalysis.com/wp-content/uploads/2024/11/cropped-Logo2-02-1.png?fit=32%2C32&",
+    "website": "https://semianalysis.com/"
+  },
+  "interconnects": {
+    "path": "/source-icons/interconnects.png",
+    "source": "https://substackcdn.com/image/fetch/$s_!NNek!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F6f0da424-dc5e-43bf-ae0d-56b947e43c23%2Ffavicon.ico",
+    "website": "https://www.interconnects.ai/"
+  },
+  "rundown": {
+    "path": "/source-icons/rundown.ico",
+    "source": "https://www.therundown.ai/favicon.ico?favicon.3j7bv152q5_5l.ico",
+    "website": "https://www.therundown.ai/"
+  },
+  "arxiv": {
+    "path": "/source-icons/arxiv.png",
+    "source": "https://arxiv.org/static/browse/0.3.4/images/icons/apple-touch-icon.png",
+    "website": "https://arxiv.org/list/cs.AI/recent"
+  },
+  "scholar": {
+    "path": "/source-icons/scholar.ico",
+    "source": "https://scholar.google.com/favicon.ico",
+    "website": "https://scholar.google.com/"
+  },
+  "hai": {
+    "path": "/source-icons/hai.ico",
+    "source": "https://hai.stanford.edu/favicon.ico",
+    "website": "https://hai.stanford.edu/news"
+  },
+  "platformer": {
+    "path": "/source-icons/platformer.png",
+    "source": "https://storage.ghost.io/c/a0/4c/a04c7225-d919-4d78-9b7c-a3fdd071349b/content/images/size/w256h256/2024/05/Logomark_Blue_800px.png",
+    "website": "https://www.platformer.news/"
+  },
+  "semantic": {
+    "path": "/source-icons/semantic.png",
+    "source": "https://cdn.semanticscholar.org/96374d262d7c8584/img/favicon-196x196.png",
+    "website": "https://www.semanticscholar.org/"
+  },
+  "thu-yao": {
+    "path": "/source-icons/thu-yao.png",
+    "source": "https://iiis.tsinghua.edu.cn/images/favicon.png",
+    "website": "https://iiis.tsinghua.edu.cn/"
+  },
+  "thu-dai": {
+    "path": "/source-icons/thu-dai.png",
+    "source": "https://media.au.tsinghua.edu.cn/cn/images/favicon.png",
+    "website": "https://media.au.tsinghua.edu.cn/cn/xwtz/xw.htm"
+  },
+  "cas": {
+    "path": "/source-icons/cas.png",
+    "source": "https://ia.cas.cn/images/favicon.png",
+    "website": "https://ia.cas.cn/"
+  },
+  "pku-lin": {
+    "path": "/source-icons/pku-lin.png",
+    "source": "https://www.pku.edu.cn/pku_logo_red.png",
+    "website": "https://www.ai.pku.edu.cn/kxyj1/tyrgznyjs/jqxxyznkxllyjzx.htm"
+  },
+  "csail": {
+    "path": "/source-icons/csail.ico",
+    "source": "https://www.csail.mit.edu/themes/custom/csail/images/favicon.ico",
+    "website": "https://www.csail.mit.edu/news"
+  },
+  "bair": {
+    "path": "/source-icons/bair.ico",
+    "source": "https://bair.berkeley.edu/favicon.ico",
+    "website": "https://bair.berkeley.edu/blog/"
+  },
+  "huggingface": {
+    "path": "/source-icons/huggingface.ico",
+    "source": "https://huggingface.co/favicon.ico",
+    "website": "https://huggingface.co/"
+  },
+  "mit": {
+    "path": "/source-icons/mit.ico",
+    "source": "https://news.mit.edu/themes/mit/assets/img/favicon/favicon.ico",
+    "website": "https://news.mit.edu/topic/artificial-intelligence2"
+  },
+  "neurips": {
+    "path": "/source-icons/neurips.ico",
+    "source": "https://neurips.cc/favicon.ico",
+    "website": "https://neurips.cc/"
+  },
+  "icml": {
+    "path": "/source-icons/icml.ico",
+    "source": "https://icml.cc/favicon.ico",
+    "website": "https://icml.cc/"
+  },
+  "cmu": {
+    "path": "/source-icons/cmu.png",
+    "source": "https://blog.ml.cmu.edu/wp-content/uploads/2018/06/favicon-80x80.png",
+    "website": "https://blog.ml.cmu.edu/"
+  },
+  "iclr": {
+    "path": "/source-icons/iclr.ico",
+    "source": "https://iclr.cc/favicon.ico",
+    "website": "https://iclr.cc/"
+  },
+  "mmlab": {
+    "path": "/source-icons/mmlab.ico",
+    "source": "https://mmlab.ie.cuhk.edu.hk/favicon.ico",
+    "website": "https://mmlab.ie.cuhk.edu.hk/"
+  },
+  "emnlp": {
+    "path": "/source-icons/emnlp.png",
+    "source": "https://2026.emnlp.org/assets/images/apple-touch-icon-57x57.png",
+    "website": "https://2026.emnlp.org/"
+  },
+  "naacl": {
+    "path": "/source-icons/naacl.ico",
+    "source": "https://naacl.org/favicon.ico",
+    "website": "https://naacl.org/"
+  },
+  "github": {
+    "path": "/source-icons/github.ico",
+    "source": "https://github.com/favicon.ico",
+    "website": "https://github.com/topics/artificial-intelligence"
+  },
+  "iccv": {
+    "path": "/source-icons/iccv.png",
+    "source": "https://www.thecvf.com/wp-content/uploads/2020/06/cropped-cvf-icon-small-32x32.png",
+    "website": "https://www.thecvf.com/"
+  },
+  "sacra": {
+    "path": "/source-icons/sacra.ico",
+    "source": "https://sacra.com/static/img/favicon.ico",
+    "website": "https://sacra.com/"
+  },
+  "contrary": {
+    "path": "/source-icons/contrary.ico",
+    "source": "https://research.contrary.com/favicon.ico",
+    "website": "https://research.contrary.com/"
+  },
+  "a16z-research": {
+    "path": "/source-icons/a16z-research.png",
+    "source": "https://substackcdn.com/image/fetch/$s_!ynep!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F39a4e8ca-baad-4811-b30a-c3144e770475%2Ffavicon.ico",
+    "website": "https://www.a16z.news/"
+  },
+  "sequoia": {
+    "path": "/source-icons/sequoia.png",
+    "source": "https://framerusercontent.com/images/ItZ3Og0z4GahXe5uWHqwk69EPRw.png",
+    "website": "https://www.sequoiacap.com/"
+  }
+}
