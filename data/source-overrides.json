@@ -140,5 +140,12 @@
   },
   "nvresearch": {
     "notice": "论文目录含会议月份而非统一发布日期，尚未作为实时新闻源启用"
+  },
+  "36kr": {
+    "website": "https://www.36kr.com/",
+    "feed": "https://www.36kr.com/feed-article",
+    "adapter": "rss",
+    "uncompressed": true,
+    "notice": "官方文章 RSS；使用 www 域名并请求不压缩的响应，避免裸域安全检测页和压缩传输错误"
   }
 }

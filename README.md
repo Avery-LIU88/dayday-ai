@@ -84,3 +84,7 @@ npm run build
 不同来源覆盖范围不同，机构首页可访问不代表已采到新闻，取得历史文章也不代表最近有更新。Papers with Code 目前跳转 Hugging Face Papers，沿用已接 HF 论文源，不重复计数。百度研究院显示维护中；机器之心旧 RSS 返回数据服务页；其他受限来源仍保留待接入/更新异常状态。
 
 所有新增数据提取均不执行下载的 JavaScript；只读取公开列表、明确的文字字段或元信息。采集与摘要长度仍有上限，无付费全文、登录 Cookie 或用户私人订阅。本次未修改提醒功能或现有云任务配置。
+
+### 36氪 RSS 修复
+
+官方订阅中心：`https://www.36kr.com/rss-center`。使用带 `www` 的 `feed-article` 和 `feed-newsflash`，分别获取文章与快讯，发布者统一为 `36kr`。裸域 `36kr.com/feed` 在本次环境返回安全检测页；`www` 的压缩响应虽含完整 RSS，curl 仍报传输错误，指定 `Accept-Encoding: identity` 后可完整读取。仅这两个来源设置 `uncompressed: true`；不跳过 TLS 校验，不使用登录 Cookie，不将阅读器缓存当作在线采集结果。线上是否成功以最新 `health` 为准。

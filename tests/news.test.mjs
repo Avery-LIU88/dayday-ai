@@ -47,6 +47,13 @@ test('RSS collector rejects HTML responses and returns stable IDs on repeated co
  const rss='<rss><channel><item><title>New AI model</title><link>https://example.com/model</link><pubDate>Mon, 19 Oct 2026 08:00:00 GMT</pubDate><description>Model launch</description></item></channel></rss>';
  const a=await collectSource(source,async()=>new Response(rss)),b=await collectSource(source,async()=>new Response(rss));assert.equal(a.items[0].id,b.items[0].id);assert.ok(a.items[0].topics.includes('产品发布'));
 });
+test('36kr official RSS can request identity encoding without changing other sources',async()=>{
+ const source={id:'36kr',name:'36氪',website:'https://www.36kr.com/',feed:'https://www.36kr.com/feed-article',adapter:'rss',section:'媒体资讯',language:'zh',uncompressed:true};
+ const requests=[];const fetcher=async(url,options)=>{requests.push({url,headers:options.headers});return new Response('<rss><channel><item><title>AI 模型发布</title><link>https://www.36kr.com/p/1</link><pubDate>Mon, 19 Oct 2026 08:00:00 GMT</pubDate></item></channel></rss>');};
+ const result=await collectSource(source,fetcher);await collectSource({...source,uncompressed:false},fetcher);
+ assert.equal(result.items.length,1);assert.equal(requests[0].url,'https://www.36kr.com/feed-article');
+ assert.equal(requests[0].headers['Accept-Encoding'],'identity');assert.equal(requests[1].headers['Accept-Encoding'],undefined);
+});
 test('dated newsletter links retain the real issue title and date',()=>{
  const [item]=parseDatedList('<a href=\"/ai/2026-10-19\"><div><time dateTime=\"2026-10-19\">Oct 19, 2026</time>New AI model</div></a>',{id:'tldr',name:'TLDR',adapter:'tldr',website:'https://tldr.tech',section:'Newsletter'});
  assert.equal(item.title,'New AI model');assert.equal(item.publishedAt,'2026-10-19T00:00:00.000Z');

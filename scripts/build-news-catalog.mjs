@@ -59,6 +59,7 @@ const mediaRows=[
  ['siliconangle','SiliconANGLE','https://siliconangle.com/category/ai/','https://siliconangle.com/feed/']
 ];
 for(const [id,name,url,feed] of mediaRows)add(media,id,name,url,feed,{filterAI:!['qbit','jiqizhixin','techcrunch','wired','ieee','venturebeat'].includes(id),language:['infoq'].includes(id)?'en':/[\u4e00-\u9fff]/.test(name)?'zh':'en',notice:['ft','bloomberg','information','wsj'].includes(id)?'仅采集公开元信息，付费正文在原站阅读':''});
+add(media,'36kr-flashes','36氪 · 快讯','https://www.36kr.com/','https://www.36kr.com/feed-newsflash',{publisher:'36kr',filterAI:true,uncompressed:true,scope:'截图媒体官方快讯端点',notice:'官方快讯 RSS；与文章源按发布者合并计数'});
 
 const newsletter='Newsletter';
 for(const [id,name,url,feed] of [
