@@ -61,3 +61,17 @@ export const notices = sqliteTable("notices", {
   createdAt: text("created_at").notNull(),
   message: text("message").notNull(),
 });
+export const feedback = sqliteTable("feedback", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  submissionKey: text("submission_key").notNull().unique(),
+  payloadHash: text("payload_hash").notNull(),
+  content: text("content").notNull(),
+  email: text("email").notNull().default(""),
+  pageUrl: text("page_url").notNull().default(""),
+  createdAt: text("created_at").notNull(),
+});
+export const feedbackLimits = sqliteTable("feedback_limits", {
+  key: text("key").primaryKey(),
+  count: integer("count").notNull().default(1),
+  expiresAt: integer("expires_at").notNull(),
+});

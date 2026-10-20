@@ -1,12 +1,14 @@
 'use client';
 import {useEffect,useMemo,useRef,useState} from 'react';
-import {Satellite,Newspaper,BookOpen,CalendarDays,Layers,Bookmark,Radio,Bell,Trophy,Plug,Info,MessageSquare,Search,ExternalLink,X,Menu,ChevronRight,RefreshCw,ArrowRight,Sun,Moon,Download} from 'lucide-react';
+import {Satellite,Newspaper,BookOpen,CalendarDays,Layers,Bookmark,Radio,Bell,Trophy,Plug,Info,MessageSquare,Search,ExternalLink,X,Menu,ChevronRight,RefreshCw,ArrowRight,Sun,Moon} from 'lucide-react';
 import type {NewsState} from '../lib/news-store';
 import SubscriptionPanel from './subscription-panel';
 import SourceMark from './source-mark';
 import DailyBrief from './daily-brief';
 import TopicBrowser from './topic-browser';
 import ModelLeaderboard from './model-leaderboard';
+import AboutPanel from './about-panel';
+import FeedbackPanel from './feedback-panel';
 import TodayHot,{EventScore} from './today-hot';
 type Story=NewsState['stories'][number];
 type View='news'|'daily'|'weekly'|'topics'|'saved'|'following'|'settings'|'ranking'|'agent'|'about'|'feedback';
@@ -18,7 +20,8 @@ function sourceStatus(source:NewsState['sources'][number],data:NewsState){const 
 function loadSaved():Story[]{try{const raw=JSON.parse(localStorage.getItem('dayday-bookmarks-v1')||'[]');return Array.isArray(raw)?raw.filter(s=>s&&typeof s.id==='string'&&typeof s.title==='string'&&/^https?:\/\//.test(s.url)):[];}catch{return [];}}
 export default function Dashboard({initial}:{initial:NewsState}){
  const [data,setData]=useState(initial),[view,setView]=useState<View>('news'),[topic,setTopic]=useState('全部'),[query,setQuery]=useState(''),[source,setSource]=useState('all'),[language,setLanguage]=useState('all'),[subtype,setSubtype]=useState('全部类型'),[sort,setSort]=useState('score'),[limit,setLimit]=useState(25),[saved,setSaved]=useState<Story[]>([]),[selected,setSelected]=useState<Story|null>(null),[showSources,setShowSources]=useState(false),[mobile,setMobile]=useState(false),[dark,setDark]=useState(false),[notice,setNotice]=useState(''),[refreshing,setRefreshing]=useState(false);
- const dialog=useRef<HTMLDialogElement>(null);
+ const dialog=useRef<HTMLDialogElement>(null),lastPage=useRef<View>('news');
+ useEffect(()=>{if(view!=='feedback')lastPage.current=view;},[view]);
  useEffect(()=>{setSaved(loadSaved());const onStorage=()=>setSaved(loadSaved());const onHash=()=>{const hash=location.hash.slice(1);if(hash in labels)setView(hash as View);};onHash();setDark(localStorage.getItem('dayday-theme')==='dark');window.addEventListener('hashchange',onHash);window.addEventListener('storage',onStorage);return()=>{window.removeEventListener('hashchange',onHash);window.removeEventListener('storage',onStorage);};},[]);
  useEffect(()=>{document.documentElement.dataset.theme=dark?'dark':'light';},[dark]);
  useEffect(()=>{if(selected)dialog.current?.showModal();else dialog.current?.close();},[selected]);
@@ -42,7 +45,7 @@ export default function Dashboard({initial}:{initial:NewsState}){
  {mobile&&<button className="nav-backdrop" aria-label="关闭导航" onClick={()=>setMobile(false)}/>}
  <aside className={`sidebar ${mobile?'open':''}`}><a className="brand" href="#news" onClick={()=>go('news')}><span className="brand-icon"><Satellite size={26}/></span><span>DayDay AI</span></a><div className="navigation">{groups.map(g=><section className="nav-group" key={g.label}><p className="group-label">{g.label}</p><nav aria-label={g.label}>{g.items.map(([id,label,Icon])=><button className={`nav ${view===id?'active':''}`} aria-current={view===id?'page':undefined} key={id} onClick={()=>go(id)}><Icon size={20}/><span>{label}</span></button>)}</nav></section>)}</div><footer className="sidebar-footer"><p>每天一点，跟上 AI。</p><button onClick={()=>{setDark(!dark);try{localStorage.setItem('dayday-theme',!dark?'dark':'light');}catch{}}}>{dark?<Moon size={16}/>:<Sun size={16}/>} {dark?'深色模式':'浅色模式'}</button></footer></aside>
  <div className="main"><header className="mobile-header"><button aria-label="打开导航" onClick={()=>setMobile(true)}><Menu/></button><strong>DayDay AI</strong></header><main className={`page view-${view}`}>
- {view!=='daily'&&view!=='weekly'&&view!=='ranking'&&<div className="heading"><h1>{labels[view]}</h1><div className="heading-actions">{view==='news'?<time className="news-updated-at" dateTime={data.collectedAt}>{updateText(data.collectedAt)}</time>:isReading&&view!=='topics'&&<><button className="text-button" onClick={()=>setShowSources(!showSources)}>{showSources?'返回资讯':'信息源'}</button><button className="icon-button" aria-label="刷新资讯" disabled={refreshing} onClick={refresh}><RefreshCw size={18} className={refreshing?'spinning':''}/></button></>}</div></div>}
+ {view!=='daily'&&view!=='weekly'&&view!=='ranking'&&<div className="heading"><h1>{view==='feedback'?'说说你的想法':labels[view]}</h1><div className="heading-actions">{view==='news'?<time className="news-updated-at" dateTime={data.collectedAt}>{updateText(data.collectedAt)}</time>:isReading&&view!=='topics'&&<><button className="text-button" onClick={()=>setShowSources(!showSources)}>{showSources?'返回资讯':'信息源'}</button><button className="icon-button" aria-label="刷新资讯" disabled={refreshing} onClick={refresh}><RefreshCw size={18} className={refreshing?'spinning':''}/></button></>}</div></div>}
  {view==='news'&&<p className="positioning">过去24小时AI圈讨论最多的事儿</p>}
  {view==='topics'&&<nav className="category-tabs" aria-label="主题分类">{['全部',...data.topics].map(t=><button key={t} className={topic===t?'selected':''} onClick={()=>{setTopic(t);setSource('all');setSubtype('全部类型');setShowSources(false);}}>{t}</button>)}</nav>}
  {isReading&&<>
@@ -55,11 +58,11 @@ export default function Dashboard({initial}:{initial:NewsState}){
  </>}
  {view!=='news'&&view!=='daily'&&view!=='weekly'&&view!=='topics'&&view!=='ranking'&&<footer className="page-footer"><span>最近采集 {dateText(data.collectedAt)}</span><span>{data.pipeline.mode}</span></footer>}
  </>}
- {view==='about'&&<div className="prose"><h2>每天一点，跟上 AI。</h2><p>DayDay AI 聚合你关心的 AI 信息。免费阅读，无需注册，收藏保存在当前浏览器。</p><h2>覆盖范围</h2><p>按已确认的信息源清单接入公司官方动态、论文与研究、媒体、Newsletter、开发者平台及行业事件。当前 {data.stats.configured} 个采集端点中，{data.stats.healthyEndpoints} 个在最近 48 小时检查正常，对应 {data.stats.healthy} 个独立发布者。</p><button className="secondary" onClick={()=>{go('topics');setShowSources(true);}}>查看全部信息源</button><h2>怎样筛选与评分</h2><p>先过滤无关内容，再按原文链接、标题和相近发布时间合并。事件综合评分由讨论热度（40 分）、事件重要性（35 分）、时效性（15 分）与信息可靠性（10 分）组成。热度依据去重后的报道覆盖及近期新增报道估算，尚未接入社媒互动量。今日热点只展示首次报道在过去24小时内的事件。</p><p>当前使用规则评分及来源公开摘要。未启用模型翻译，不将英文原文冒充中文摘要；跨语言同一事件可能尚未合并。</p><h2>更新与来源</h2><p>每条内容保留原文入口。更新时间、采集失败与尚未接入的来源可在信息源列表查看。付费或私有内容不复制全文。</p></div>}
+ {view==='about'&&<AboutPanel data={data} onBrowse={()=>go('news')} onSources={()=>{go('topics');setShowSources(true);}}/>}
  {(view==='following'||view==='settings')&&<SubscriptionPanel view={view}/>}
  {view==='ranking'&&<ModelLeaderboard/>}
  {view==='agent'&&<div className="prose"><h2>公开资讯接口</h2><p>无需登录，可读取已聚合的公开资讯、来源和状态。</p><a className="secondary" href="/api/state" target="_blank" rel="noopener noreferrer">打开 JSON 接口 <ExternalLink size={16}/></a><pre>GET /api/state</pre><p>stories：资讯及评分依据；sources：来源清单；health：最近采集状态。建议请求间隔不少于 5 分钟。</p></div>}
- {view==='feedback'&&<div className="prose"><h2>导出问题记录</h2><p>反馈收件渠道尚未设置。你可以先下载问题记录，发给网站维护者。</p><form onSubmit={e=>{e.preventDefault();const text=String(new FormData(e.currentTarget).get('feedback')||'').trim();if(!text)return;const blob=new Blob([`DayDay AI 反馈\n${new Date().toISOString()}\n\n${text}`],{type:'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='DayDay-AI-反馈.txt';a.click();URL.revokeObjectURL(url);setNotice('问题记录已下载，尚未发送');}}><label className="sr-only" htmlFor="feedback">反馈内容</label><textarea id="feedback" name="feedback" required minLength={5} maxLength={2000} placeholder="描述遇到的问题或遗漏的信息源"/><button className="secondary" type="submit"><Download size={16}/>下载记录</button></form></div>}
+ {view==='feedback'&&<FeedbackPanel from={lastPage.current} onHome={()=>go('news')}/>}
  </main></div>
  <dialog ref={dialog} onCancel={()=>setSelected(null)} onClick={e=>{if(e.target===dialog.current)setSelected(null);}} aria-labelledby="detail-title"><button className="dialog-close" aria-label="关闭详情" onClick={()=>setSelected(null)}><X/></button>{selected&&<><div className="meta">{selected.source} · {dateText(selected.publishedAt)}</div><h2 id="detail-title">{selected.title}</h2><p className="detail-summary">{selected.summary||'此来源未提供公开摘要，请打开原文阅读。'}</p>{selected.scoreVersion===2?<><p className="detail-why"><strong>为什么关注</strong>{selected.why}</p><EventScore story={selected}/></>:<div className="score-box"><h3>热度趋势</h3><p>此历史收藏暂无趋势记录。</p></div>}<h3>来源与原文</h3><ul className="original-links">{selected.links.map(l=><li key={`${l.sourceId}:${l.url}`}><a href={l.url} target="_blank" rel="noopener noreferrer"><SourceMark publisher={l.publisher||l.sourceId} name={l.source}/> <ExternalLink size={14}/></a></li>)}</ul><div className="dialog-actions"><button className="secondary" onClick={()=>toggleSave(selected)}><Bookmark size={16}/>{saved.some(s=>s.id===selected.id)?'取消收藏':'收藏'}</button><a className="primary" href={selected.url} target="_blank" rel="noopener noreferrer">阅读原文 <ChevronRight size={17}/></a></div></>}</dialog>
  {notice&&<div className="toast" role="status">{notice}</div>}
