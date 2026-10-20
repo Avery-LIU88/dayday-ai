@@ -1,5 +1,7 @@
 import {env} from 'cloudflare:workers';
 import seed from '../data/model-rankings.json';
+import priceSeed from '../data/model-costs.json';
+import {fetchCostSnapshot} from './model-cost.mjs';
 import {fetchModelSnapshot} from './model-ranking-fetch.mjs';
 import type {ModelSnapshot,ModelHealth} from './model-ranking-types';
 const db=()=>(env as {DB?:D1Database}).DB;
@@ -15,12 +17,15 @@ async function write(key:string,value:unknown){
 export async function modelRankings(){
  try{
   const [stored,health]=await Promise.all([read<ModelSnapshot>('model_rankings_v1',initial),read<ModelHealth|null>('model_rankings_health_v1',null)]);
-  return {snapshot:Date.parse(stored.updatedAt)>Date.parse(initial.updatedAt)?stored:initial,health};
- }catch{return {snapshot:initial,health:null};}
+  const cachedPrices=await read('model_prices_v1',priceSeed);
+  return {snapshot:Date.parse(stored.updatedAt)>Date.parse(initial.updatedAt)?stored:initial,health,prices:Date.parse(cachedPrices.updatedAt)>Date.parse(priceSeed.updatedAt)?cachedPrices:priceSeed};
+ }catch{return {snapshot:initial,health:null,prices:priceSeed};}
 }
 /** Called once after a completed scheduled news round; never fetches on visitor requests. */
 export async function refreshModelRankings(){
  const checkedAt=new Date().toISOString();
+ // Price failures retain the prior valid snapshot and do not block capability updates.
+ try{await write('model_prices_v1',await fetchCostSnapshot());}catch{}
  try{
   const snapshot=await fetchModelSnapshot();
   await write('model_rankings_v1',snapshot);

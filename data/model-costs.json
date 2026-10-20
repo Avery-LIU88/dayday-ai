@@ -1,0 +1,1546 @@
+{
+  "updatedAt": "2026-10-20T19:13:01.769Z",
+  "source": "https://openrouter.ai/api/v1/models",
+  "rows": [
+    {
+      "id": "nvidia/nemotron-3.5-super-vl",
+      "name": "Nemotron 3.5 Super VL",
+      "provider": "nvidia",
+      "input": 1.5e-7,
+      "output": 5e-7
+    },
+    {
+      "id": "google/gemini-4-argon",
+      "name": "Gemini 4 Argon",
+      "provider": "deepmind",
+      "input": 0.000002,
+      "output": 0.00001
+    },
+    {
+      "id": "stepfun/step-5-preview",
+      "name": "Step 5 Preview",
+      "provider": "stepfun",
+      "input": 0.000001,
+      "output": 0.0000027
+    },
+    {
+      "id": "anthropic/claude-haiku-5.5",
+      "name": "Claude Haiku 5.5",
+      "provider": "anthropic",
+      "input": 1e-7,
+      "output": 5e-7
+    },
+    {
+      "id": "google/gemini-nano-banana-2.1",
+      "name": "Nano Banana 2.1",
+      "provider": "deepmind",
+      "input": 0.0000015,
+      "output": 0.0000075
+    },
+    {
+      "id": "openai/gpt-6.1-sol-pro",
+      "name": "GPT-6.1 Sol Pro",
+      "provider": "openai",
+      "input": 0.000002,
+      "output": 0.00001
+    },
+    {
+      "id": "openai/gpt-6.1-sol",
+      "name": "GPT-6.1 Sol",
+      "provider": "openai",
+      "input": 0.000002,
+      "output": 0.00001
+    },
+    {
+      "id": "anthropic/claude-sonnet-5.5",
+      "name": "Claude Sonnet 5.5",
+      "provider": "anthropic",
+      "input": 0.000002,
+      "output": 0.00001
+    },
+    {
+      "id": "z-ai/glm-5.3-prime",
+      "name": "GLM 5.3 Prime",
+      "provider": "zai",
+      "input": 0.0000028,
+      "output": 0.0000088
+    },
+    {
+      "id": "qwen/qwen3.8-max-prime",
+      "name": "Qwen3.8 Max Prime",
+      "provider": "alibaba",
+      "input": 0.000004,
+      "output": 0.000012
+    },
+    {
+      "id": "openai/gpt-6-luna-pro",
+      "name": "GPT-6 Luna Pro",
+      "provider": "openai",
+      "input": 1e-7,
+      "output": 5e-7
+    },
+    {
+      "id": "openai/gpt-6-luna",
+      "name": "GPT-6 Luna",
+      "provider": "openai",
+      "input": 1e-7,
+      "output": 5e-7
+    },
+    {
+      "id": "openai/gpt-6-sol-pro",
+      "name": "GPT-6 Sol Pro",
+      "provider": "openai",
+      "input": 0.000002,
+      "output": 0.00001
+    },
+    {
+      "id": "openai/gpt-6-sol",
+      "name": "GPT-6 Sol",
+      "provider": "openai",
+      "input": 0.000002,
+      "output": 0.00001
+    },
+    {
+      "id": "anthropic/claude-opus-5.5",
+      "name": "Claude Opus 5.5",
+      "provider": "anthropic",
+      "input": 0.000004,
+      "output": 0.00002
+    },
+    {
+      "id": "qwen/qwen3.8-omni-flash",
+      "name": "Qwen3.8 Omni Flash",
+      "provider": "alibaba",
+      "input": 1.5e-7,
+      "output": 4.7e-7
+    },
+    {
+      "id": "z-ai/glm-5.3-flashx",
+      "name": "GLM 5.3 FlashX",
+      "provider": "zai",
+      "input": 3.7e-7,
+      "output": 0.00000125
+    },
+    {
+      "id": "deepseek/deepseek-v4.1-flash",
+      "name": "DeepSeek V4.1 Flash",
+      "provider": "deepseek",
+      "input": 2.832e-8,
+      "output": 1.2e-7
+    },
+    {
+      "id": "openai/gpt-6-astra",
+      "name": "GPT-6 Astra",
+      "provider": "openai",
+      "input": 0.00001,
+      "output": 0.00005
+    },
+    {
+      "id": "openai/gpt-6-astra-pro",
+      "name": "GPT-6 Astra Pro",
+      "provider": "openai",
+      "input": 0.00001,
+      "output": 0.00005
+    },
+    {
+      "id": "qwen/qwen3.8-max-0902",
+      "name": "Qwen3.8 Max (0902)",
+      "provider": "alibaba",
+      "input": 0.000002,
+      "output": 0.000006
+    },
+    {
+      "id": "google/gemini-3.8-flash",
+      "name": "Gemini 3.8 Flash",
+      "provider": "deepmind",
+      "input": 8.25e-7,
+      "output": 0.000004125
+    },
+    {
+      "id": "anthropic/claude-fable-5.1",
+      "name": "Claude Fable 5.1",
+      "provider": "anthropic",
+      "input": 0.00001,
+      "output": 0.00005
+    },
+    {
+      "id": "qwen/qwen3.8-flash",
+      "name": "Qwen3.8 Flash",
+      "provider": "alibaba",
+      "input": 1.5e-7,
+      "output": 4.7e-7
+    },
+    {
+      "id": "z-ai/glm-5.3-flash",
+      "name": "GLM 5.3 Flash",
+      "provider": "zai",
+      "input": 4.7076e-8,
+      "output": 1.2e-7
+    },
+    {
+      "id": "deepseek/deepseek-v4-flash-vision-exp",
+      "name": "DeepSeek V4 Flash Vision Exp",
+      "provider": "deepseek",
+      "input": 2.156e-7,
+      "output": 6.468e-7
+    },
+    {
+      "id": "tencent/hy-mt2-1.8b",
+      "name": "Hy-MT2-1.8B",
+      "provider": "tencent",
+      "input": 4.4e-8,
+      "output": 1.77e-7
+    },
+    {
+      "id": "tencent/hy-mt2-30b-a3b",
+      "name": "Hy-MT2-30B-A3B",
+      "provider": "tencent",
+      "input": 7.4e-8,
+      "output": 2.95e-7
+    },
+    {
+      "id": "tencent/hy-mt2-7b",
+      "name": "Hy-MT2-7B",
+      "provider": "tencent",
+      "input": 7.4e-8,
+      "output": 2.95e-7
+    },
+    {
+      "id": "z-ai/glm-5.3",
+      "name": "GLM 5.3",
+      "provider": "zai",
+      "input": 7.9e-8,
+      "output": 0.0000014
+    },
+    {
+      "id": "qwen/qwen3.8-27b",
+      "name": "Qwen3.8 27B",
+      "provider": "alibaba",
+      "input": 4e-8,
+      "output": 0.00000135
+    },
+    {
+      "id": "google/gemini-3.7-flash",
+      "name": "Gemini 3.7 Flash",
+      "provider": "deepmind",
+      "input": 7.5e-7,
+      "output": 0.00000375
+    },
+    {
+      "id": "qwen/qwen3.8-2.4t-a95b",
+      "name": "Qwen3.8 2.4T A95B",
+      "provider": "alibaba",
+      "input": 0.000002,
+      "output": 0.000006
+    },
+    {
+      "id": "deepseek/deepseek-v4-pro-0813",
+      "name": "DeepSeek V4 Pro 0813",
+      "provider": "deepseek",
+      "input": 6.6e-7,
+      "output": 0.00000198
+    },
+    {
+      "id": "nvidia/nemotron-3.5-lightning",
+      "name": "Nemotron 3.5 Lightning",
+      "provider": "nvidia",
+      "input": 7e-8,
+      "output": 2e-7
+    },
+    {
+      "id": "deepseek/deepseek-v4-flash-0731",
+      "name": "DeepSeek V4 Flash 0731",
+      "provider": "deepseek",
+      "input": 1.298e-7,
+      "output": 3.894e-7
+    },
+    {
+      "id": "qwen/qwen3.7-flash",
+      "name": "Qwen3.7 Flash",
+      "provider": "alibaba",
+      "input": 3e-8,
+      "output": 1.3e-7
+    },
+    {
+      "id": "anthropic/claude-opus-5",
+      "name": "Claude Opus 5",
+      "provider": "anthropic",
+      "input": 0.000005,
+      "output": 0.000025
+    },
+    {
+      "id": "google/gemini-3.6-flash",
+      "name": "Gemini 3.6 Flash",
+      "provider": "deepmind",
+      "input": 7.5e-7,
+      "output": 0.00000375
+    },
+    {
+      "id": "google/gemini-3.5-flash-lite",
+      "name": "Gemini 3.5 Flash Lite",
+      "provider": "deepmind",
+      "input": 3e-7,
+      "output": 0.0000025
+    },
+    {
+      "id": "moonshotai/kimi-k3",
+      "name": "Kimi K3",
+      "provider": "moonshot",
+      "input": 2.39e-7,
+      "output": 0.000011936
+    },
+    {
+      "id": "openai/gpt-5.6-luna-pro",
+      "name": "GPT-5.6 Luna Pro",
+      "provider": "openai",
+      "input": 2e-7,
+      "output": 0.0000012
+    },
+    {
+      "id": "openai/gpt-5.6-luna",
+      "name": "GPT-5.6 Luna",
+      "provider": "openai",
+      "input": 2e-7,
+      "output": 0.0000012
+    },
+    {
+      "id": "openai/gpt-5.6-terra-pro",
+      "name": "GPT-5.6 Terra Pro",
+      "provider": "openai",
+      "input": 0.000002,
+      "output": 0.000012
+    },
+    {
+      "id": "openai/gpt-5.6-terra",
+      "name": "GPT-5.6 Terra",
+      "provider": "openai",
+      "input": 0.000002,
+      "output": 0.000012
+    },
+    {
+      "id": "openai/gpt-5.6-sol-pro",
+      "name": "GPT-5.6 Sol Pro",
+      "provider": "openai",
+      "input": 0.000004,
+      "output": 0.00002
+    },
+    {
+      "id": "openai/gpt-5.6-sol",
+      "name": "GPT-5.6 Sol",
+      "provider": "openai",
+      "input": 0.000004,
+      "output": 0.00002
+    },
+    {
+      "id": "anthropic/claude-sonnet-5",
+      "name": "Claude Sonnet 5",
+      "provider": "anthropic",
+      "input": 0.000002,
+      "output": 0.00001
+    },
+    {
+      "id": "google/gemini-3.1-flash-lite-image",
+      "name": "Nano Banana 2 Lite (Gemini 3.1 Flash Lite Image)",
+      "provider": "deepmind",
+      "input": 2.5e-7,
+      "output": 0.0000015
+    },
+    {
+      "id": "google/gemini-3.1-flash-image",
+      "name": "Nano Banana 2 (Gemini 3.1 Flash Image)",
+      "provider": "deepmind",
+      "input": 5e-7,
+      "output": 0.000003
+    },
+    {
+      "id": "google/gemini-3-pro-image",
+      "name": "Nano Banana Pro (Gemini 3 Pro Image)",
+      "provider": "deepmind",
+      "input": 0.000002,
+      "output": 0.000012
+    },
+    {
+      "id": "z-ai/glm-5.2",
+      "name": "GLM 5.2",
+      "provider": "zai",
+      "input": 6.2e-7,
+      "output": 0.00000242
+    },
+    {
+      "id": "moonshotai/kimi-k2.7-code",
+      "name": "Kimi K2.7 Code",
+      "provider": "moonshot",
+      "input": 6.712e-7,
+      "output": 0.00000335
+    },
+    {
+      "id": "anthropic/claude-fable-5",
+      "name": "Claude Fable 5",
+      "provider": "anthropic",
+      "input": 0.00001,
+      "output": 0.00005
+    },
+    {
+      "id": "nvidia/nemotron-3.5-content-safety",
+      "name": "Nemotron 3.5 Content Safety",
+      "provider": "nvidia",
+      "input": 2e-7,
+      "output": 2e-7
+    },
+    {
+      "id": "nvidia/nemotron-3-ultra-550b-a55b",
+      "name": "Nemotron 3 Ultra",
+      "provider": "nvidia",
+      "input": 6e-7,
+      "output": 0.0000024
+    },
+    {
+      "id": "qwen/qwen3.7-plus",
+      "name": "Qwen3.7 Plus",
+      "provider": "alibaba",
+      "input": 3.2e-7,
+      "output": 0.00000128
+    },
+    {
+      "id": "minimax/minimax-m3",
+      "name": "MiniMax M3",
+      "provider": "minimax",
+      "input": 3e-7,
+      "output": 0.0000012
+    },
+    {
+      "id": "stepfun/step-3.7-flash",
+      "name": "Step 3.7 Flash",
+      "provider": "stepfun",
+      "input": 2e-7,
+      "output": 0.00000115
+    },
+    {
+      "id": "anthropic/claude-opus-4.8",
+      "name": "Claude Opus 4.8",
+      "provider": "anthropic",
+      "input": 0.000005,
+      "output": 0.000025
+    },
+    {
+      "id": "qwen/qwen3.7-max",
+      "name": "Qwen3.7 Max",
+      "provider": "alibaba",
+      "input": 0.000001475,
+      "output": 0.000004425
+    },
+    {
+      "id": "google/gemini-3.5-flash",
+      "name": "Gemini 3.5 Flash",
+      "provider": "deepmind",
+      "input": 0.0000015,
+      "output": 0.000009
+    },
+    {
+      "id": "google/gemini-3.1-flash-lite",
+      "name": "Gemini 3.1 Flash Lite",
+      "provider": "deepmind",
+      "input": 2.5e-7,
+      "output": 0.0000015
+    },
+    {
+      "id": "openai/gpt-chat-latest",
+      "name": "GPT Chat Latest",
+      "provider": "openai",
+      "input": 0.000005,
+      "output": 0.00003
+    },
+    {
+      "id": "qwen/qwen3.5-plus-20260420",
+      "name": "Qwen3.5 Plus 2026-04-20",
+      "provider": "alibaba",
+      "input": 3e-7,
+      "output": 0.0000018
+    },
+    {
+      "id": "qwen/qwen3.6-flash",
+      "name": "Qwen3.6 Flash",
+      "provider": "alibaba",
+      "input": 1.875e-7,
+      "output": 0.000001125
+    },
+    {
+      "id": "qwen/qwen3.6-35b-a3b",
+      "name": "Qwen3.6 35B A3B",
+      "provider": "alibaba",
+      "input": 1e-7,
+      "output": 9.5e-7
+    },
+    {
+      "id": "qwen/qwen3.6-27b",
+      "name": "Qwen3.6 27B",
+      "provider": "alibaba",
+      "input": 2.5e-7,
+      "output": 0.000002
+    },
+    {
+      "id": "openai/gpt-5.5-pro",
+      "name": "GPT-5.5 Pro",
+      "provider": "openai",
+      "input": 0.00003,
+      "output": 0.00018
+    },
+    {
+      "id": "openai/gpt-5.5",
+      "name": "GPT-5.5",
+      "provider": "openai",
+      "input": 0.000005,
+      "output": 0.00003
+    },
+    {
+      "id": "deepseek/deepseek-v4-pro",
+      "name": "DeepSeek V4 Pro 0423",
+      "provider": "deepseek",
+      "input": 3.76884e-7,
+      "output": 7.53768e-7
+    },
+    {
+      "id": "deepseek/deepseek-v4-flash",
+      "name": "DeepSeek V4 Flash 0423",
+      "provider": "deepseek",
+      "input": 9.1e-8,
+      "output": 1.82e-7
+    },
+    {
+      "id": "tencent/hy3-preview",
+      "name": "Hy3 preview",
+      "provider": "tencent",
+      "input": 1.8e-7,
+      "output": 6e-7
+    },
+    {
+      "id": "openai/gpt-5.4-image-2",
+      "name": "GPT-5.4 Image 2",
+      "provider": "openai",
+      "input": 0.000008,
+      "output": 0.000015
+    },
+    {
+      "id": "moonshotai/kimi-k2.6",
+      "name": "Kimi K2.6",
+      "provider": "moonshot",
+      "input": 6.5e-7,
+      "output": 0.00000341
+    },
+    {
+      "id": "anthropic/claude-opus-4.7",
+      "name": "Claude Opus 4.7",
+      "provider": "anthropic",
+      "input": 0.000005,
+      "output": 0.000025
+    },
+    {
+      "id": "z-ai/glm-5.1",
+      "name": "GLM 5.1",
+      "provider": "zai",
+      "input": 9.66e-7,
+      "output": 0.000003036
+    },
+    {
+      "id": "google/gemma-4-26b-a4b-it",
+      "name": "Gemma 4 26B A4B ",
+      "provider": "deepmind",
+      "input": 7.65e-8,
+      "output": 2.55e-7
+    },
+    {
+      "id": "google/gemma-4-31b-it",
+      "name": "Gemma 4 31B",
+      "provider": "deepmind",
+      "input": 2e-7,
+      "output": 4e-7
+    },
+    {
+      "id": "qwen/qwen3.6-plus",
+      "name": "Qwen3.6 Plus",
+      "provider": "alibaba",
+      "input": 3.25e-7,
+      "output": 0.00000195
+    },
+    {
+      "id": "z-ai/glm-5v-turbo",
+      "name": "GLM 5V Turbo",
+      "provider": "zai",
+      "input": 0.0000012,
+      "output": 0.000004
+    },
+    {
+      "id": "google/lyria-3-pro-preview",
+      "name": "Lyria 3 Pro Preview",
+      "provider": "deepmind",
+      "input": 0,
+      "output": 0
+    },
+    {
+      "id": "google/lyria-3-clip-preview",
+      "name": "Lyria 3 Clip Preview",
+      "provider": "deepmind",
+      "input": 0,
+      "output": 0
+    },
+    {
+      "id": "minimax/minimax-m2.7",
+      "name": "MiniMax M2.7",
+      "provider": "minimax",
+      "input": 3e-7,
+      "output": 0.0000012
+    },
+    {
+      "id": "openai/gpt-5.4-nano",
+      "name": "GPT-5.4 Nano",
+      "provider": "openai",
+      "input": 2e-7,
+      "output": 0.00000125
+    },
+    {
+      "id": "openai/gpt-5.4-mini",
+      "name": "GPT-5.4 Mini",
+      "provider": "openai",
+      "input": 7.5e-7,
+      "output": 0.0000045
+    },
+    {
+      "id": "z-ai/glm-5-turbo",
+      "name": "GLM 5 Turbo",
+      "provider": "zai",
+      "input": 0.0000012,
+      "output": 0.000004
+    },
+    {
+      "id": "nvidia/nemotron-3-super-120b-a12b",
+      "name": "Nemotron 3 Super",
+      "provider": "nvidia",
+      "input": 8e-8,
+      "output": 4.5e-7
+    },
+    {
+      "id": "qwen/qwen3.5-9b",
+      "name": "Qwen3.5-9B",
+      "provider": "alibaba",
+      "input": 1e-7,
+      "output": 1.5e-7
+    },
+    {
+      "id": "openai/gpt-5.4-pro",
+      "name": "GPT-5.4 Pro",
+      "provider": "openai",
+      "input": 0.00003,
+      "output": 0.00018
+    },
+    {
+      "id": "openai/gpt-5.4",
+      "name": "GPT-5.4",
+      "provider": "openai",
+      "input": 0.0000025,
+      "output": 0.000015
+    },
+    {
+      "id": "google/gemini-3.1-flash-lite-preview",
+      "name": "Gemini 3.1 Flash Lite Preview",
+      "provider": "deepmind",
+      "input": 2.5e-7,
+      "output": 0.0000015
+    },
+    {
+      "id": "google/gemini-3.1-flash-image-preview",
+      "name": "Nano Banana 2 (Gemini 3.1 Flash Image Preview)",
+      "provider": "deepmind",
+      "input": 5e-7,
+      "output": 0.000003
+    },
+    {
+      "id": "qwen/qwen3.5-35b-a3b",
+      "name": "Qwen3.5-35B-A3B",
+      "provider": "alibaba",
+      "input": 1.4e-7,
+      "output": 0.000001
+    },
+    {
+      "id": "qwen/qwen3.5-27b",
+      "name": "Qwen3.5-27B",
+      "provider": "alibaba",
+      "input": 2.7e-7,
+      "output": 0.00000216
+    },
+    {
+      "id": "qwen/qwen3.5-122b-a10b",
+      "name": "Qwen3.5-122B-A10B",
+      "provider": "alibaba",
+      "input": 2.6e-7,
+      "output": 0.00000208
+    },
+    {
+      "id": "qwen/qwen3.5-flash-02-23",
+      "name": "Qwen3.5-Flash",
+      "provider": "alibaba",
+      "input": 6.5e-8,
+      "output": 2.6e-7
+    },
+    {
+      "id": "google/gemini-3.1-pro-preview-customtools",
+      "name": "Gemini 3.1 Pro Preview Custom Tools",
+      "provider": "deepmind",
+      "input": 0.000002,
+      "output": 0.000012
+    },
+    {
+      "id": "openai/gpt-5.3-codex",
+      "name": "GPT-5.3-Codex",
+      "provider": "openai",
+      "input": 0.00000175,
+      "output": 0.000014
+    },
+    {
+      "id": "google/gemini-3.1-pro-preview",
+      "name": "Gemini 3.1 Pro Preview",
+      "provider": "deepmind",
+      "input": 0.000002,
+      "output": 0.000012
+    },
+    {
+      "id": "anthropic/claude-sonnet-4.6",
+      "name": "Claude Sonnet 4.6",
+      "provider": "anthropic",
+      "input": 0.000003,
+      "output": 0.000015
+    },
+    {
+      "id": "qwen/qwen3.5-plus-02-15",
+      "name": "Qwen3.5 Plus 2026-02-15",
+      "provider": "alibaba",
+      "input": 2.6e-7,
+      "output": 0.00000156
+    },
+    {
+      "id": "qwen/qwen3.5-397b-a17b",
+      "name": "Qwen3.5 397B A17B",
+      "provider": "alibaba",
+      "input": 3.9e-7,
+      "output": 0.00000234
+    },
+    {
+      "id": "minimax/minimax-m2.5",
+      "name": "MiniMax M2.5",
+      "provider": "minimax",
+      "input": 2.7e-7,
+      "output": 9.5e-7
+    },
+    {
+      "id": "z-ai/glm-5",
+      "name": "GLM 5",
+      "provider": "zai",
+      "input": 0.000001,
+      "output": 0.0000032
+    },
+    {
+      "id": "anthropic/claude-opus-4.6",
+      "name": "Claude Opus 4.6",
+      "provider": "anthropic",
+      "input": 0.000005,
+      "output": 0.000025
+    },
+    {
+      "id": "qwen/qwen3-coder-next",
+      "name": "Qwen3 Coder Next",
+      "provider": "alibaba",
+      "input": 1.2e-7,
+      "output": 8e-7
+    },
+    {
+      "id": "stepfun/step-3.5-flash",
+      "name": "Step 3.5 Flash",
+      "provider": "stepfun",
+      "input": 1e-7,
+      "output": 3e-7
+    },
+    {
+      "id": "moonshotai/kimi-k2.5",
+      "name": "Kimi K2.5",
+      "provider": "moonshot",
+      "input": 5e-7,
+      "output": 0.0000025
+    },
+    {
+      "id": "minimax/minimax-m2-her",
+      "name": "MiniMax M2-her",
+      "provider": "minimax",
+      "input": 3e-7,
+      "output": 0.0000012
+    },
+    {
+      "id": "openai/gpt-audio",
+      "name": "GPT Audio",
+      "provider": "openai",
+      "input": 0.0000025,
+      "output": 0.00001
+    },
+    {
+      "id": "openai/gpt-audio-mini",
+      "name": "GPT Audio Mini",
+      "provider": "openai",
+      "input": 6e-7,
+      "output": 0.0000024
+    },
+    {
+      "id": "z-ai/glm-4.7-flash",
+      "name": "GLM 4.7 Flash",
+      "provider": "zai",
+      "input": 6.05e-8,
+      "output": 4e-7
+    },
+    {
+      "id": "openai/gpt-5.2-codex",
+      "name": "GPT-5.2-Codex",
+      "provider": "openai",
+      "input": 0.00000175,
+      "output": 0.000014
+    },
+    {
+      "id": "minimax/minimax-m2.1",
+      "name": "MiniMax M2.1",
+      "provider": "minimax",
+      "input": 3e-7,
+      "output": 0.0000012
+    },
+    {
+      "id": "z-ai/glm-4.7",
+      "name": "GLM 4.7",
+      "provider": "zai",
+      "input": 5.4e-7,
+      "output": 0.00000198
+    },
+    {
+      "id": "google/gemini-3-flash-preview",
+      "name": "Gemini 3 Flash Preview",
+      "provider": "deepmind",
+      "input": 5e-7,
+      "output": 0.000003
+    },
+    {
+      "id": "nvidia/nemotron-3-nano-30b-a3b",
+      "name": "Nemotron 3 Nano 30B A3B",
+      "provider": "nvidia",
+      "input": 6e-8,
+      "output": 2.4e-7
+    },
+    {
+      "id": "openai/gpt-5.2-chat",
+      "name": "GPT-5.2 Chat",
+      "provider": "openai",
+      "input": 0.00000175,
+      "output": 0.000014
+    },
+    {
+      "id": "openai/gpt-5.2-pro",
+      "name": "GPT-5.2 Pro",
+      "provider": "openai",
+      "input": 0.000021,
+      "output": 0.000168
+    },
+    {
+      "id": "openai/gpt-5.2",
+      "name": "GPT-5.2",
+      "provider": "openai",
+      "input": 0.00000175,
+      "output": 0.000014
+    },
+    {
+      "id": "z-ai/glm-4.6v",
+      "name": "GLM 4.6V",
+      "provider": "zai",
+      "input": 3e-7,
+      "output": 9e-7
+    },
+    {
+      "id": "openai/gpt-5.1-codex-max",
+      "name": "GPT-5.1-Codex-Max",
+      "provider": "openai",
+      "input": 0.00000125,
+      "output": 0.00001
+    },
+    {
+      "id": "deepseek/deepseek-v3.2",
+      "name": "DeepSeek V3.2",
+      "provider": "deepseek",
+      "input": 2.8e-7,
+      "output": 4.2e-7
+    },
+    {
+      "id": "anthropic/claude-opus-4.5",
+      "name": "Claude Opus 4.5",
+      "provider": "anthropic",
+      "input": 0.000005,
+      "output": 0.000025
+    },
+    {
+      "id": "google/gemini-3-pro-image-preview",
+      "name": "Nano Banana Pro (Gemini 3 Pro Image Preview)",
+      "provider": "deepmind",
+      "input": 0.000002,
+      "output": 0.000012
+    },
+    {
+      "id": "openai/gpt-5.1",
+      "name": "GPT-5.1",
+      "provider": "openai",
+      "input": 0.00000125,
+      "output": 0.00001
+    },
+    {
+      "id": "openai/gpt-5.1-codex",
+      "name": "GPT-5.1-Codex",
+      "provider": "openai",
+      "input": 0.00000125,
+      "output": 0.00001
+    },
+    {
+      "id": "openai/gpt-5.1-codex-mini",
+      "name": "GPT-5.1-Codex-Mini",
+      "provider": "openai",
+      "input": 2.5e-7,
+      "output": 0.000002
+    },
+    {
+      "id": "moonshotai/kimi-k2-thinking",
+      "name": "Kimi K2 Thinking",
+      "provider": "moonshot",
+      "input": 6e-7,
+      "output": 0.0000025
+    },
+    {
+      "id": "openai/gpt-oss-safeguard-20b",
+      "name": "gpt-oss-safeguard-20b",
+      "provider": "openai",
+      "input": 7.5e-8,
+      "output": 3e-7
+    },
+    {
+      "id": "minimax/minimax-m2",
+      "name": "MiniMax M2",
+      "provider": "minimax",
+      "input": 2.55e-7,
+      "output": 0.00000102
+    },
+    {
+      "id": "openai/gpt-5-image-mini",
+      "name": "GPT-5 Image Mini",
+      "provider": "openai",
+      "input": 0.0000025,
+      "output": 0.000002
+    },
+    {
+      "id": "anthropic/claude-haiku-4.5",
+      "name": "Claude Haiku 4.5",
+      "provider": "anthropic",
+      "input": 0.000001,
+      "output": 0.000005
+    },
+    {
+      "id": "qwen/qwen3-vl-8b-instruct",
+      "name": "Qwen3 VL 8B Instruct",
+      "provider": "alibaba",
+      "input": 2.5e-7,
+      "output": 7.5e-7
+    },
+    {
+      "id": "openai/gpt-5-image",
+      "name": "GPT-5 Image",
+      "provider": "openai",
+      "input": 0.00001,
+      "output": 0.00001
+    },
+    {
+      "id": "google/gemini-2.5-flash-image",
+      "name": "Nano Banana (Gemini 2.5 Flash Image)",
+      "provider": "deepmind",
+      "input": 3e-7,
+      "output": 0.0000025
+    },
+    {
+      "id": "qwen/qwen3-vl-30b-a3b-thinking",
+      "name": "Qwen3 VL 30B A3B Thinking",
+      "provider": "alibaba",
+      "input": 2.9e-7,
+      "output": 0.000001
+    },
+    {
+      "id": "qwen/qwen3-vl-30b-a3b-instruct",
+      "name": "Qwen3 VL 30B A3B Instruct",
+      "provider": "alibaba",
+      "input": 1.5e-7,
+      "output": 6e-7
+    },
+    {
+      "id": "openai/gpt-5-pro",
+      "name": "GPT-5 Pro",
+      "provider": "openai",
+      "input": 0.000015,
+      "output": 0.00012
+    },
+    {
+      "id": "z-ai/glm-4.6",
+      "name": "GLM 4.6",
+      "provider": "zai",
+      "input": 5.5e-7,
+      "output": 0.0000022
+    },
+    {
+      "id": "anthropic/claude-sonnet-4.5",
+      "name": "Claude Sonnet 4.5",
+      "provider": "anthropic",
+      "input": 0.000003,
+      "output": 0.000015
+    },
+    {
+      "id": "deepseek/deepseek-v3.2-exp",
+      "name": "DeepSeek V3.2 Exp",
+      "provider": "deepseek",
+      "input": 2.7e-7,
+      "output": 4.1e-7
+    },
+    {
+      "id": "qwen/qwen3-vl-235b-a22b-instruct",
+      "name": "Qwen3 VL 235B A22B Instruct",
+      "provider": "alibaba",
+      "input": 2.1e-7,
+      "output": 0.0000019
+    },
+    {
+      "id": "deepseek/deepseek-v3.1-terminus",
+      "name": "DeepSeek V3.1 Terminus",
+      "provider": "deepseek",
+      "input": 2.7e-7,
+      "output": 0.000001
+    },
+    {
+      "id": "qwen/qwen3-coder-flash",
+      "name": "Qwen3 Coder Flash",
+      "provider": "alibaba",
+      "input": 1.95e-7,
+      "output": 9.75e-7
+    },
+    {
+      "id": "qwen/qwen3-next-80b-a3b-thinking",
+      "name": "Qwen3 Next 80B A3B Thinking",
+      "provider": "alibaba",
+      "input": 1.5e-7,
+      "output": 0.0000012
+    },
+    {
+      "id": "qwen/qwen3-next-80b-a3b-instruct",
+      "name": "Qwen3 Next 80B A3B Instruct",
+      "provider": "alibaba",
+      "input": 1e-7,
+      "output": 0.0000011
+    },
+    {
+      "id": "moonshotai/kimi-k2-0905",
+      "name": "Kimi K2 0905",
+      "provider": "moonshot",
+      "input": 6e-7,
+      "output": 0.0000025
+    },
+    {
+      "id": "deepseek/deepseek-chat-v3.1",
+      "name": "DeepSeek V3.1",
+      "provider": "deepseek",
+      "input": 2.5e-7,
+      "output": 9.5e-7
+    },
+    {
+      "id": "z-ai/glm-4.5v",
+      "name": "GLM 4.5V",
+      "provider": "zai",
+      "input": 6e-7,
+      "output": 0.0000018
+    },
+    {
+      "id": "openai/gpt-5",
+      "name": "GPT-5",
+      "provider": "openai",
+      "input": 0.00000125,
+      "output": 0.00001
+    },
+    {
+      "id": "openai/gpt-5-mini",
+      "name": "GPT-5 Mini",
+      "provider": "openai",
+      "input": 2.5e-7,
+      "output": 0.000002
+    },
+    {
+      "id": "openai/gpt-5-nano",
+      "name": "GPT-5 Nano",
+      "provider": "openai",
+      "input": 5e-8,
+      "output": 4e-7
+    },
+    {
+      "id": "openai/gpt-oss-120b",
+      "name": "gpt-oss-120b",
+      "provider": "openai",
+      "input": 1.5e-7,
+      "output": 6e-7
+    },
+    {
+      "id": "openai/gpt-oss-20b",
+      "name": "gpt-oss-20b",
+      "provider": "openai",
+      "input": 1.8e-8,
+      "output": 9e-8
+    },
+    {
+      "id": "anthropic/claude-opus-4.1",
+      "name": "Claude Opus 4.1",
+      "provider": "anthropic",
+      "input": 0.000015,
+      "output": 0.000075
+    },
+    {
+      "id": "qwen/qwen3-coder-30b-a3b-instruct",
+      "name": "Qwen3 Coder 30B A3B Instruct",
+      "provider": "alibaba",
+      "input": 7e-8,
+      "output": 2.8e-7
+    },
+    {
+      "id": "qwen/qwen3-30b-a3b-instruct-2507",
+      "name": "Qwen3 30B A3B Instruct 2507",
+      "provider": "alibaba",
+      "input": 9e-8,
+      "output": 3e-7
+    },
+    {
+      "id": "z-ai/glm-4.5",
+      "name": "GLM 4.5",
+      "provider": "zai",
+      "input": 6e-7,
+      "output": 0.0000022
+    },
+    {
+      "id": "z-ai/glm-4.5-air",
+      "name": "GLM 4.5 Air",
+      "provider": "zai",
+      "input": 1.3e-7,
+      "output": 8.5e-7
+    },
+    {
+      "id": "qwen/qwen3-235b-a22b-thinking-2507",
+      "name": "Qwen3 235B A22B Thinking 2507",
+      "provider": "alibaba",
+      "input": 4.5e-7,
+      "output": 0.0000035
+    },
+    {
+      "id": "qwen/qwen3-coder",
+      "name": "Qwen3 Coder 480B A35B",
+      "provider": "alibaba",
+      "input": 3e-7,
+      "output": 0.000001
+    },
+    {
+      "id": "bytedance/ui-tars-1.5-7b",
+      "name": "UI-TARS 7B ",
+      "provider": "bytedance",
+      "input": 1e-7,
+      "output": 2e-7
+    },
+    {
+      "id": "google/gemini-2.5-flash-lite",
+      "name": "Gemini 2.5 Flash Lite",
+      "provider": "deepmind",
+      "input": 1e-7,
+      "output": 4e-7
+    },
+    {
+      "id": "qwen/qwen3-235b-a22b-2507",
+      "name": "Qwen3 235B A22B Instruct 2507",
+      "provider": "alibaba",
+      "input": 9e-8,
+      "output": 5.5e-7
+    },
+    {
+      "id": "moonshotai/kimi-k2",
+      "name": "Kimi K2 0711",
+      "provider": "moonshot",
+      "input": 5.7e-7,
+      "output": 0.0000023
+    },
+    {
+      "id": "tencent/hunyuan-a13b-instruct",
+      "name": "Hunyuan A13B Instruct",
+      "provider": "tencent",
+      "input": 1.4e-7,
+      "output": 5.7e-7
+    },
+    {
+      "id": "minimax/minimax-m1",
+      "name": "MiniMax M1",
+      "provider": "minimax",
+      "input": 5.5e-7,
+      "output": 0.0000022
+    },
+    {
+      "id": "google/gemini-2.5-flash",
+      "name": "Gemini 2.5 Flash",
+      "provider": "deepmind",
+      "input": 3e-7,
+      "output": 0.0000025
+    },
+    {
+      "id": "google/gemini-2.5-pro",
+      "name": "Gemini 2.5 Pro",
+      "provider": "deepmind",
+      "input": 0.00000125,
+      "output": 0.00001
+    },
+    {
+      "id": "openai/o3-pro",
+      "name": "o3 Pro",
+      "provider": "openai",
+      "input": 0.00002,
+      "output": 0.00008
+    },
+    {
+      "id": "google/gemini-2.5-pro-preview",
+      "name": "Gemini 2.5 Pro Preview 06-05",
+      "provider": "deepmind",
+      "input": 0.00000125,
+      "output": 0.00001
+    },
+    {
+      "id": "deepseek/deepseek-r1-0528",
+      "name": "R1 0528",
+      "provider": "deepseek",
+      "input": 5e-7,
+      "output": 0.00000215
+    },
+    {
+      "id": "meta-llama/llama-guard-4-12b",
+      "name": "Llama Guard 4 12B",
+      "provider": "meta",
+      "input": 1.8e-7,
+      "output": 1.8e-7
+    },
+    {
+      "id": "qwen/qwen3-30b-a3b",
+      "name": "Qwen3 30B A3B",
+      "provider": "alibaba",
+      "input": 1.2e-7,
+      "output": 5e-7
+    },
+    {
+      "id": "qwen/qwen3-14b",
+      "name": "Qwen3 14B",
+      "provider": "alibaba",
+      "input": 1.2e-7,
+      "output": 2.4e-7
+    },
+    {
+      "id": "qwen/qwen3-32b",
+      "name": "Qwen3 32B",
+      "provider": "alibaba",
+      "input": 8e-8,
+      "output": 2.8e-7
+    },
+    {
+      "id": "openai/o4-mini-high",
+      "name": "o4 Mini High",
+      "provider": "openai",
+      "input": 0.0000011,
+      "output": 0.0000044
+    },
+    {
+      "id": "openai/o3",
+      "name": "o3",
+      "provider": "openai",
+      "input": 0.000002,
+      "output": 0.000008
+    },
+    {
+      "id": "openai/o4-mini",
+      "name": "o4 Mini",
+      "provider": "openai",
+      "input": 0.0000011,
+      "output": 0.0000044
+    },
+    {
+      "id": "openai/gpt-4.1",
+      "name": "GPT-4.1",
+      "provider": "openai",
+      "input": 0.000002,
+      "output": 0.000008
+    },
+    {
+      "id": "openai/gpt-4.1-mini",
+      "name": "GPT-4.1 Mini",
+      "provider": "openai",
+      "input": 4e-7,
+      "output": 0.0000016
+    },
+    {
+      "id": "openai/gpt-4.1-nano",
+      "name": "GPT-4.1 Nano",
+      "provider": "openai",
+      "input": 1e-7,
+      "output": 4e-7
+    },
+    {
+      "id": "meta-llama/llama-4-maverick",
+      "name": "Llama 4 Maverick",
+      "provider": "meta",
+      "input": 1.875e-7,
+      "output": 6.525e-7
+    },
+    {
+      "id": "meta-llama/llama-4-scout",
+      "name": "Llama 4 Scout",
+      "provider": "meta",
+      "input": 1e-7,
+      "output": 3e-7
+    },
+    {
+      "id": "deepseek/deepseek-chat-v3-0324",
+      "name": "DeepSeek V3 0324",
+      "provider": "deepseek",
+      "input": 2.9e-7,
+      "output": 0.00000114
+    },
+    {
+      "id": "openai/o1-pro",
+      "name": "o1-pro",
+      "provider": "openai",
+      "input": 0.00015,
+      "output": 0.0006
+    },
+    {
+      "id": "google/gemma-3-4b-it",
+      "name": "Gemma 3 4B",
+      "provider": "deepmind",
+      "input": 4e-8,
+      "output": 5e-8
+    },
+    {
+      "id": "google/gemma-3-12b-it",
+      "name": "Gemma 3 12B",
+      "provider": "deepmind",
+      "input": 5e-8,
+      "output": 1.5e-7
+    },
+    {
+      "id": "google/gemma-3-27b-it",
+      "name": "Gemma 3 27B",
+      "provider": "deepmind",
+      "input": 8e-8,
+      "output": 3.5e-7
+    },
+    {
+      "id": "openai/o3-mini-high",
+      "name": "o3 Mini High",
+      "provider": "openai",
+      "input": 0.0000011,
+      "output": 0.0000044
+    },
+    {
+      "id": "qwen/qwen2.5-vl-72b-instruct",
+      "name": "Qwen2.5 VL 72B Instruct",
+      "provider": "alibaba",
+      "input": 8e-7,
+      "output": 0.000001
+    },
+    {
+      "id": "qwen/qwen-plus",
+      "name": "Qwen-Plus",
+      "provider": "alibaba",
+      "input": 2.6e-7,
+      "output": 7.8e-7
+    },
+    {
+      "id": "openai/o3-mini",
+      "name": "o3 Mini",
+      "provider": "openai",
+      "input": 0.0000011,
+      "output": 0.0000044
+    },
+    {
+      "id": "minimax/minimax-01",
+      "name": "MiniMax-01",
+      "provider": "minimax",
+      "input": 2e-7,
+      "output": 0.0000011
+    },
+    {
+      "id": "microsoft/phi-4",
+      "name": "Phi 4",
+      "provider": "microsoft",
+      "input": 7e-8,
+      "output": 1.4e-7
+    },
+    {
+      "id": "deepseek/deepseek-chat",
+      "name": "DeepSeek V3",
+      "provider": "deepseek",
+      "input": 2.574e-7,
+      "output": 0.0000010287
+    },
+    {
+      "id": "openai/o1",
+      "name": "o1",
+      "provider": "openai",
+      "input": 0.000015,
+      "output": 0.00006
+    },
+    {
+      "id": "meta-llama/llama-3.3-70b-instruct",
+      "name": "Llama 3.3 70B Instruct",
+      "provider": "meta",
+      "input": 1e-7,
+      "output": 3.2e-7
+    },
+    {
+      "id": "openai/gpt-4o-2024-11-20",
+      "name": "GPT-4o (2024-11-20)",
+      "provider": "openai",
+      "input": 0.0000025,
+      "output": 0.00001
+    },
+    {
+      "id": "qwen/qwen-2.5-coder-32b-instruct",
+      "name": "Qwen2.5 Coder 32B Instruct",
+      "provider": "alibaba",
+      "input": 6.6e-7,
+      "output": 0.000001
+    },
+    {
+      "id": "qwen/qwen-2.5-7b-instruct",
+      "name": "Qwen2.5 7B Instruct",
+      "provider": "alibaba",
+      "input": 1e-7,
+      "output": 2e-7
+    },
+    {
+      "id": "meta-llama/llama-3.2-1b-instruct",
+      "name": "Llama 3.2 1B Instruct",
+      "provider": "meta",
+      "input": 2.7e-8,
+      "output": 2.01e-7
+    },
+    {
+      "id": "meta-llama/llama-3.2-3b-instruct",
+      "name": "Llama 3.2 3B Instruct",
+      "provider": "meta",
+      "input": 5.09e-8,
+      "output": 3.35e-7
+    },
+    {
+      "id": "qwen/qwen-2.5-72b-instruct",
+      "name": "Qwen2.5 72B Instruct",
+      "provider": "alibaba",
+      "input": 3.6e-7,
+      "output": 4e-7
+    },
+    {
+      "id": "openai/gpt-4o-2024-08-06",
+      "name": "GPT-4o (2024-08-06)",
+      "provider": "openai",
+      "input": 0.0000025,
+      "output": 0.00001
+    },
+    {
+      "id": "meta-llama/llama-3.1-70b-instruct",
+      "name": "Llama 3.1 70B Instruct",
+      "provider": "meta",
+      "input": 4e-7,
+      "output": 4e-7
+    },
+    {
+      "id": "meta-llama/llama-3.1-8b-instruct",
+      "name": "Llama 3.1 8B Instruct",
+      "provider": "meta",
+      "input": 5e-8,
+      "output": 8e-8
+    },
+    {
+      "id": "openai/gpt-4o-mini",
+      "name": "GPT-4o-mini",
+      "provider": "openai",
+      "input": 1.5e-7,
+      "output": 6e-7
+    },
+    {
+      "id": "openai/gpt-4o-mini-2024-07-18",
+      "name": "GPT-4o-mini (2024-07-18)",
+      "provider": "openai",
+      "input": 1.5e-7,
+      "output": 6e-7
+    },
+    {
+      "id": "google/gemma-2-27b-it",
+      "name": "Gemma 2 27B",
+      "provider": "deepmind",
+      "input": 6.5e-7,
+      "output": 6.5e-7
+    },
+    {
+      "id": "openai/gpt-4o",
+      "name": "GPT-4o",
+      "provider": "openai",
+      "input": 0.0000025,
+      "output": 0.00001
+    },
+    {
+      "id": "openai/gpt-4o-2024-05-13",
+      "name": "GPT-4o (2024-05-13)",
+      "provider": "openai",
+      "input": 0.000005,
+      "output": 0.000015
+    },
+    {
+      "id": "openai/gpt-4-turbo",
+      "name": "GPT-4 Turbo",
+      "provider": "openai",
+      "input": 0.00001,
+      "output": 0.00003
+    },
+    {
+      "id": "openai/gpt-3.5-turbo-0613",
+      "name": "GPT-3.5 Turbo (older v0613)",
+      "provider": "openai",
+      "input": 0.000001,
+      "output": 0.000002
+    },
+    {
+      "id": "openai/gpt-3.5-turbo-instruct",
+      "name": "GPT-3.5 Turbo Instruct",
+      "provider": "openai",
+      "input": 0.0000015,
+      "output": 0.000002
+    },
+    {
+      "id": "openai/gpt-3.5-turbo-16k",
+      "name": "GPT-3.5 Turbo 16k",
+      "provider": "openai",
+      "input": 0.000003,
+      "output": 0.000004
+    },
+    {
+      "id": "openai/gpt-3.5-turbo",
+      "name": "GPT-3.5 Turbo",
+      "provider": "openai",
+      "input": 5e-7,
+      "output": 0.0000015
+    },
+    {
+      "id": "openai/gpt-4",
+      "name": "GPT-4",
+      "provider": "openai",
+      "input": 0.00003,
+      "output": 0.00006
+    }
+  ]
+}
