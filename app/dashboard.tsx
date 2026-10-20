@@ -53,7 +53,7 @@ export default function Dashboard({initial}:{initial:NewsState}){
  {filtered.length>limit&&<button className="more" onClick={()=>setLimit(limit+25)}>加载更多（剩余 {filtered.length-limit} 条）</button>}
  </section></div>
  </>}
- {view!=='news'&&view!=='daily'&&view!=='weekly'&&view!=='topics'&&<footer className="page-footer"><span>最近采集 {dateText(data.collectedAt)}</span><span>{data.pipeline.mode}</span></footer>}
+ {view!=='news'&&view!=='daily'&&view!=='weekly'&&view!=='topics'&&view!=='ranking'&&<footer className="page-footer"><span>最近采集 {dateText(data.collectedAt)}</span><span>{data.pipeline.mode}</span></footer>}
  </>}
  {view==='about'&&<div className="prose"><h2>每天一点，跟上 AI。</h2><p>DayDay AI 聚合你关心的 AI 信息。免费阅读，无需注册，收藏保存在当前浏览器。</p><h2>覆盖范围</h2><p>按已确认的信息源清单接入公司官方动态、论文与研究、媒体、Newsletter、开发者平台及行业事件。当前 {data.stats.configured} 个采集端点中，{data.stats.healthyEndpoints} 个在最近 48 小时检查正常，对应 {data.stats.healthy} 个独立发布者。</p><button className="secondary" onClick={()=>{go('topics');setShowSources(true);}}>查看全部信息源</button><h2>怎样筛选与评分</h2><p>先过滤无关内容，再按原文链接、标题和相近发布时间合并。事件综合评分由讨论热度（40 分）、事件重要性（35 分）、时效性（15 分）与信息可靠性（10 分）组成。热度依据去重后的报道覆盖及近期新增报道估算，尚未接入社媒互动量。今日热点只展示首次报道在过去24小时内的事件。</p><p>当前使用规则评分及来源公开摘要。未启用模型翻译，不将英文原文冒充中文摘要；跨语言同一事件可能尚未合并。</p><h2>更新与来源</h2><p>每条内容保留原文入口。更新时间、采集失败与尚未接入的来源可在信息源列表查看。付费或私有内容不复制全文。</p></div>}
  {(view==='following'||view==='settings')&&<SubscriptionPanel view={view}/>}
