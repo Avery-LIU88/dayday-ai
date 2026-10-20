@@ -1,0 +1,142 @@
+{
+  "verifiedAt": "2026-10-20",
+  "source": "Apple Podcasts official Search API; matches reviewed by title and author",
+  "shows": [
+    {
+      "kind": "podcast",
+      "name": "张小珺Jùn｜商业访谈录",
+      "feed": "https://feed.xyzfm.space/dk4yh3pkpjp3",
+      "website": "https://podcasts.apple.com/us/podcast/%E5%BC%A0%E5%B0%8F%E7%8F%BAj%C3%B9n-%E5%95%86%E4%B8%9A%E8%AE%BF%E8%B0%88%E5%BD%95/id1634356920?uo=4",
+      "appleUrl": "https://podcasts.apple.com/us/podcast/%E5%BC%A0%E5%B0%8F%E7%8F%BAj%C3%B9n-%E5%95%86%E4%B8%9A%E8%AE%BF%E8%B0%88%E5%BD%95/id1634356920?uo=4",
+      "appleId": "1634356920"
+    },
+    {
+      "kind": "podcast",
+      "name": "卫诗婕｜漫谈Light the Star",
+      "feed": "https://feed.xyzfm.space/4jjdlpq3khc9",
+      "website": "https://podcasts.apple.com/us/podcast/%E5%8D%AB%E8%AF%97%E5%A9%95-%E6%BC%AB%E8%B0%88light-the-star/id1754955836?uo=4",
+      "appleUrl": "https://podcasts.apple.com/us/podcast/%E5%8D%AB%E8%AF%97%E5%A9%95-%E6%BC%AB%E8%B0%88light-the-star/id1754955836?uo=4",
+      "appleId": "1754955836"
+    },
+    {
+      "kind": "podcast",
+      "name": "What's Next｜科技早知道",
+      "feed": "https://feeds.fireside.fm/guiguzaozhidao/rss",
+      "website": "https://podcasts.apple.com/us/podcast/whats-next-%E7%A7%91%E6%8A%80%E6%97%A9%E7%9F%A5%E9%81%93/id1494812579?uo=4",
+      "appleUrl": "https://podcasts.apple.com/us/podcast/whats-next-%E7%A7%91%E6%8A%80%E6%97%A9%E7%9F%A5%E9%81%93/id1494812579?uo=4",
+      "appleId": "1494812579"
+    },
+    {
+      "kind": "podcast",
+      "name": "OnBoard!",
+      "feed": "https://feed.xyzfm.space/xxg7ryklkkft",
+      "website": "https://podcasts.apple.com/us/podcast/onboard/id1613083252?uo=4",
+      "appleUrl": "https://podcasts.apple.com/us/podcast/onboard/id1613083252?uo=4",
+      "appleId": "1613083252"
+    },
+    {
+      "kind": "podcast",
+      "name": "声动早咖啡",
+      "feed": "https://www.ximalaya.com/album/51076156.xml",
+      "website": "https://podcasts.apple.com/us/podcast/%E5%A3%B0%E5%8A%A8%E6%97%A9%E5%92%96%E5%95%A1/id1573189055?uo=4",
+      "appleUrl": "https://podcasts.apple.com/us/podcast/%E5%A3%B0%E5%8A%A8%E6%97%A9%E5%92%96%E5%95%A1/id1573189055?uo=4",
+      "appleId": "1573189055"
+    },
+    {
+      "kind": "podcast",
+      "name": "乱翻书",
+      "feed": "https://feed.xyzfm.space/yxuruh3f9mc4",
+      "website": "https://podcasts.apple.com/us/podcast/%E4%B9%B1%E7%BF%BB%E4%B9%A6/id1591595410?uo=4",
+      "appleUrl": "https://podcasts.apple.com/us/podcast/%E4%B9%B1%E7%BF%BB%E4%B9%A6/id1591595410?uo=4",
+      "appleId": "1591595410"
+    },
+    {
+      "kind": "podcast",
+      "name": "硬地骇客",
+      "feed": "https://feed.xyzfm.space/byhkljlbep9j",
+      "website": "https://podcasts.apple.com/us/podcast/%E7%A1%AC%E5%9C%B0%E9%AA%87%E5%AE%A2/id1678465783?uo=4",
+      "appleUrl": "https://podcasts.apple.com/us/podcast/%E7%A1%AC%E5%9C%B0%E9%AA%87%E5%AE%A2/id1678465783?uo=4",
+      "appleId": "1678465783"
+    },
+    {
+      "kind": "podcast",
+      "name": "42章经",
+      "feed": "https://feed.xyzfm.space/evgg6xle9rdc",
+      "website": "https://podcasts.apple.com/us/podcast/42%E7%AB%A0%E7%BB%8F/id1700299886?uo=4",
+      "appleUrl": "https://podcasts.apple.com/us/podcast/42%E7%AB%A0%E7%BB%8F/id1700299886?uo=4",
+      "appleId": "1700299886"
+    },
+    {
+      "kind": "podcast",
+      "name": "The TWIML AI Podcast (formerly This Week in Machine Learning & Artificial Intelligence)",
+      "feed": "https://feeds.megaphone.fm/MLN2155636147",
+      "website": "https://podcasts.apple.com/us/podcast/the-twiml-ai-podcast-formerly-this-week-in-machine/id1116303051?uo=4",
+      "appleUrl": "https://podcasts.apple.com/us/podcast/the-twiml-ai-podcast-formerly-this-week-in-machine/id1116303051?uo=4",
+      "appleId": "1116303051"
+    },
+    {
+      "kind": "podcast",
+      "name": "Training Data",
+      "feed": "https://feeds.megaphone.fm/trainingdata",
+      "website": "https://podcasts.apple.com/us/podcast/training-data/id1750736528?uo=4",
+      "appleUrl": "https://podcasts.apple.com/us/podcast/training-data/id1750736528?uo=4",
+      "appleId": "1750736528"
+    },
+    {
+      "kind": "podcast",
+      "name": "The Twenty Minute VC (20VC): Venture Capital | Startup Funding | The Pitch",
+      "feed": "https://rss.libsyn.com/shows/61840/destinations/240976.xml",
+      "website": "https://podcasts.apple.com/us/podcast/the-twenty-minute-vc-20vc-venture-capital-startup/id958230465?uo=4",
+      "appleUrl": "https://podcasts.apple.com/us/podcast/the-twenty-minute-vc-20vc-venture-capital-startup/id958230465?uo=4",
+      "appleId": "958230465"
+    },
+    {
+      "kind": "podcast",
+      "name": "The AI Daily Brief: Artificial Intelligence News and Analysis",
+      "feed": "https://anchor.fm/s/f7cac464/podcast/rss",
+      "website": "https://podcasts.apple.com/us/podcast/the-ai-daily-brief-artificial-intelligence-news/id1680633614?uo=4",
+      "appleUrl": "https://podcasts.apple.com/us/podcast/the-ai-daily-brief-artificial-intelligence-news/id1680633614?uo=4",
+      "appleId": "1680633614"
+    },
+    {
+      "kind": "podcast",
+      "name": "\"The Cognitive Revolution\"",
+      "feed": "https://feeds.megaphone.fm/RINTP3108857801",
+      "website": "https://podcasts.apple.com/us/podcast/the-cognitive-revolution/id1669813431?uo=4",
+      "appleUrl": "https://podcasts.apple.com/us/podcast/the-cognitive-revolution/id1669813431?uo=4",
+      "appleId": "1669813431"
+    },
+    {
+      "kind": "podcast",
+      "name": "Interconnects",
+      "feed": "https://api.substack.com/feed/podcast/48206.rss",
+      "website": "https://podcasts.apple.com/us/podcast/interconnects/id1719552353?uo=4",
+      "appleUrl": "https://podcasts.apple.com/us/podcast/interconnects/id1719552353?uo=4",
+      "appleId": "1719552353"
+    },
+    {
+      "kind": "podcast",
+      "name": "Last Week in AI",
+      "feed": "https://rss.art19.com/last-week-in-ai",
+      "website": "https://podcasts.apple.com/us/podcast/last-week-in-ai/id1502782720?uo=4",
+      "appleUrl": "https://podcasts.apple.com/us/podcast/last-week-in-ai/id1502782720?uo=4",
+      "appleId": "1502782720"
+    },
+    {
+      "kind": "podcast",
+      "name": "Dwarkesh Podcast",
+      "feed": "https://apple.dwarkesh-podcast.workers.dev/feed.rss",
+      "website": "https://podcasts.apple.com/us/podcast/dwarkesh-podcast/id1516093381?uo=4",
+      "appleUrl": "https://podcasts.apple.com/us/podcast/dwarkesh-podcast/id1516093381?uo=4",
+      "appleId": "1516093381"
+    },
+    {
+      "kind": "podcast",
+      "name": "How I AI",
+      "feed": "https://anchor.fm/s/1035b1568/podcast/rss",
+      "website": "https://podcasts.apple.com/us/podcast/how-i-ai/id1809663079?uo=4",
+      "appleUrl": "https://podcasts.apple.com/us/podcast/how-i-ai/id1809663079?uo=4",
+      "appleId": "1809663079"
+    }
+  ]
+}

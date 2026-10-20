@@ -17,6 +17,11 @@ test('Apple resolves feed through lookup and keeps actual episode date',async()=
  const result=await resolveShow('https://podcasts.apple.com/cn/podcast/name/id123',[],async u=>{calls.push(u);return u.includes('/lookup')?Response.json({results:[{collectionId:123,feedUrl:feed,collectionViewUrl:'https://podcasts.apple.com/cn/podcast/id123'}]}):new Response(xml);});
  assert.equal(calls.length,2);assert.equal(result.show.name,'AI Podcast');assert.equal(result.episodes[0].publishedAt,'2026-09-01T08:00:00.000Z');assert.equal(result.episodes[0].kind,'episode');
 });
+test('known Apple program IDs work across locale, slug and query variants without lookup',async()=>{
+ const known=[{kind:'podcast',name:'AI Podcast',feed,appleUrl:'https://podcasts.apple.com/us/podcast/ai-podcast/id123?uo=4'}];
+ const result=await resolveShow('https://podcasts.apple.com/cn/podcast/id123?i=987',known,async url=>{assert.equal(url,feed);return new Response(xml);});
+ assert.equal(result.show.name,'AI Podcast');
+});
 test('YouTube handles resolve to channel feed; a single video is rejected',async()=>{
  const id='UCabcdefghijklmnopqrstuv',calls=[];
  const result=await resolveShow('https://www.youtube.com/@example',[],async u=>{calls.push(u);return new Response(u.includes('/feeds/')?xml:`{"externalId":"${id}"}`);});
@@ -56,7 +61,7 @@ test('database flow isolates readers, skips history, deduplicates delivery and s
  const D1={prepare(query){const statement=sql.prepare(query);let values=[];const p={bind(...v){values=v;return p;},async first(){return statement.get(...values)||null;},async all(){return {results:statement.all(...values)};},async run(){const x=statement.run(...values);return {meta:{changes:Number(x.changes)}};}};return p;},async batch(batch){return Promise.all(batch.map(x=>x.run()));}};
  globalThis.__subscriptionsTestEnv={DB:D1,REMINDER_ENCRYPTION_KEY:'b'.repeat(64)};
  let text=await readFile(new URL('../lib/subscription-store.ts',import.meta.url),'utf8');
- text=text.replace("import {env} from 'cloudflare:workers';","const env=globalThis.__subscriptionsTestEnv;").replace("import catalog from '../data/catalog.json';","const catalog=[];").replace("import {publicState} from './news-store';","const publicState=async()=>({stories:[]});").replace(/from '(\.\/[^']+\.mjs)'/g,(_,p)=>`from '${new URL('../lib/'+p.slice(2),import.meta.url).href}'`);
+ text=text.replace("import {env} from 'cloudflare:workers';","const env=globalThis.__subscriptionsTestEnv;").replace("import catalog from '../data/catalog.json';","const catalog=[];").replace("import podcastLinks from '../data/podcast-links.json';","const podcastLinks={shows:[]};").replace("import {publicState} from './news-store';","const publicState=async()=>({stories:[]});").replace(/from '(\.\/[^']+\.mjs)'/g,(_,p)=>`from '${new URL('../lib/'+p.slice(2),import.meta.url).href}'`);
  const js=ts.transpileModule(text,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText;
  const store=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
  const originalFetch=globalThis.fetch,sent=[];

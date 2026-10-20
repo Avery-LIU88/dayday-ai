@@ -1,5 +1,6 @@
 import {env} from 'cloudflare:workers';
 import catalog from '../data/catalog.json';
+import podcastLinks from '../data/podcast-links.json';
 import {stableId} from './feed.mjs';
 import {resolveShow,showFromFeed,defaultReminderPreferences,reminderPreferences,encryptBot,decryptBot,deliveryDue,chinaTime,briefText} from './subscriptions.mjs';
 import {sendFeishu,notificationText,validateWebhook} from './feishu.mjs';
@@ -42,7 +43,7 @@ export async function subscriptionState(id:string){
  const job=await setting('subscription_job_status',null);
  return {shows:followed,episodes:episodes.results.map(x=>JSON.parse(x.data) as Entry),preferences:r?JSON.parse(r.preferences) as Prefs:defaultReminderPreferences as Prefs,connected:!!r?.bot,deliveries:logs.results,job};
 }
-export async function previewShow(url:string){return resolveShow(url,catalog);}
+export async function previewShow(url:string){return resolveShow(url,[...catalog,...podcastLinks.shows]);}
 export async function follow(id:string,showId:string,active:boolean,mode='instant'){
  if(!['instant','digest','off'].includes(mode))throw Error('提醒方式不正确');
  const key=id+':'+showId;
