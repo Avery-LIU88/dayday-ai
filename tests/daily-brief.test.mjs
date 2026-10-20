@@ -19,6 +19,10 @@ test('source excerpts preserve facts, decimal numbers and sentence boundaries',(
  assert.equal(briefExcerpt('Model 3.5 launches. It is available. Cost is $0.20. Extra.'),'Model 3.5 launches. It is available. Cost is $0.20.');
  assert.equal(briefExcerpt(''),'');
 });
+test('routine patches and isolated keyword-matched papers do not displace major events',()=>{
+ const input=[story('patch',{title:'Patch release v5.20.2'}),story('paper',{topic:'论文与研究',title:'Balancing regulatory risk',scoreParts:{importance:31,reliability:5}}),story('major',{heatEvidence:{independentReports:5},scoreParts:{importance:30,reliability:10}}),story('single',{scoreParts:{importance:34,reliability:5}})];
+ assert.deepEqual(selectDailyStories(input,'2026-10-21',Date.parse(at)).map(s=>s.id),['major','single']);
+});
 test('old editions survive raw feed eviction; unchanged issue keeps actual update time',()=>{
  const first=buildDailyEditions([story('a')],[],at);
  const same=buildDailyEditions([story('a')],[],'2026-10-21T13:00:00Z',first);

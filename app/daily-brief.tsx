@@ -18,18 +18,19 @@ function BriefArticle({article,lead=false,index=0}:{article:Article;lead?:boolea
 }
 export default function DailyBrief({data}:{data:NewsState}){
  const editions=data.daily;
+ const published=editions.filter((e:Edition)=>e.articles.length>0);
+ const latest=published[0]?.date||editions[0]?.date;
  const [chosen,setChosen]=useState('');
- const date=chosen||editions[0]?.date||'';
+ const date=chosen||latest||'';
  const issue=editions.find((e:Edition)=>e.date===date);
- const older=editions.find((e:Edition)=>e.date<date);
- const newer=[...editions].reverse().find((e:Edition)=>e.date>date);
+ const older=published.find((e:Edition)=>e.date<date);
+ const newer=[...published].reverse().find((e:Edition)=>e.date>date);
  const articles:Article[]=issue?.articles||[];
- const latest=editions[0]?.date;
  return <section className="daily-newspaper" aria-label="每日简报">
   <nav className="brief-navigation" aria-label="简报日期">
    <div className="brief-date-controls">
     <button disabled={!older} aria-label="上一期" onClick={()=>older&&setChosen(older.date)}><ChevronLeft size={18}/></button>
-    <input type="date" aria-label="查看往期简报" value={date} max={latest} min={editions.at(-1)?.date} onChange={e=>e.target.value&&setChosen(e.target.value)}/>
+    <input type="date" aria-label="查看往期简报" value={date} max={editions[0]?.date} min={editions.at(-1)?.date} onChange={e=>e.target.value&&setChosen(e.target.value)}/>
     <button disabled={!newer} aria-label="下一期" onClick={()=>newer&&setChosen(newer.date)}><ChevronRight size={18}/></button>
    </div>
    {date!==latest&&<button className="brief-latest" onClick={()=>setChosen('')}>最新一期</button>}
@@ -44,6 +45,6 @@ export default function DailyBrief({data}:{data:NewsState}){
    <BriefArticle article={articles[0]} lead/>
    {articles.length>1&&<div className="brief-stories">{articles.slice(1).map((article:Article,index:number)=><BriefArticle key={article.id} article={article} index={index+1}/>)}</div>}
    <div className="brief-end"><span>本期完</span></div>
-  </>:<div className="brief-empty"><h2>{date===latest?'今日简报待更新':'这一天暂无简报'}</h2><p>{date===latest?'有值得关注的大事时，会整理在这里。':'可以切换日期，阅读其他期简报。'}</p>{older&&<button onClick={()=>setChosen(older.date)}>阅读上一期 <ChevronRight size={15}/></button>}</div>}
+  </>:<div className="brief-empty"><h2>{date===editions[0]?.date?'本期简报待更新':'这一天暂无简报'}</h2><p>{date===editions[0]?.date?'有值得关注的大事时，会整理在这里。':'可以切换日期，阅读其他期简报。'}</p>{older&&<button onClick={()=>setChosen(older.date)}>阅读上一期 <ChevronRight size={15}/></button>}</div>}
  </section>;
 }
