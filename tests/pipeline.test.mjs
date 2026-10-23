@@ -4,7 +4,7 @@ import {DatabaseSync} from 'node:sqlite';
 import fs from 'node:fs';
 import {modelJSON,budgetStatus,chinaDay,usageCost} from '../lib/pipeline-model.mjs';
 import {ingest,runPipeline,getSetting,validSelection} from '../lib/news-pipeline.mjs';
-import {validateAnalyses,validateGroups,scoreGroup,selectHot,editions,ruleFilter} from '../lib/pipeline-editorial.mjs';
+import {validateAnalyses,validateGroups,scoreGroup,selectHot,editions,ruleFilter,duplicate,eventCandidate,addEventEvidence} from '../lib/pipeline-editorial.mjs';
 import {policy} from '../config/pipeline.mjs';
 function database(){
  const sql=new DatabaseSync(':memory:');
@@ -95,4 +95,46 @@ test('targeted audit processes only requested pending rows and rejects invalid s
    for(const ids of [[],['x','x'],['x\' OR 1=1'],Array.from({length:7},(_,i)=>'x'+i)])assert.equal(validSelection('analyze',ids),false);
    assert.equal(validSelection('auto',['older']),false);
  }finally{globalThis.fetch=original;sql.close();}
+});
+test('absence of AI keywords is not evidence of irrelevance; empty URLs never deduplicate',()=>{
+ assert.equal(ruleFilter({title:'Neocloud operator Nscale loses a data center order',summary:''},{filterAI:true}),null);
+ assert.equal(ruleFilter({title:'明天天气预报',summary:''},{filterAI:true}),'明显非 AI 内容');
+ assert.equal(duplicate({url:'',title:'One'},{url:'',title:'Another'}),false);
+ assert.equal(duplicate({url:'https://x.test/a?utm_source=rss',title:'One'},{url:'https://x.test/a',title:'Another'}),true);
+});
+test('grouping evidence remains bounded and is never copied into public story fields',()=>{
+ const row={id:'a',published_at:new Date().toISOString(),analysis:analysis('a'),raw:{...entry(),summary:'<p>'+ '原始摘要'.repeat(600)+'</p>'}};
+ let candidate=eventCandidate(row);assert.ok(candidate.evidence[0].excerpt.length<=policy.groupingEvidenceChars);assert.doesNotMatch(candidate.evidence[0].excerpt,/<p>/);
+ for(let i=0;i<5;i++)candidate=addEventEvidence(candidate,eventCandidate({...row,id:'x'+i}));
+ assert.equal(candidate.evidence.length,policy.groupingEvidenceReports);
+ const publicStory=scoreGroup([{...row,source_id:'one',raw:JSON.stringify(row.raw),analysis:JSON.stringify(row.analysis)}],new Map(sources.map(s=>[s.id,s])),{id:'event'},Date.now());
+ assert.ok(!JSON.stringify(publicStory).includes('原始摘要'));
+});
+test('reprocessing can split an erroneous event without overwriting its other members',async()=>{
+ const {db,sql}=database(),original=globalThis.fetch;let split=false;
+ globalThis.fetch=async(_url,options)=>{const items=JSON.parse(JSON.parse(options.body).messages[1].content).items;return response(items.map(x=>x.candidates?{id:x.id,eventId:split?null:x.candidates[0].id,relation:split?'new':'same_event',confidence:0.97,reason:split?'不同真实动作':'同一发布'}:analysis(x.id)));};
+ const seed={entries:[],health:[]};
+ try{await ingest(db,[entry('a'),{...entry('b','two','Another report'),publishedAt:new Date(Date.now()-1000).toISOString()}]);
+   for(const stage of ['analyze','deduplicate','group'])await runPipeline(db,sources,seed,'test-only',stage);
+   const old=sql.prepare("SELECT event_id FROM pipeline_items WHERE id='a'").get().event_id;
+   assert.equal(sql.prepare("SELECT event_id FROM pipeline_items WHERE id='b'").get().event_id,old);
+   split=true;await runPipeline(db,sources,seed,'test-only','reprocess',['a']);
+   for(const stage of ['analyze','deduplicate','group'])await runPipeline(db,sources,seed,'test-only',stage,['a']);
+   assert.notEqual(sql.prepare("SELECT event_id FROM pipeline_items WHERE id='a'").get().event_id,old);
+   assert.equal(sql.prepare("SELECT event_id FROM pipeline_items WHERE id='b'").get().event_id,old);
+   const previous=JSON.parse(sql.prepare("SELECT result FROM pipeline_steps WHERE item_id='a' AND stage='reprocess'").get().result);
+   assert.equal(previous.previousEventId,old);assert.equal(previous.previousAnalysis.title,analysis('a').title);
+   await runPipeline(db,sources,seed,'test-only','score');await runPipeline(db,sources,seed,'test-only','publish');assert.equal((await getSetting(db,'news_publication_v3',{})).stories.length,2);
+   assert.equal(validSelection('reprocess',undefined),false);
+ }finally{globalThis.fetch=original;sql.close();}
+});
+test('grouping uses source evidence and records rejected low-confidence and backward follow-ups',async()=>{
+ for(const [relation,confidence] of [['same_event',0.85],['follow_up',0.99]]){
+   const {db,sql}=database(),original=globalThis.fetch;
+   globalThis.fetch=async(_url,options)=>{const items=JSON.parse(JSON.parse(options.body).messages[1].content).items;return response(items.map(x=>{if(!x.candidates)return analysis(x.id);assert.match(x.evidence[0].excerpt,/new AI model/);assert.ok(x.candidates[0].evidence.length);return {id:x.id,eventId:x.candidates[0].id,relation,confidence,reason:'test'};}));};
+   try{await ingest(db,[entry('a'),{...entry('b','two','Another report'),publishedAt:new Date(Date.now()-1000).toISOString()}]);for(const stage of ['analyze','deduplicate','group'])await runPipeline(db,sources,{entries:[],health:[]},'test-only',stage);
+     assert.equal(sql.prepare('SELECT COUNT(*) n FROM pipeline_events').get().n,2);assert.equal(sql.prepare('SELECT COUNT(*) n FROM pipeline_events WHERE parent_id IS NOT NULL').get().n,0);
+     const result=JSON.parse(sql.prepare("SELECT result FROM pipeline_steps WHERE item_id='b' AND stage='group'").get().result);assert.equal(result.merged,false);assert.equal(result.followUp,false);assert.ok(result.candidateIds.length);
+   }finally{globalThis.fetch=original;sql.close();}
+ }
 });
