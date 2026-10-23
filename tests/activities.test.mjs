@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {activityRecord,parseActivityPage,parseEventJsonLd,dateRange,allowedActivityUrl,collectActivities} from '../lib/activity-collector.mjs';
-import {activityEnd,activityTime,activityNoticeId} from '../lib/activity-data.mjs';
+import {publicActivity,activityEnd,activityTime,activityNoticeId} from '../lib/activity-data.mjs';
 import {duplicate,candidateWeight,validateAnalyses,selectHot,editions} from '../lib/pipeline-editorial.mjs';
 import {upcomingActivities,deliveryParts} from '../lib/delivery-content.mjs';
 const source={id:'example',name:'AI 活动',website:'https://luma.com/example',city:'上海'};
@@ -56,4 +56,9 @@ test('same-day livestreams at different times are different occurrences; source 
  const v={id:'x',isAI:true,title:'AI 活动',takeaway:'AI 开发者活动',bullets:[],importance:45,reasons:['公开时间'],entities:['AI'],action:'发布活动',topic:'线下活动',primaryEvidenceUrls:['https://example.org/event/']};
  assert.deepEqual(validateAnalyses({items:[v]},['x'],[{id:'x',url:'https://example.org/event',primaryLinks:[]}])[0].primaryEvidenceUrls,[]);
  assert.throws(()=>validateAnalyses({items:[{...v,primaryEvidenceUrls:['https://unobserved.example/event']}]},['x'],[{id:'x',url:'https://example.org/event',primaryLinks:[]}]));
+});
+
+test('published activity dates use Beijing calendar days and retain a specific event link',()=>{
+ const a=publicActivity({date:'2026-10-23',startAt:'2026-10-23T21:00:00Z',endAt:'2026-10-23T22:00:00Z',url:'https://luma.com/specific',originalUrl:'https://organizer.example/'});
+ assert.equal(a.date,'2026-10-24');assert.equal(a.endDate,'2026-10-24');assert.equal(a.timezone,'Asia/Shanghai');assert.equal(a.originalUrl,undefined);
 });
