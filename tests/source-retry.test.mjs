@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {parseAnthropic,parseProductUpdates,parsePublisherList,parseOfficialPost,collectSource} from '../lib/news-collector.mjs';
+import {parseAnthropic,parseChangelog,parseProductUpdates,parsePublisherList,parseOfficialPost,parsePostListing,collectSource} from '../lib/news-collector.mjs';
 import {subscriptionRead} from '../lib/subscriptions.mjs';
 
 test('Anthropic cards and table rows keep neighbouring dates isolated and include root release links',()=>{
@@ -46,4 +46,13 @@ test('official repository fallback uses published frontmatter, rejects drafts an
  assert.equal(parseOfficialPost(text,{...file,html_url:'https://unrelated.example/article'},s),null);
  const calls=[];const result=await collectSource(s,async url=>{calls.push(url);return url===s.feed?Response.json([{...file,name:'2026-10-17-other.md',download_url:'https://unrelated.example/body'},file]):new Response(text);});
  assert.deepEqual(calls,[s.feed,file.download_url]);assert.equal(result.items.length,1);assert.ok(!JSON.stringify(result).includes('Full article'));
+});
+test('DeepSeek localized changelog dates and anchors remain publisher-provided',()=>{
+ const rows=parseChangelog('<h2 id="时间-2026-10-17">时间: 2026-10-17</h2><h3>发布搜索 API</h3><p>官方说明</p><h2 id="时间-2026-09-10">时间: 2026-09-10</h2><h3>发布模型</h3>',{website:'https://api-docs.deepseek.com/zh-cn/updates/'});
+ assert.equal(rows.length,2);assert.equal(rows[0].publishedAt,'2026-10-17T00:00:00.000Z');assert.match(decodeURI(rows[0].url),/#时间-2026-10-17$/);
+});
+test('GitHub web listing selects only dated files from the configured public branch',()=>{
+ const s={repositoryPage:'https://github.com/StanfordVL/sail-blog',repositoryBranch:'source',rawPrefix:'https://raw.githubusercontent.com/StanfordVL/sail-blog/source/_posts/'};
+ const wrap=branch=>'<script type="application/json">'+JSON.stringify({payload:{codeViewTreeRoute:{path:'_posts',refInfo:{name:branch},tree:{items:[{name:'2026-10-16-tracer.md',path:'_posts/2026-10-16-tracer.md',contentType:'file'},{name:'2026-10-17-other.md',path:'../outside',contentType:'file'}]}}}})+'</script>';
+ const list=parsePostListing(wrap('source'),s);assert.equal(list.length,1);assert.equal(list[0].download_url,s.rawPrefix+list[0].name);assert.throws(()=>parsePostListing(wrap('master'),s));
 });

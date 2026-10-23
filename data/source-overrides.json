@@ -183,7 +183,7 @@
   },
   "sail": {
     "adapter": "github-posts",
-    "feed": "https://api.github.com/repos/StanfordVL/sail-blog/contents/_posts?ref=source",
+    "feed": "https://github.com/StanfordVL/sail-blog/tree/source/_posts",
     "repositoryPage": "https://github.com/StanfordVL/sail-blog",
     "repositoryBranch": "source",
     "rawPrefix": "https://raw.githubusercontent.com/StanfordVL/sail-blog/source/_posts/",
@@ -202,5 +202,8 @@
     "name": "WAIC 世界人工智能大会",
     "website": "https://www.worldaic.com.cn/",
     "notice": "截图 WAICA 名称核对为 WAIC；官网新闻动态加载，独立新闻采集尚未接通。"
+  },
+  "deepseek": {
+    "feed": "https://api-docs.deepseek.com/updates/"
   }
 }
