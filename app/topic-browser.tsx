@@ -25,6 +25,7 @@ export default function TopicBrowser({data,category,initialPublisher,saved,onSel
  const group=selection?groups.find(g=>g.category===selection.category):null;
  const selected:Card|undefined=group?.cards.find((c:Card)=>c.id===selection?.id)
   ||(initialPublisher&&selection?groups.flatMap(g=>g.cards).find((c:Card)=>c.publisher===initialPublisher):undefined);
+ const selectedSource=selected?data.sources.find(s=>s.publisher===selected.publisher&&s.section===selection?.category):undefined;
  const visible=groups.filter(g=>category==='全部'||g.category===category);
  const normalized=search.toLowerCase().trim();
  const eventBase:Story[]=selected?.stories||[];
@@ -52,7 +53,7 @@ export default function TopicBrowser({data,category,initialPublisher,saved,onSel
     {story.summary&&<p>{story.summary}</p>}
     <div className="topic-event-actions"><button aria-pressed={saved.some(s=>s.id===story.id)} onClick={()=>onSave(story)}><Bookmark size={15}/>{saved.some(s=>s.id===story.id)?'已收藏':'收藏'}</button><a href={story.activity?.originalUrl||story.activity?.url||story.url} target="_blank" rel="noopener noreferrer">{story.activity?'活动原页':'原文'}<ExternalLink size={14}/></a></div>
    </article>)}</div>
-   {!events.length&&<div className="empty"><h3>{isActivity?'暂无'+activityTab:'暂无相关动态'}</h3>{(kind!=='全部事件'||search)&&<button className="secondary" onClick={()=>{setKind('全部事件');setSearch('');}}>清除筛选</button>}</div>}
+   {!events.length&&<div className="empty"><h3>{isActivity?'暂无'+activityTab:'暂无相关动态'}</h3>{isActivity&&selectedSource?.website&&<a className="secondary" href={selectedSource.website} target="_blank" rel="noopener noreferrer">前往活动官网</a>}{(kind!=='全部事件'||search)&&<button className="secondary" onClick={()=>{setKind('全部事件');setSearch('');}}>清除筛选</button>}</div>}
    {events.length>limit&&<button className="more" onClick={()=>setLimit(limit+25)}>加载更多（剩余 {events.length-limit} 条）</button>}
   </div>:<>
    <div className="topic-directory-tools"><label className="search topic-search"><Search size={17}/><input aria-label="搜索公司或来源" placeholder="搜索公司、模型或来源" value={search} onChange={e=>setSearch(e.target.value)}/></label></div>

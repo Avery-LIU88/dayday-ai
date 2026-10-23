@@ -50,3 +50,10 @@ test('activity fetch checks every redirect and stays within known public endpoin
  const calls=[];await assert.rejects(collectActivities({...source,feed:'https://luma.com/x',activityAdapter:'jsonld'},async url=>{calls.push(url);return new Response('',{status:302,headers:{location:'https://127.0.0.1/private'}});},async(url,fetcher)=>{const r=await fetcher(url,{});return r.text();}),/已核验/);
  assert.equal(calls.length,1);
 });
+test('same-day livestreams at different times are different occurrences; source self-citations do not inflate evidence',()=>{
+ const a={title:'AI Fundamentals',takeaway:'AI 直播',entities:['Microsoft'],publishedAt:'2026-10-24T00:00:00Z',activity:{date:'2026-10-26',startAt:'2026-10-26T15:00:00Z'}};
+ assert.equal(candidateWeight(a,{...a,activity:{date:'2026-10-26',startAt:'2026-10-26T20:00:00Z'}}),0);
+ const v={id:'x',isAI:true,title:'AI 活动',takeaway:'AI 开发者活动',bullets:[],importance:45,reasons:['公开时间'],entities:['AI'],action:'发布活动',topic:'线下活动',primaryEvidenceUrls:['https://example.org/event/']};
+ assert.deepEqual(validateAnalyses({items:[v]},['x'],[{id:'x',url:'https://example.org/event',primaryLinks:[]}])[0].primaryEvidenceUrls,[]);
+ assert.throws(()=>validateAnalyses({items:[{...v,primaryEvidenceUrls:['https://unobserved.example/event']}]},['x'],[{id:'x',url:'https://example.org/event',primaryLinks:[]}]));
+});
