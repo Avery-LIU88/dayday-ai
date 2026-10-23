@@ -6,6 +6,7 @@ import type {clusterEntries} from './dayday-core.mjs';
 import type {buildDailyEditions} from './daily-brief.mjs';
 import type {buildWeeklyEditions} from './weekly-brief.mjs';
 import type {Health} from './types';
+import {policy} from '../config/pipeline.mjs';
 export const newsSources=catalog;
 type Story=ReturnType<typeof clusterEntries>[number]&{trend:{at:string;heat:number}[];takeaway?:string;bullets?:string[]};
 export type NewsState={stories:Story[];hot:Story[];daily:ReturnType<typeof buildDailyEditions>;weekly:ReturnType<typeof buildWeeklyEditions>;sources:typeof catalog;health:(Health&{lastSuccessAt?:string|null})[];collectedAt:string;processedAt?:string;databaseReady:boolean;topics:string[];ranking:{version:number;windowHours:number;asOf:string};pipeline:{mode:string;processed:number;lastSuccessAt:string|null;pending?:number};stats:{registered:number;configured:number;healthy:number;healthyEndpoints:number;articles:number;stories:number}};
@@ -19,6 +20,7 @@ export async function publicState():Promise<NewsState>{
 }
 export async function refreshNews(stage='auto'){return runPipeline(database(),newsSources,seed,runtime().DEEPSEEK_API_KEY,stage);}
 export async function processingStatus(){return pipelineStatus(database());}
+export async function modelConnection(){try{const response=await fetch(policy.baseUrl+'/models',{headers:{Authorization:`Bearer ${runtime().DEEPSEEK_API_KEY}`},redirect:'manual',signal:AbortSignal.timeout(15000)});const text=await response.text();let models:string[]=[];try{models=JSON.parse(text).data?.map((m:{id:string})=>m.id)||[];}catch{}return {status:response.status,modelAvailable:models.includes(policy.model),models,redirect:response.headers.get('location')?.split('?')[0]||null};}catch(e){return {error:String(e instanceof Error?e.name+': '+e.message:'network error').replace(/sk-[a-zA-Z0-9_-]+/g,'[redacted]').slice(0,200)};}}
 export async function processingItem(id:string){const db=database();return {item:await db.prepare('SELECT id,source_id,published_at,status,analysis,duplicate_of,event_id,error,updated_at FROM pipeline_items WHERE id=?').bind(id).first(),steps:(await db.prepare('SELECT stage,status,result,version,updated_at FROM pipeline_steps WHERE item_id=?').bind(id).all()).results};}
 export {stages};
 export function authorizedUpdater(request:Request){const token=runtime().ADMIN_TOKEN;return !!token&&token.length>=32&&request.headers.get('authorization')===`Bearer ${token}`;}
