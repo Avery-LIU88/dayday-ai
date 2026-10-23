@@ -38,6 +38,11 @@ test('the model cannot fabricate supporting links or return string editorial boo
  assert.throws(()=>validateAnalyses({items:[analysis('a',85,{primaryEvidenceUrls:['https://lab.example/made-up']})]},['a'],[input]));
  assert.throws(()=>validateAnalyses({items:[analysis('a',85,{editorial:{newFact:'true',uncertain:false,insufficientEvidence:false}})]},['a']));
 });
+test('an extra model bullet is combined without dropping a trailing uncertainty caveat',()=>{
+ const bullets=['融资已宣布。','资金将投入研发。','产品称兼容现有生态。','投资方与估值尚未披露。'];
+ const [value]=validateAnalyses({items:[analysis('a',62,{bullets})]},['a']);
+ assert.equal(value.bullets.length,3);assert.equal(value.bullets[2],bullets[2]+'；'+bullets[3]);assert.deepEqual(bullets,['融资已宣布。','资金将投入研发。','产品称兼容现有生态。','投资方与估值尚未披露。']);
+});
 test('unconfirmed and insufficient reports cannot lead, and a sensational member cannot inflate a confirmed event',()=>{
  const rumor=row('rumor','media',99,{analysis:JSON.stringify(analysis('rumor',99,{editorial:{newFact:true,uncertain:true,insufficientEvidence:false}}))});
  assert.equal(selectHot([event([rumor])],now).length,0);

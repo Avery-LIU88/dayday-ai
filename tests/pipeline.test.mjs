@@ -33,7 +33,7 @@ test('targeted source retries persist independent health, retain last success an
 });
 test('model responses reject fabricated IDs, oversized summaries and invalid scores',()=>{
  assert.equal(validateAnalyses({items:[analysis('a')]},['a'])[0].importance,75);
- for(const bad of [{id:'other'},{importance:101},{bullets:['a','b','c','d']},{isAI:'true'}])assert.throws(()=>validateAnalyses({items:[{...analysis('a'),...bad}]},['a']));
+ for(const bad of [{id:'other'},{importance:101},{bullets:['a','b','c'.repeat(260),'d']},{isAI:'true'}])assert.throws(()=>validateAnalyses({items:[{...analysis('a'),...bad}]},['a']));
  assert.throws(()=>validateGroups({items:[{id:'a',eventId:'forged',relation:'same_event',confidence:1,reason:'same'}]},[{id:'a',candidates:[]}]))
 });
 test('Shanghai budget day and peak token accounting are deterministic',()=>{
