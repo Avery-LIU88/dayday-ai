@@ -50,7 +50,7 @@ test('missing key and exhausted budgets never fake AI results',async()=>{
 });
 test('complete pipeline persists every stage, handles mirrors and publishes only derived fields',async()=>{
  const {db,sql}=database();const rawFetch=globalThis.fetch;let modelCalls=0;
- globalThis.fetch=async(url,options)=>{assert.equal(url,'https://api.deepseek.com/chat/completions');modelCalls++;const body=JSON.parse(options.body),items=JSON.parse(body.messages[1].content).items;
+ globalThis.fetch=async(url,options)=>{assert.equal(url,'https://api.deepseek.com/chat/completions');assert.equal(options.redirect,'manual');modelCalls++;const body=JSON.parse(options.body),items=JSON.parse(body.messages[1].content).items;
    return response(items.map(x=>x.candidates?{id:x.id,eventId:x.candidates[0].id,relation:'same_event',confidence:0.97,reason:'同一具体模型发布'}:analysis(x.id)));};
  try{
    const entries=[entry(),entry('b','two','Independent report on TestModel 9 AI release'),entry('c','mirror'),entry('d','one','优惠券领取')];

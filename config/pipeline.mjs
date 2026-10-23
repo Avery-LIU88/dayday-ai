@@ -1,6 +1,6 @@
 // All editorial policy, model settings and thresholds are versioned here.
 export const policy = {
-  version: '2026-10-24-v1',
+  version: '2026-10-24-v2',
   model: 'deepseek-flash', baseUrl: 'https://api.deepseek.com',
   dailyBudgetCny: 6, timezone: 'Asia/Shanghai',
   // Conservative peak-price accounting, CNY per million tokens. Off-peak
