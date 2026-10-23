@@ -30,12 +30,12 @@ function BriefArticle({article,lead=false,index=0,weekly=false}:{article:Article
   {weekly&&!!article.developments?.length&&<details className="brief-developments"><summary>本周相关进展 · {article.developments.length}</summary><ol>{article.developments.map(d=><li key={d.url}><time dateTime={d.firstPublishedAt}>{new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',month:'numeric',day:'numeric'}).format(new Date(d.firstPublishedAt))}</time><div><a href={d.url} target="_blank" rel="noopener noreferrer">{d.title}<ExternalLink size={12}/></a><span>{d.source}</span></div></li>)}</ol></details>}
  </article>;
 }
-export default function DailyBrief({data,period='daily'}:{data:NewsState;period?:'daily'|'weekly'}){
+export default function DailyBrief({data,period='daily',initialDate=''}:{data:NewsState;period?:'daily'|'weekly';initialDate?:string}){
  const weekly=period==='weekly',name=weekly?'周报':'日报';
  const editions:Edition[]=weekly?data.weekly:data.daily;
  const published=editions.filter((e:Edition,i:number)=>e.articles.length>0||(weekly&&i===0));
  const latest=published[0]?.date||editions[0]?.date;
- const [chosen,setChosen]=useState(''),[archiveOpen,setArchiveOpen]=useState(false);
+ const [chosen,setChosen]=useState(initialDate),[archiveOpen,setArchiveOpen]=useState(false);
  const top=useRef<HTMLDivElement>(null);
  const date=chosen||latest||'';
  const issue=editions.find((e:Edition)=>e.date===date);

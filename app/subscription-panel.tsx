@@ -47,8 +47,8 @@ export default function SubscriptionPanel({view}:{view:'following'|'settings'}){
  <section className="subscription-box"><h2>提醒设置</h2><div className="reminder-fields">
  <label className="check-row"><input type="checkbox" checked={prefs.enabled} onChange={e=>setPrefs({...prefs,enabled:e.target.checked})}/>开启飞书提醒</label>
  <label className="check-row"><input type="checkbox" checked={prefs.episodes} onChange={e=>setPrefs({...prefs,episodes:e.target.checked})}/>关注节目更新</label>
- <label className="check-row"><input type="checkbox" checked={prefs.daily} onChange={e=>setPrefs({...prefs,daily:e.target.checked})}/>每日 AI 简报</label>
- <label className="check-row"><input type="checkbox" checked={prefs.weekly} onChange={e=>setPrefs({...prefs,weekly:e.target.checked})}/>每周一 AI 周报</label>
+ <label className="check-row"><input type="checkbox" checked={prefs.daily} onChange={e=>setPrefs({...prefs,daily:e.target.checked})}/>昨日 AI 日报</label>
+ <label className="check-row"><input type="checkbox" checked={prefs.weekly} onChange={e=>setPrefs({...prefs,weekly:e.target.checked})}/>上周 AI 周报（每周一）</label>
  <label>汇总及简报时间（北京时间） <input type="time" value={prefs.time} onChange={e=>setPrefs({...prefs,time:e.target.value})}/></label>
  <label className="check-row"><input type="checkbox" checked={prefs.quiet} onChange={e=>setPrefs({...prefs,quiet:e.target.checked})}/>22:00–08:00 免打扰</label>
  </div><button className="primary" disabled={!!busy} onClick={saveSettings}>保存设置</button><p className="subscription-help">节目提醒在后台检查发现更新后发送。{state.job?`最近任务：${date(state.job.checkedAt)} · ${state.job.phase}`:'后台任务尚未运行。'}</p></section>

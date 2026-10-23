@@ -5,6 +5,7 @@ import {stableId} from './feed.mjs';
 import {resolveShow,showFromFeed,defaultReminderPreferences,reminderPreferences,encryptBot,decryptBot,deliveryDue,chinaTime,briefText} from './subscriptions.mjs';
 import {sendFeishu,notificationText,validateWebhook} from './feishu.mjs';
 import {publicState} from './news-store';
+import {scheduledEdition,editionText} from './distribution.mjs';
 import type {Entry} from './types';
 
 type Runtime={DB?:D1Database;REMINDER_ENCRYPTION_KEY?:string};
@@ -88,7 +89,7 @@ export async function previewMessage(id:string,kind:string){
  if(kind==='episodes'){
   const s=await subscriptionState(id);return s.episodes.length?notificationText(s.episodes.slice(0,5),true):'';
  }
- return briefText((await publicState()).stories,kind);
+ return briefText(await publicState(),kind);
 }
 export async function preparePreview(id:string,kind:string){
  const text=await previewMessage(id,kind);
@@ -140,9 +141,12 @@ async function dispatchReader(r:Reader){
  }
  for(const kind of ['daily','weekly']){
   if(!deliveryDue(p,kind,date))continue;
-  const key=r.id+':'+kind+':'+clock.day;
+  // Send the previous calendar day / completed week, exactly as published.
+  // A missing edition is retried at a later check, never replaced by stale news.
+  const issue=scheduledEdition(await publicState(),kind,date);if(!issue)continue;
+  const key=r.id+':edition:'+kind+':'+issue.date;
   if(await db().prepare('SELECT id FROM notices WHERE id=?').bind(key).first())continue;
-  const text=await previewMessage(r.id,kind);if(!text)continue;
+  const text=editionText(issue,kind);if(!text)continue;
   const result=await deliver(r,[key],kind,text);if(result.status==='sent')sent++;
  }
  return sent;

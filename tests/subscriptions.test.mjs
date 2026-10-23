@@ -44,9 +44,9 @@ test('quiet hours, daily clock and Monday weekly clock use Beijing time',()=>{
  assert.equal(deliveryDue(p,'weekly',new Date('2026-10-20T00:00Z')),false);
  assert.equal(deliveryDue(p,'daily',new Date('2026-10-19T23:59Z')),false);
 });
-test('brief uses real records within period and ignores future records',()=>{
- const now=new Date('2026-10-20T08:00Z'),stories=[{title:'Current',source:'Source',score:10,publishedAt:'2026-10-20T00:00Z',url:'https://example.org/1'},{title:'Old',score:100,publishedAt:'2026-10-01T00:00Z'},{title:'Future',score:100,publishedAt:'2026-10-21T00:00Z'}];
- const text=briefText(stories,'daily',now);assert.match(text,/Current/);assert.doesNotMatch(text,/Old|Future/);
+test('brief uses the published edition without reselecting or reranking stories',()=>{
+ const state={stories:[{title:'Unpublished',score:100}],daily:[{date:'2026-10-20',articles:[]},{date:'2026-10-19',articles:[{id:'a',title:'Published',source:'Source',summary:'Derived points',url:'https://example.org/1'}]}]};
+ const text=briefText(state,'daily');assert.match(text,/Published/);assert.match(text,/2026-10-19/);assert.doesNotMatch(text,/Unpublished|2026-10-20/);
 });
 
 test('database flow isolates readers, skips history, deduplicates delivery and sends exact preview',async()=>{
@@ -61,7 +61,7 @@ test('database flow isolates readers, skips history, deduplicates delivery and s
  const D1={prepare(query){const statement=sql.prepare(query);let values=[];const p={bind(...v){values=v;return p;},async first(){return statement.get(...values)||null;},async all(){return {results:statement.all(...values)};},async run(){const x=statement.run(...values);return {meta:{changes:Number(x.changes)}};}};return p;},async batch(batch){return Promise.all(batch.map(x=>x.run()));}};
  globalThis.__subscriptionsTestEnv={DB:D1,REMINDER_ENCRYPTION_KEY:'b'.repeat(64)};
  let text=await readFile(new URL('../lib/subscription-store.ts',import.meta.url),'utf8');
- text=text.replace("import {env} from 'cloudflare:workers';","const env=globalThis.__subscriptionsTestEnv;").replace("import catalog from '../data/catalog.json';","const catalog=[];").replace("import podcastLinks from '../data/podcast-links.json';","const podcastLinks={shows:[]};").replace("import {publicState} from './news-store';","const publicState=async()=>({stories:[]});").replace(/from '(\.\/[^']+\.mjs)'/g,(_,p)=>`from '${new URL('../lib/'+p.slice(2),import.meta.url).href}'`);
+ text=text.replace("import {env} from 'cloudflare:workers';","const env=globalThis.__subscriptionsTestEnv;").replace("import catalog from '../data/catalog.json';","const catalog=[];").replace("import podcastLinks from '../data/podcast-links.json';","const podcastLinks={shows:[]};").replace("import {publicState} from './news-store';","const publicState=async()=>globalThis.__subscriptionsPublication||({stories:[],daily:[],weekly:[]});").replace(/from '(\.\/[^']+\.mjs)'/g,(_,p)=>`from '${new URL('../lib/'+p.slice(2),import.meta.url).href}'`);
  const js=ts.transpileModule(text,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText;
  const store=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
  const originalFetch=globalThis.fetch,sent=[];
@@ -84,7 +84,17 @@ test('database flow isolates readers, skips history, deduplicates delivery and s
   addEpisode(2);await run();assert.equal(sent.length,1,'daily digest cannot repeat later that day');
   await store.follow(a,resolved.show.id,true,'instant');await run();assert.equal(sent.length,2);await run();assert.equal(sent.length,2,'same episode must not send again');
   const preview=await store.preparePreview(a,'episodes');addEpisode(3);await store.sendPreview(a,'episodes');assert.equal(sent.at(-1),preview.text,'manual send must equal preview');
+  // An unready edition sends nothing. Once published, the exact retained issue
+  // is delivered once; ranking changes cannot silently alter the selected set.
+  await store.configure(a,{...defaultReminderPreferences,enabled:true,episodes:false,daily:true,quiet:false,time:'00:00'});
+  const before=sent.length;await run();assert.equal(sent.length,before);
+  const yesterday=new Date(Date.now()+8*3600000-86400000).toISOString().slice(0,10);
+  globalThis.__subscriptionsPublication={daily:[{date:yesterday,updatedAt:new Date().toISOString(),articles:[{id:'daily-real',title:'Published daily',summary:'Derived summary',source:'Official',url:'https://example.org/daily'}]}],weekly:[]};
+  await run();assert.equal(sent.length,before+1);assert.equal(sent.at(-1),briefText(globalThis.__subscriptionsPublication,'daily'));
+  await run();assert.equal(sent.length,before+1,'an edition must not be resent');
+  const dailyPreview=await store.preparePreview(a,'daily');globalThis.__subscriptionsPublication.daily[0].articles[0].title='Later revision';
+  await store.sendPreview(a,'daily');assert.equal(sent.at(-1),dailyPreview.text,'daily manual send must equal saved preview');
   await store.disconnectBot(a);assert.equal((await store.subscriptionState(a)).preferences.enabled,false);
   await store.follow(a,resolved.show.id,false);assert.equal((await store.subscriptionState(a)).shows.length,0);
- }finally{globalThis.fetch=originalFetch;sql.close();delete globalThis.__subscriptionsTestEnv;}
+ }finally{globalThis.fetch=originalFetch;sql.close();delete globalThis.__subscriptionsTestEnv;delete globalThis.__subscriptionsPublication;}
 });
