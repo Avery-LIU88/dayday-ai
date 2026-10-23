@@ -1,3 +1,4 @@
+import {activityNoticeId} from './activity-data.mjs';
 import {env} from 'cloudflare:workers';
 import catalog from '../data/catalog.json';
 import podcastLinks from '../data/podcast-links.json';
@@ -154,7 +155,7 @@ async function dispatchReader(r:Reader,publication:Publication){
  const existing=new Set((await db().prepare('SELECT id FROM notices WHERE reader_id=?').bind(r.id).all<{id:string}>()).results.map(x=>x.id));
  for(const kind of deliveryPolicy.categories){
   if(!p[kind as 'activities'|'episodes'|'hot'])continue;
-  const items=groups[kind as DeliveryKind].filter((x:{id:string})=>!existing.has(key(kind,x.id)));
+  const items=groups[kind as DeliveryKind].filter((x:{id:string})=>!existing.has(key(kind,kind==='activities'?activityNoticeId(x):x.id)));
   for(const part of deliveryParts(items,kind)){
    if(attempted>=deliveryPolicy.messagesPerRequest)return {sent,complete:false};
    const result=await deliver(r,part.ids.map((id:string)=>key(kind,id)),kind,part.text);

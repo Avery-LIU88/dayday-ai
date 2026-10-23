@@ -182,3 +182,18 @@ test('one invalid candidate reference does not poison other articles in the batc
    assert.equal(sql.prepare("SELECT event_id FROM pipeline_items WHERE id='a'").get().event_id,sql.prepare("SELECT event_id FROM pipeline_items WHERE id='c'").get().event_id);
  }finally{globalThis.fetch=original;sql.close();}
 });
+
+test('calendar intake preserves first-seen, invalidates changed schedules and publishes old-announced future events outside news',async()=>{
+ const {db,sql}=database(),original=globalThis.fetch;
+ const future=new Date(Date.now()+30*86400000).toISOString().slice(0,10),old='2020-01-01T00:00:00.000Z';
+ const raw={...entry('calendar'),activityListing:true,publicationDateKnown:false,publishedAt:old,activityCandidate:{date:future,endDate:future,location:'上海',format:'offline',kind:'meetup',url:'https://example.test/calendar',status:'scheduled',dateEvidence:'private evidence'}};
+ globalThis.fetch=async(_url,options)=>{const item=JSON.parse(JSON.parse(options.body).messages[1].content).items[0];return response([{...analysis(item.id),topic:'线下活动',editorial:{newFact:true,uncertain:false,insufficientEvidence:false}}]);};
+ try{
+  await ingest(db,[raw]);assert.equal(sql.prepare('SELECT status FROM pipeline_items').get().status,'collected');
+  const seed={entries:[],health:[]};for(const stage of ['analyze','deduplicate','group','score','publish'])await runPipeline(db,sources,seed,'test-only',stage);
+  const state=await getSetting(db,'news_publication_v3',null);assert.equal(state.activities.length,1);assert.equal(state.activities[0].activity.date,future);assert.equal(state.activities[0].activity.dateEvidence,undefined);assert.equal(state.hot.length,0);assert.ok(state.daily.every(x=>x.articles.length===0));
+  await ingest(db,[{...raw,publishedAt:new Date().toISOString()}]);assert.equal(sql.prepare('SELECT status FROM pipeline_items').get().status,'grouped');assert.equal(sql.prepare('SELECT published_at FROM pipeline_items').get().published_at,old);
+  await ingest(db,[{...raw,publishedAt:new Date().toISOString(),activityCandidate:{...raw.activityCandidate,location:'北京'}}]);
+  const row=sql.prepare('SELECT * FROM pipeline_items').get();assert.equal(row.status,'collected');assert.equal(row.analysis,null);assert.equal(row.published_at,old);
+ }finally{globalThis.fetch=original;sql.close();}
+});

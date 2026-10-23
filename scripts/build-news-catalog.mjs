@@ -175,5 +175,7 @@ try{
  const discovered=JSON.parse(await fs.readFile(new URL('../data/source-overrides.json',import.meta.url),'utf8'));
  for(const row of rows)Object.assign(row,discovered[row.id]||{});
 }catch{}
+const {activitySources}=await import('../config/activities.mjs');
+for(const source of activitySources){const found=rows.find(x=>x.id===source.id);if(found)Object.assign(found,source);else rows.push(source);}
 await fs.writeFile(new URL('../data/news-sources.json',import.meta.url),JSON.stringify(rows,null,2)+'\n');
 console.log(`已建立 ${rows.length} 个来源/端点记录（含待核验入口，不作为已接入数量）`);
