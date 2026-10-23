@@ -5,7 +5,7 @@ import type {NewsState} from '../lib/news-store';
 import icons from '../data/source-icons.json';
 const manifest=icons as Record<string,{path:string}>;
 const sourceNodes=[{id:'openai',name:'OpenAI',x:55,y:45},{id:'anthropic',name:'Anthropic',x:140,y:112},{id:'deepmind',name:'Google',x:45,y:183},{id:'36kr',name:'36氪',x:155,y:253},{id:'arxiv',name:'arXiv',x:55,y:315},{id:'github',name:'GitHub',x:213,y:40}];
-const descriptions=[{title:'采集',text:'从公司官方、媒体、论文与开发者平台汇入公开动态。'},{title:'筛选去重',text:'筛选 AI 相关内容，识别重复链接与相近报道。'},{title:'聚合排序',text:'同一事件合并展示，热点按独立信源数排序，简报按重要性选稿。'},{title:'热点与简报',text:'浏览今日热点，或用日报、周报回顾值得关注的进展。'}];
+const descriptions=[{title:'采集',text:'从公司官方、媒体、论文与开发者平台汇入公开动态。'},{title:'筛选去重',text:'筛选 AI 相关内容，识别重复链接与相近报道。'},{title:'聚合排序',text:'同一事件合并展示，综合重要性、一手证据、热度与时效，选出今日必知。'},{title:'热点与简报',text:'浏览今日热点，或用日报、周报回顾值得关注的进展。'}];
 export default function AboutPanel({data,onBrowse,onSources}:{data:NewsState;onBrowse:()=>void;onSources:()=>void}){
  const [paused,setPaused]=useState(false),[step,setStep]=useState(0);
  const stages=[{...descriptions[0],number:data.stats.healthy,unit:'个近期可用发布者'},{...descriptions[1],number:data.pipeline.processed,unit:'条已处理动态'},{...descriptions[2],number:data.stats.stories,unit:'个聚合事件'},{...descriptions[3],number:data.daily.length,unit:'期日报归档'}];

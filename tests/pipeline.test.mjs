@@ -74,7 +74,7 @@ test('complete pipeline persists every stage, handles mirrors and publishes only
    assert.equal(sql.prepare('SELECT COUNT(*) n FROM pipeline_items').get().n,4);
    const seed={entries:[],health:[]};for(const stage of ['analyze','deduplicate','group','score','publish'])await runPipeline(db,sources,seed,'test-only',stage);
    const published=await getSetting(db,'news_publication_v3',null);assert.equal(published.stories.length,1);assert.equal(published.hot[0].scoreParts.heat,2);
-   assert.equal(published.hot[0].scoreParts.importance,75);assert.equal(published.daily[0].articles[0].title,'OpenAI 发布 TestModel 9');
+   assert.equal(published.hot[0].scoreParts.importance,75);assert.equal(published.daily[0].articles[0].title,'OpenAI 发布 TestModel 9');assert.equal(published.ranking.mode,'editorial_priority');assert.equal(published.hot[0].priority.eligible,true);
    assert.ok(!JSON.stringify(published).includes('A new AI model with a released evaluation.'));
    assert.equal(sql.prepare("SELECT COUNT(*) n FROM pipeline_steps WHERE stage='collect'").get().n,4);
    assert.equal(sql.prepare("SELECT status FROM pipeline_items WHERE id='d'").get().status,'filtered');
@@ -82,9 +82,9 @@ test('complete pipeline persists every stage, handles mirrors and publishes only
    const recorded=JSON.stringify(published);await getSetting(db,'news_publication_v3',null);assert.equal(JSON.stringify(await getSetting(db,'news_publication_v3',null)),recorded);
  }finally{globalThis.fetch=rawFetch;sql.close();}
 });
-test('hot ranking and daily ranking deliberately choose different leading events',()=>{
- const at=new Date().toISOString(),make=(id,heat,importance)=>({id,title:id,takeaway:id,bullets:[],topic:'公司动态',source:'x',sourceId:'x',url:'https://x.test/'+id,links:[],publishedAt:at,firstPublishedAt:at,scoreParts:{heat,importance,reliability:100}});
- const stories=[make('widely-reported',8,65),make('important',1,95)];
+test('hot ranking uses persisted editorial priority while daily ranking keeps importance',()=>{
+ const at=new Date().toISOString(),make=(id,heat,importance,priorityScore)=>({id,title:id,takeaway:id,bullets:[],topic:'公司动态',source:'x',sourceId:'x',url:'https://x.test/'+id,links:[],publishedAt:at,firstPublishedAt:at,scoreParts:{heat,importance,reliability:90},priority:{eligible:true},priorityScore});
+ const stories=[make('widely-reported',8,85,85),make('important',1,90,80)];
  assert.equal(selectHot(stories,Date.now())[0].id,'widely-reported');assert.equal(editions(stories,at).daily[0].articles[0].id,'important');
  assert.ok(ruleFilter(entry('sale','one','black friday deals')));
 });
@@ -99,6 +99,17 @@ test('public read path does not invoke grouping, scoring or model calls',()=>{
  const file=fs.readFileSync(new URL('../lib/news-store.ts',import.meta.url),'utf8'),body=file.slice(file.indexOf('export async function publicState'),file.indexOf('export async function refreshNews'));
  assert.doesNotMatch(body,/clusterEntries\(|scoreGroup\(|modelJSON\(|buildDailyEditions\(|\.run\(|\.batch\(/);
  assert.match(body,/getSetting\(database\(\),'news_publication_v3'/);
+});
+test('source-observed primary citations flow through model validation into persisted priority without inflating heat',async()=>{
+ const {db,sql}=database(),original=globalThis.fetch,url='https://lab.example/research/model';
+ const catalog=[{...sources[0],primary:false},{...sources[1],adapter:'rss',primary:true,website:'https://lab.example/news'}];
+ globalThis.fetch=async(_url,options)=>{const items=JSON.parse(JSON.parse(options.body).messages[1].content).items;assert.equal(items[0].primaryLinks[0].url,url);return response(items.map(x=>({...analysis(x.id),editorial:{newFact:true,uncertain:false,insufficientEvidence:false},primaryEvidenceUrls:[url]})));};
+ try{await ingest(db,[{...entry(),evidenceLinks:[{url,label:'Original research',context:'The original study describes this model.'}]}]);
+   for(const stage of ['analyze','deduplicate','group','score','publish'])await runPipeline(db,catalog,{entries:[],health:[]},'test-only',stage);
+   const state=await getSetting(db,'news_publication_v3',null),story=state.hot[0];assert.equal(story.verification,'引有一手材料');assert.equal(story.scoreParts.heat,1);assert.equal(story.primaryEvidence[0].url,url);
+   const persisted=JSON.parse(sql.prepare("SELECT result FROM pipeline_steps WHERE item_id=? AND stage='score'").get(story.id).result);assert.equal(persisted.priority.score,story.priorityScore);
+   assert.equal(story.priority.quality.method,'model');
+ }finally{globalThis.fetch=original;sql.close();}
 });
 test('targeted audit processes only requested pending rows and rejects invalid selections',async()=>{
  const {db,sql}=database(),original=globalThis.fetch;let calls=0;
