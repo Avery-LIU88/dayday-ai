@@ -72,6 +72,13 @@ test('hot ranking and daily ranking deliberately choose different leading events
  assert.equal(selectHot(stories,Date.now())[0].id,'widely-reported');assert.equal(editions(stories,at).daily[0].articles[0].id,'important');
  assert.ok(ruleFilter(entry('sale','one','black friday deals')));
 });
+test('automatic batches publish immediately and resume persisted work to completion',async()=>{
+ const {db,sql}=database(),original=globalThis.fetch;globalThis.fetch=async(_url,options)=>{const items=JSON.parse(JSON.parse(options.body).messages[1].content).items;return response(items.map(x=>x.candidates?{id:x.id,eventId:x.candidates[0].id,relation:'same_event',confidence:0.95,reason:'同一具体事件'}:analysis(x.id)));};
+ try{const seed={entries:Array.from({length:8},(_,i)=>entry('item'+i)),health:[]};
+   const first=await runPipeline(db,sources,seed,'test-only');assert.equal(first.complete,false);assert.ok(first.processed>0);assert.ok(first.pending>0);assert.equal((await getSetting(db,'news_publication_v3',null)).stories.length,1);
+   const second=await runPipeline(db,sources,seed,'test-only');assert.equal(second.complete,true);assert.equal(second.pending,0);assert.equal(await getSetting(db,'pipeline_phase',''),'collect');
+ }finally{globalThis.fetch=original;sql.close();}
+});
 test('public read path does not invoke grouping, scoring or model calls',()=>{
  const file=fs.readFileSync(new URL('../lib/news-store.ts',import.meta.url),'utf8'),body=file.slice(file.indexOf('export async function publicState'),file.indexOf('export async function refreshNews'));
  assert.doesNotMatch(body,/clusterEntries\(|scoreGroup\(|modelJSON\(|buildDailyEditions\(|\.run\(|\.batch\(/);

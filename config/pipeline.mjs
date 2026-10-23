@@ -8,7 +8,7 @@ export const policy = {
   pricing: { input: 2, cachedInput: 0.04, output: 8,
     checkedAt: '2026-10-24', source: 'https://api-docs.deepseek.com/zh-cn/quick_start/pricing/' },
   batches: { collect: 4, analyze: 6, deduplicate: 24, group: 6 },
-  requestTimeoutMs: 45000, leaseMs: 120000, maxOutputTokens: 4500,
+  requestTimeoutMs: 45000, collectionTimeBudgetMs: 25000, leaseMs: 300000, maxOutputTokens: 4500,
   inputExcerptChars: 1800, inputTitleChars: 180, bootstrapLimit: 1800,
   processDays: 14, groupingHours: 72, groupingCandidates: 6,
   mergeConfidence: 0.88, candidateTextOverlap: 0.5, hotHours: 24, dailyMinImportance: 60,
