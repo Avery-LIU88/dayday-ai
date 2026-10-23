@@ -179,14 +179,14 @@
     "name": "百度",
     "publisher": "baidu",
     "section": "公司动态",
-    "website": "https://yiyan.baidu.com/",
-    "feed": "",
-    "adapter": "directory",
+    "website": "https://ai.baidu.com/support/news",
+    "feed": "https://ai.baidu.com/support/news",
+    "adapter": "baidu-news",
     "kind": "news",
     "language": "zh",
     "primary": true,
     "scope": "截图指定",
-    "notice": "文心官网为动态页面；另查百度研究院官网显示维护中，现仅官方模型记录"
+    "notice": "百度 AI 开放平台上线快报；覆盖官方产品更新，不等同百度所有新闻或研究院博客。"
   },
   {
     "id": "minimax",
@@ -264,14 +264,14 @@
     "publisher": "36kr",
     "section": "媒体资讯",
     "website": "https://www.36kr.com/",
-    "feed": "http://www.36kr.com/feed",
+    "feed": "https://36kr.com/feed",
     "adapter": "rss",
     "kind": "news",
     "language": "zh",
     "primary": false,
     "scope": "截图指定",
     "filterAI": true,
-    "notice": "对照用户 Feedly 的官方综合 RSS；包含文章与快讯，使用 Dify 同款请求头",
+    "notice": "官方 RSS 中心当前 HTTPS 地址；需取得有效 RSS 响应后才计为接通。",
     "uncompressed": true,
     "readerHeaders": true
   },
@@ -360,14 +360,14 @@
     "publisher": "jiqizhixin",
     "section": "媒体资讯",
     "website": "https://www.jiqizhixin.com/",
-    "feed": "https://www.jiqizhixin.com/rss",
-    "adapter": "rss",
+    "feed": "https://www.jiqizhixin.com/industry",
+    "adapter": "jiqi-list",
     "kind": "news",
     "language": "zh",
     "primary": false,
     "scope": "截图指定",
     "filterAI": false,
-    "notice": "原 RSS 入口返回数据服务介绍；需核实官方订阅授权方式"
+    "notice": "官方公开产业报道列表：标题、原始日期、链接；不读取需登录的文章正文。"
   },
   {
     "id": "qbit",
@@ -661,7 +661,7 @@
     "publisher": "36kr",
     "section": "媒体资讯",
     "website": "https://www.36kr.com/",
-    "feed": "http://www.36kr.com/feed-newsflash",
+    "feed": "https://36kr.com/feed-newsflash",
     "adapter": "rss",
     "kind": "news",
     "language": "zh",
@@ -670,7 +670,7 @@
     "filterAI": true,
     "uncompressed": true,
     "readerHeaders": true,
-    "notice": "官方快讯 RSS；与综合源按发布者合并计数"
+    "notice": "官方快讯 RSS；与综合源按发布者合并计数，访问结果以最近检查为准。"
   },
   {
     "id": "reuters-video",
@@ -907,7 +907,8 @@
     "kind": "news",
     "language": "en",
     "primary": false,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "notice": "官方说明不提供批量访问；保留检索入口。论文采集使用 arXiv、Semantic Scholar、HF，不计作 Google Scholar 接通。"
   },
   {
     "id": "semantic",
@@ -943,12 +944,17 @@
     "publisher": "sail",
     "section": "论文与研究",
     "website": "https://ai.stanford.edu/blog/",
-    "feed": "https://ai.stanford.edu/blog/feed.xml",
-    "adapter": "rss",
+    "feed": "https://api.github.com/repos/StanfordVL/sail-blog/contents/_posts?ref=source",
+    "adapter": "github-posts",
     "kind": "news",
     "language": "en",
     "primary": true,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "repositoryPage": "https://github.com/StanfordVL/sail-blog",
+    "repositoryBranch": "source",
+    "rawPrefix": "https://raw.githubusercontent.com/StanfordVL/sail-blog/source/_posts/",
+    "maxArticles": 5,
+    "notice": "官网 RSS 访问异常，改读实验室官方 GitHub 博客源文件；日期取稿件字段/文件名，原文链接指向官方仓库，不把旧备用 RSS 当实时数据。"
   },
   {
     "id": "hai",
@@ -1020,14 +1026,14 @@
     "name": "NVIDIA Research",
     "publisher": "nvidia",
     "section": "论文与研究",
-    "website": "https://research.nvidia.com/",
-    "feed": "",
-    "adapter": "directory",
+    "website": "https://blogs.nvidia.com/blog/tag/nvidia-research/",
+    "feed": "https://blogs.nvidia.com/blog/tag/nvidia-research/feed/",
+    "adapter": "rss",
     "kind": "news",
     "language": "en",
     "primary": true,
     "scope": "截图指定",
-    "notice": "论文目录含会议月份而非统一发布日期，尚未作为实时新闻源启用"
+    "notice": "NVIDIA 官方研究专题博客；不等同独立论文目录。与 NVIDIA 主博客按同一发布者计数。"
   },
   {
     "id": "mit",
@@ -1072,16 +1078,17 @@
   },
   {
     "id": "thu-keip",
-    "name": "清华 · KEIP 实验室（名称待核对）",
+    "name": "清华 · KEG 知识工程实验室",
     "publisher": "thu-keip",
     "section": "论文与研究",
-    "website": "",
+    "website": "https://keg.cs.tsinghua.edu.cn/",
     "feed": "",
     "adapter": "directory",
     "kind": "news",
     "language": "zh",
     "primary": true,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "notice": "截图 KEIP 名称核对为 KEG；官网为客户端页面，尚未取得可持续新闻更新入口。"
   },
   {
     "id": "thu-dai",
@@ -1140,20 +1147,22 @@
     "kind": "news",
     "language": "zh",
     "primary": true,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "notice": "学院科研动态已在“上海交大 · 人工智能学院”采集，部分含卢策吾团队；尚未建立团队独立更新入口。"
   },
   {
     "id": "sjtu-ai",
-    "name": "上海交大 · 人工智能研究院",
+    "name": "上海交大 · 人工智能学院",
     "publisher": "sjtu-ai",
     "section": "论文与研究",
-    "website": "https://ai.sjtu.edu.cn/",
-    "feed": "",
-    "adapter": "directory",
+    "website": "https://soai.sjtu.edu.cn/cn/news/kydt",
+    "feed": "https://soai.sjtu.edu.cn/cn/news/kydt",
+    "adapter": "sjtu-list",
     "kind": "news",
     "language": "zh",
     "primary": true,
-    "scope": "截图指定"
+    "scope": "截图指定",
+    "notice": "官方学院科研动态；按官网发布日期采集，原文可能链接至公众号，不读取公众号正文。"
   },
   {
     "id": "cas",
@@ -1448,28 +1457,28 @@
     "name": "CCL",
     "publisher": "ccl",
     "section": "线下活动",
-    "website": "https://www.cipsc.org.cn/",
-    "feed": "",
-    "adapter": "directory",
+    "website": "https://cips-cl.org/",
+    "feed": "https://cips-cl.org/?feed=rss2",
+    "adapter": "rss",
     "kind": "news",
-    "language": "en",
+    "language": "zh",
     "primary": true,
     "scope": "截图指定",
-    "notice": "官方会议入口；时间、地点与报名信息仅在取得有效记录后展示"
+    "notice": "中国中文信息学会计算语言学专委会官方 RSS；记录公告发布日期，不将会议日期当发布时间。"
   },
   {
     "id": "waica",
-    "name": "WAICA（截图名称待核对）",
+    "name": "WAIC 世界人工智能大会",
     "publisher": "waica",
     "section": "线下活动",
-    "website": "",
+    "website": "https://www.worldaic.com.cn/",
     "feed": "",
     "adapter": "directory",
     "kind": "news",
     "language": "zh",
     "primary": true,
     "scope": "截图指定",
-    "notice": "官方会议入口；时间、地点与报名信息仅在取得有效记录后展示"
+    "notice": "截图 WAICA 名称核对为 WAIC；官网新闻动态加载，独立新闻采集尚未接通。"
   },
   {
     "id": "ccf",
@@ -1540,7 +1549,7 @@
     "primary": true,
     "scope": "截图指定",
     "filterAI": true,
-    "notice": "公开报告目录动态加载，当前未取得可持续的带日期文章列表"
+    "notice": "官方研究目录动态加载；单篇公开研究可读，但未确认持续列表入口。官方 News API 需申请访问，未用产品博客代替研究。"
   },
   {
     "id": "contrary",

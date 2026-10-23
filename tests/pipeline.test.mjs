@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
 import fs from 'node:fs';
 import {modelJSON,budgetStatus,chinaDay,usageCost} from '../lib/pipeline-model.mjs';
-import {ingest,runPipeline,getSetting,validSelection} from '../lib/news-pipeline.mjs';
+import {ingest,runPipeline,getSetting,validSelection,validSourceSelection,settingStatement} from '../lib/news-pipeline.mjs';
 import {validateAnalyses,validateGroups,scoreGroup,selectHot,editions,ruleFilter,duplicate,eventCandidate,addEventEvidence} from '../lib/pipeline-editorial.mjs';
 import {policy} from '../config/pipeline.mjs';
 function database(){
@@ -15,6 +15,22 @@ const sources=[{id:'one',name:'One',publisher:'one',primary:true,adapter:'direct
 const entry=(id='a',sourceId='one',title='OpenAI releases TestModel 9')=>({id,sourceId,title,summary:'A new AI model with a released evaluation.',source:sourceId,url:'https://example.test/'+id,publishedAt:new Date().toISOString(),kind:'article',topics:['公司动态']});
 const analysis=id=>({id,isAI:true,title:'OpenAI 发布 TestModel 9',takeaway:'新模型发布并提供评测。',bullets:['公开摘要没有提供具体指标。'],importance:75,reasons:['有可核对的产品更新'],entities:['OpenAI','TestModel 9'],action:'发布 TestModel 9',topic:'公司动态'});
 const response=items=>Response.json({choices:[{message:{content:JSON.stringify({items})},finish_reason:'stop'}],usage:{prompt_tokens:100,completion_tokens:80,prompt_cache_hit_tokens:50}});
+test('targeted source retries persist independent health, retain last success and do not move the scheduled cursor or call a model',async()=>{
+ const {db,sql}=database(),original=globalThis.fetch,calls=[];
+ const selected=[{id:'ok',name:'Official',adapter:'rss',feed:'https://one.test/rss'},{id:'bad',name:'Unavailable',adapter:'rss',feed:'https://two.test/rss'},{id:'skip',name:'Unselected',adapter:'rss',feed:'https://three.test/rss'}];
+ const last='2026-10-10T00:00:00.000Z';
+ globalThis.fetch=async url=>{calls.push(url);if(url===selected[1].feed)return new Response('Unavailable',{status:503});return new Response(`<rss><channel><item><title>AI model update</title><link>https://one.test/new</link><pubDate>${new Date().toUTCString()}</pubDate></item></channel></rss>`);};
+ try{
+   await db.batch([settingStatement(db,'pipeline_collect_cursor',2),settingStatement(db,'news_collected_at',last),settingStatement(db,'news_health',[{id:'bad',ok:true,checkedAt:last,lastSuccessAt:last}])]);
+   const result=await runPipeline(db,selected,{entries:[],health:[]},'','collect',undefined,['ok','bad']);
+   assert.deepEqual(calls,selected.slice(0,2).map(x=>x.feed));assert.equal(result.targeted,true);assert.equal(result.done,true);assert.equal(result.itemIds.length,1);
+   assert.equal(result.sourceResults[0].ok,true);assert.equal(result.sourceResults[1].ok,false);assert.match(result.sourceResults[1].error,/503/);assert.equal(result.sourceResults[1].lastSuccessAt,last);
+   assert.equal(await getSetting(db,'pipeline_collect_cursor',0),2);assert.equal(await getSetting(db,'news_collected_at',''),last);
+   assert.equal(sql.prepare('SELECT COUNT(*) n FROM pipeline_items').get().n,1);assert.equal(sql.prepare('SELECT COUNT(*) n FROM pipeline_calls').get().n,0);
+   for(const ids of [[],['ok','ok'],['unknown'],['ok','bad','skip','extra','fifth']])assert.equal(validSourceSelection('collect',ids,selected),false);
+   assert.equal(validSourceSelection('analyze',['ok'],selected),false);
+ }finally{globalThis.fetch=original;sql.close();}
+});
 test('model responses reject fabricated IDs, oversized summaries and invalid scores',()=>{
  assert.equal(validateAnalyses({items:[analysis('a')]},['a'])[0].importance,75);
  for(const bad of [{id:'other'},{importance:101},{bullets:['a','b','c','d']},{isAI:'true'}])assert.throws(()=>validateAnalyses({items:[{...analysis('a'),...bad}]},['a']));
