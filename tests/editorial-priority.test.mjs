@@ -11,7 +11,7 @@ const row=(id='a',source='official',importance=85,extra={})=>({id,source_id:sour
 const event=(rows,id='evt')=>scoreGroup(rows,sources,{id},now);
 test('an important original release outranks a widely covered incremental update; marketing never buys first place',()=>{
  const major=event([row('major','official',90)],'major'),minor=event(Array.from({length:8},(_,i)=>row('minor'+i,'media'+i,62)),'minor');
- const marketing=event(Array.from({length:30},(_,i)=>row('ad'+i,'ad'+i,55)),'ad');
+ const marketing=event(Array.from({length:30},(_,i)=>row('ad'+i,'ad'+i,55,{analysis:JSON.stringify(analysis('ad'+i,55,{editorial:{newFact:false,uncertain:false,insufficientEvidence:false}}))})),'ad');
  assert.deepEqual(selectHot([marketing,minor,major],now).map(x=>x.id),['major','minor']);
  assert.equal(major.scoreParts.heat,1);assert.equal(marketing.priority.eligible,false);
  assert.ok(major.priorityScore>minor.priorityScore);

@@ -27,7 +27,7 @@ export const policy = {
     recency: { method: 'exponential', max: 100, decayHours: 24 },
     reliability: { primary: 90, citedPrimary: 85, threePublishers: 70, twoPublishers: 60, singlePublisher: 45, insufficient: 20 },
     priority: {
-      version: 1, minimumImportance: 60,
+      version: 1, minimumImportance: 55,
       weights: { importance: 0.60, heat: 0.15, reliability: 0.20, recency: 0.05 },
       heatSaturation: 10,
       // Conservative fallback for previously analyzed records. New analyses
