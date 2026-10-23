@@ -2,19 +2,21 @@ import {env} from 'cloudflare:workers';
 import catalog from '../data/catalog.json';
 import podcastLinks from '../data/podcast-links.json';
 import {stableId} from './feed.mjs';
-import {resolveShow,showFromFeed,defaultReminderPreferences,reminderPreferences,encryptBot,decryptBot,deliveryDue,chinaTime,briefText} from './subscriptions.mjs';
+import {resolveShow,showFromFeed,defaultReminderPreferences,reminderPreferences,encryptBot,decryptBot,normalizedReminderPreferences,briefText} from './subscriptions.mjs';
 import {sendFeishu,notificationText,validateWebhook} from './feishu.mjs';
 import {publicState} from './news-store';
-import {scheduledEdition,editionText} from './distribution.mjs';
+import {deliveryParts,deliveryItems} from './delivery-content.mjs';
+import {deliveryPolicy} from '../config/delivery.mjs';
 import type {Entry} from './types';
 
 type Runtime={DB?:D1Database;REMINDER_ENCRYPTION_KEY?:string};
 const runtime=()=>env as Runtime;
 const db=()=>{if(!runtime().DB)throw Error('数据库暂不可用');return runtime().DB!;};
+type DeliveryKind='activities'|'episodes'|'hot';
 type Reader={id:string;preferences:string;bot:string|null};
 type Show={id:string;name:string;feed:string;website:string;platform:string;language:string;kind:string;color:string};
 type ShowRow={id:string;data:string;checked_at:string;error:string|null};
-type Prefs={enabled:boolean;episodes:boolean;daily:boolean;weekly:boolean;time:string;quiet:boolean};
+type Prefs={version:number;enabled:boolean;activities:boolean;episodes:boolean;hot:boolean};
 async function setting<T>(key:string,fallback:T){const row=await db().prepare('SELECT value FROM settings WHERE key=?').bind(key).first<{value:string}>();return row?JSON.parse(row.value) as T:fallback;}
 async function set(key:string,value:unknown){await db().prepare('INSERT INTO settings(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').bind(key,JSON.stringify(value)).run();}
 export async function readerId(request:Request){
@@ -42,7 +44,7 @@ export async function subscriptionState(id:string){
  const followed=rows.results.map(x=>({...JSON.parse(x.data) as Show,checkedAt:x.checked_at,error:x.error,followedAt:x.followed_at,mode:x.mode}));
  const episodes=await db().prepare("SELECT e.data FROM entries e JOIN subscriptions f ON f.show_id=e.source_id WHERE f.reader_id=? AND e.kind='episode' ORDER BY e.published_at DESC LIMIT 100").bind(id).all<{data:string}>();
  const job=await setting('subscription_job_status',null);
- return {shows:followed,episodes:episodes.results.map(x=>JSON.parse(x.data) as Entry),preferences:r?JSON.parse(r.preferences) as Prefs:defaultReminderPreferences as Prefs,connected:!!r?.bot,deliveries:logs.results,job};
+ return {shows:followed,episodes:episodes.results.map(x=>JSON.parse(x.data) as Entry),preferences:normalizedReminderPreferences(r?JSON.parse(r.preferences):{}) as Prefs,connected:!!r?.bot,deliveries:logs.results,job};
 }
 export async function previewShow(url:string){return resolveShow(url,[...catalog,...podcastLinks.shows]);}
 export async function follow(id:string,showId:string,active:boolean,mode='instant'){
@@ -85,80 +87,96 @@ export async function disconnectBot(id:string){
  await db().prepare('UPDATE readers SET bot=NULL,preferences=? WHERE id=?').bind(JSON.stringify(p),id).run();
 }
 export async function previewMessage(id:string,kind:string){
- if(!['episodes','daily','weekly'].includes(kind))throw Error('请选择分发内容');
+ if(!['activities','episodes','hot','daily','weekly'].includes(kind))throw Error('请选择分发内容');
  if(kind==='episodes'){
   const s=await subscriptionState(id);return s.episodes.length?notificationText(s.episodes.slice(0,5),true):'';
  }
- return briefText(await publicState(),kind);
+ const state=await publicState();
+ if(kind==='daily'||kind==='weekly')return briefText(state,kind);
+ return deliveryParts(deliveryItems(state)[kind as DeliveryKind],kind).map((p:{text:string})=>p.text).join('\n\n—— 下一条 ——\n\n');
 }
 export async function preparePreview(id:string,kind:string){
- const text=await previewMessage(id,kind);
- await set('subscription_preview:'+id,{kind,text,expiresAt:Date.now()+30*60000});
+ const state=kind==='episodes'?await subscriptionState(id):await publicState();
+ const items=deliveryItems(state,kind==='episodes'?(state as {episodes:Entry[]}).episodes:[])[kind as DeliveryKind];
+ const parts=items?deliveryParts(items,kind).map((p:{text:string})=>p.text):[await previewMessage(id,kind)].filter(Boolean);
+ const text=parts.join('\n\n—— 下一条 ——\n\n');
+ await set('subscription_preview:'+id,{kind,text,parts,expiresAt:Date.now()+30*60000});
  return {text};
 }
 async function deliver(r:Reader,ids:string[],kind:string,text:string){
  if(!r.bot)throw Error('请先连接飞书机器人');
  const bot=await decryptBot(r.bot,runtime().REMINDER_ENCRYPTION_KEY),at=new Date().toISOString();
  let count=0;
- for(const id of ids){const claim=await db().prepare("INSERT OR IGNORE INTO notices(id,reader_id,kind,status,created_at,message) VALUES(?,?,?,'sending',?,'等待回执')").bind(id,r.id,kind,at).run();count+=claim.meta.changes||0;}
+ for(let start=0;start<ids.length;start+=50){
+  const claims=await db().batch(ids.slice(start,start+50).map(id=>db().prepare("INSERT OR IGNORE INTO notices(id,reader_id,kind,status,created_at,message) VALUES(?,?,?,'sending',?,'等待回执')").bind(id,r.id,kind,at)));
+  count+=claims.reduce((n,claim)=>n+(claim.meta.changes||0),0);
+ }
  if(count!==ids.length){
   // Job mutex ensures multi-item claims are unique. Never resend an ambiguous claim.
   return {status:'skipped',message:'这条提醒已经处理',count:0};
  }
+ const throttleKey='feishu_last_send:'+await stableId(bot.webhook);
+ const last=await setting(throttleKey,0);
+ const wait=deliveryPolicy.minSendIntervalMs-(Date.now()-last);if(wait>0)await new Promise(resolve=>setTimeout(resolve,wait));
+ await set(throttleKey,Date.now());
  let result;
  try{result=await sendFeishu(bot.webhook,bot.secret,text);}catch{result={status:'unknown',message:'未收到明确回执，请核对飞书群；不会自动重复发送'};}
- await db().batch(ids.map(id=>db().prepare('UPDATE notices SET status=?,message=? WHERE id=? AND reader_id=?').bind(result.status,result.message,id,r.id)));
+ for(let start=0;start<ids.length;start+=50)await db().batch(ids.slice(start,start+50).map(id=>db().prepare('UPDATE notices SET status=?,message=? WHERE id=? AND reader_id=?').bind(result.status,result.message,id,r.id)));
  return {...result,count};
 }
 export async function sendPreview(id:string,kind:string){
  const r=await reader(id);if(!r?.bot)throw Error('请先连接飞书机器人');
- const preview=await setting<{kind:string;text:string;expiresAt:number}|null>('subscription_preview:'+id,null);
+ const preview=await setting<{kind:string;text:string;parts?:string[];expiresAt:number}|null>('subscription_preview:'+id,null);
  if(kind!=='test'&&(!preview||preview.kind!==kind||preview.expiresAt<Date.now()))throw Error('请先重新预览，再发送');
  const text=kind==='test'?'DayDay AI · 连接测试\n飞书机器人已连接。\n每天一点，跟上 AI。':preview!.text;
  if(!text)throw Error('当前没有可发送的内容');
- return deliver(r,[id+':manual:'+crypto.randomUUID()],kind,text);
+ const parts=kind==='test'?[text]:preview?.parts||[text];
+ const key='subscription_preview_send:'+id;
+ const saved=await setting<{text:string;cursor:number}|null>(key,null);let cursor=kind!=='test'&&saved?.text===text?saved.cursor:0,processed=0;
+ while(cursor<parts.length&&processed<deliveryPolicy.messagesPerRequest){
+  const result=await deliver(r,[id+':manual:'+crypto.randomUUID()],kind,parts[cursor]);
+  cursor++;processed++;await set(key,{text,cursor});
+  if(result.status!=='sent')return result;
+ }
+ const complete=cursor===parts.length;return {status:'sent',message:complete?'飞书已接收全部内容':'已发送本批，继续发送剩余内容',complete};
 }
-async function dispatchReader(r:Reader){
- const p=JSON.parse(r.preferences) as Prefs,date=new Date(),clock=chinaTime(date);let sent=0;
- if(!r.bot||!p.enabled)return 0;
- if(deliveryDue(p,'episode',date)){
-  const digestKey=r.id+':digest:'+clock.day;
-  const digestDone=!!await db().prepare('SELECT id FROM notices WHERE id=?').bind(digestKey).first();
-  const rows=await db().prepare(`SELECT e.id,e.data,f.mode FROM entries e JOIN subscriptions f ON e.source_id=f.show_id
-   LEFT JOIN notices n ON n.id=(?||':episode:'||e.id)
-   WHERE f.reader_id=? AND e.kind='episode' AND (f.mode='instant' OR (?=1 AND f.mode='digest')) AND e.published_at>f.followed_at
-   AND e.published_at>? AND n.id IS NULL ORDER BY e.published_at ASC LIMIT 40`).bind(r.id,r.id,!digestDone&&clock.time>=p.time?1:0,new Date(Date.now()-7*86400000).toISOString()).all<{id:string;data:string;mode:string}>();
-  for(const mode of ['instant','digest']){
-   if(mode==='digest'&&(clock.time<p.time||digestDone))continue;
-   const chosen=rows.results.filter(x=>x.mode===mode);
-   for(let start=0;start<chosen.length;start+=8){
-    const chunk=chosen.slice(start,start+8);
-    const result=await deliver(r,chunk.map(x=>r.id+':episode:'+x.id),'episodes',notificationText(chunk.map(x=>JSON.parse(x.data)),mode==='digest'));
-    if(result.status==='sent')sent++;
-   }
-   if(mode==='digest'&&chosen.length)await db().prepare("INSERT OR IGNORE INTO notices(id,reader_id,kind,status,created_at,message) VALUES(?,?,'episodes','processed',?,'今日节目汇总已处理，详情见单条回执')").bind(digestKey,r.id,date.toISOString()).run();
+type Publication={runId:string;publishedAt:string;hot:Entry[];activities:Entry[]};
+async function dispatchReader(r:Reader,publication:Publication){
+ const p=normalizedReminderPreferences(JSON.parse(r.preferences));let sent=0,attempted=0;
+ if(!r.bot||!p.enabled)return {sent:0,complete:true};
+ const rows=p.episodes?await db().prepare(`SELECT e.id,e.data FROM entries e JOIN subscriptions f ON e.source_id=f.show_id
+  LEFT JOIN notices n ON n.id=(?||':episode:'||e.id)
+  WHERE f.reader_id=? AND e.kind='episode' AND f.mode!='off' AND e.published_at>f.followed_at
+  AND e.published_at>? AND n.id IS NULL ORDER BY e.published_at ASC LIMIT 200`).bind(r.id,r.id,new Date(Date.now()-deliveryPolicy.episodeLookbackDays*86400000).toISOString()).all<{id:string;data:string}>():{results:[]};
+ const groups=deliveryItems(publication,rows.results.map(x=>JSON.parse(x.data)));
+ const key=(kind:string,id:string)=>r.id+':'+(kind==='episodes'?'episode':kind)+':'+id;
+ // notices are per event/episode, not per date or rank: reordering does not resend.
+ const existing=new Set((await db().prepare('SELECT id FROM notices WHERE reader_id=?').bind(r.id).all<{id:string}>()).results.map(x=>x.id));
+ for(const kind of deliveryPolicy.categories){
+  if(!p[kind as 'activities'|'episodes'|'hot'])continue;
+  const items=groups[kind as DeliveryKind].filter((x:{id:string})=>!existing.has(key(kind,x.id)));
+  for(const part of deliveryParts(items,kind)){
+   if(attempted>=deliveryPolicy.messagesPerRequest)return {sent,complete:false};
+   const result=await deliver(r,part.ids.map((id:string)=>key(kind,id)),kind,part.text);
+   attempted++;if(result.status==='sent')sent++;
   }
  }
- for(const kind of ['daily','weekly']){
-  if(!deliveryDue(p,kind,date))continue;
-  // Send the previous calendar day / completed week, exactly as published.
-  // A missing edition is retried at a later check, never replaced by stale news.
-  const issue=scheduledEdition(await publicState(),kind,date);if(!issue)continue;
-  const key=r.id+':edition:'+kind+':'+issue.date;
-  if(await db().prepare('SELECT id FROM notices WHERE id=?').bind(key).first())continue;
-  const text=editionText(issue,kind);if(!text)continue;
-  const result=await deliver(r,[key],kind,text);if(result.status==='sent')sent++;
- }
- return sent;
+ // 200 is a DB page, never a total notification cap. Drain subsequent pages.
+ return {sent,complete:rows.results.length<200};
 }
-/** Shared hourly job, bounded batches. No user secrets are returned to the task. */
+/** Continuation of the nightly publication, with no daily message-count cap. */
 export async function runSubscriptionJob(){
+ const publication=await setting<Publication|null>('nightly_publication',null);
+ const nightly=await setting<{day:string;phase:string}|null>('nightly_update',null);
+ if(!publication||publication.runId!==nightly?.day||!['subscriptions','complete'].includes(nightly.phase))return {blocked:true,complete:false,reason:'等待本轮网站发布完成'};
+ if(await setting('subscription_completed_run','')===publication.runId)return {complete:true,alreadyCompleted:true};
  const lease=String(Date.now()+240000);
  const lock=await db().prepare("INSERT INTO settings(key,value) VALUES('subscription_job_lock',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value WHERE CAST(settings.value AS INTEGER)<? RETURNING key").bind(lease,Date.now()).first();
- if(!lock)return {busy:true};
+ if(!lock)return {busy:true,complete:false};
  try{
-  const minute=Math.floor(Date.now()/60000);
-  await db().prepare("DELETE FROM settings WHERE key LIKE 'subscription_rate:%' AND CAST(substr(key,-8) AS INTEGER)<?").bind(minute-60).run();
+  if(await setting('subscription_active_run','')!==publication.runId){
+   await set('subscription_job_phase','shows');await set('subscription_job_cursor','');await set('subscription_active_run',publication.runId);
+  }
   const phase=await setting('subscription_job_phase','shows'),cursor=await setting('subscription_job_cursor','');
   if(phase==='shows'){
    const rows=await db().prepare('SELECT s.* FROM shows s WHERE s.id>? AND EXISTS(SELECT 1 FROM subscriptions f WHERE f.show_id=s.id) ORDER BY s.id LIMIT 4').bind(cursor).all<ShowRow>();
@@ -168,12 +186,15 @@ export async function runSubscriptionJob(){
    await set('subscription_job_status',{checkedAt:new Date().toISOString(),phase:'采集节目'});
    return {busy:false,checked:rows.results.length,complete:false};
   }
-  const rows=await db().prepare("SELECT id,preferences,bot FROM readers WHERE id>? AND bot IS NOT NULL ORDER BY id LIMIT 5").bind(cursor).all<Reader>();let sent=0;
-  for(const r of rows.results)try{sent+=await dispatchReader(r);}catch{await db().prepare("INSERT INTO notices(id,reader_id,kind,status,created_at,message) VALUES(?,?,?,'failed',?,'提醒处理失败，请检查机器人设置')").bind(r.id+':error:'+chinaTime().day,r.id,'system',new Date().toISOString()).run().catch(()=>{});}
-  const complete=rows.results.length<5;
-  await set('subscription_job_cursor',complete?'':rows.results.at(-1)!.id);
-  if(complete)await set('subscription_job_phase','shows');
-  await set('subscription_job_status',{checkedAt:new Date().toISOString(),phase:complete?'本轮完成':'处理提醒'});
-  return {busy:false,checkedReaders:rows.results.length,sent,complete};
+  const r=await db().prepare("SELECT id,preferences,bot FROM readers WHERE id>? AND bot IS NOT NULL ORDER BY id LIMIT 1").bind(cursor).first<Reader>();
+  if(r){
+   const result=await dispatchReader(r,publication);
+   if(result.complete)await set('subscription_job_cursor',r.id);
+   await set('subscription_job_status',{checkedAt:new Date().toISOString(),phase:'推送三类内容'});
+   return {busy:false,sent:result.sent,complete:false};
+  }
+  await set('subscription_completed_run',publication.runId);
+  await set('subscription_job_status',{checkedAt:new Date().toISOString(),phase:'本轮完成'});
+  return {busy:false,sent:0,complete:true};
  }finally{await db().prepare("DELETE FROM settings WHERE key='subscription_job_lock' AND value=?").bind(lease).run();}
 }

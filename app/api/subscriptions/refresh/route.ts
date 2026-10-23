@@ -1,7 +1,7 @@
 import {authorizedUpdater} from '../../../../lib/news-store';
 import {runSubscriptionJob,resolveAndSave} from '../../../../lib/subscription-store';
 export const dynamic='force-dynamic';
-export async function GET(){return Response.json({purpose:'更新已关注节目，并仅向主动开启提醒的浏览器对应飞书机器人发送节目通知和所选简报。',method:'POST',authorization:'Obtain this Site service credential from get_site; send only to this Site in BOTH OAI-Sites-Authorization and Authorization bearer headers. Do not log credentials.',continueUntil:'Call sequentially until complete=true, stop on busy=true or an error. No publishing or source edits.',interval:'每小时检查；即时提醒指下一次检查发现更新后发送。',privacy:'Do not read or print reader tokens, webhook URLs or signing secrets.'},{headers:{'Cache-Control':'no-store'}});}
+export async function GET(){return Response.json({purpose:'本轮网站发布完成后，更新已关注节目，并向主动开启提醒的飞书机器人分发活动提醒、订阅更新和 AI 今日必知。',method:'POST',authorization:'Obtain this Site service credential from get_site; send only to this Site in BOTH OAI-Sites-Authorization and Authorization bearer headers. Do not log credentials.',continueUntil:'Call sequentially until complete=true, stop on busy=true, blocked=true or an error. No publishing or source edits.',interval:'每天北京时间 21:00 启动，网站发布完成后发送；由 /api/refresh 统一编排。',privacy:'Do not read or print reader tokens, webhook URLs or signing secrets.'},{headers:{'Cache-Control':'no-store'}});}
 export async function POST(request:Request){
  if(!authorizedUpdater(request))return Response.json({error:'Unauthorized'},{status:401});
  // Operator-only source verification saves a public show without following it

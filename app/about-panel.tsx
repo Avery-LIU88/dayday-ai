@@ -22,7 +22,7 @@ export default function AboutPanel({data,onBrowse,onSources}:{data:NewsState;onB
    </svg></div>
    <div className="about-stages">{stages.map((stage,i)=><button key={stage.title} onClick={()=>setStep(i)} className={step===i?'active':''} aria-pressed={step===i}><span className="about-stage-top"><small>0{i+1}</small><strong>{stage.title}</strong></span><span className="about-figure">{stage.number.toLocaleString('zh-CN')}<small>{stage.unit}</small></span></button>)}</div><p className="about-stage-description" aria-live="polite">{stages[step].text}</p>
   </section>
-  <div className="about-bottom"><div><Radio size={21}/><strong>早 8 点 · 晚 8 点</strong><span>每天更新两次</span></div><div><Check size={21}/><strong>免费阅读</strong><span>无需注册</span></div><button onClick={onSources}>查看信息源 <ArrowRight size={17}/></button></div>
+  <div className="about-bottom"><div><Radio size={21}/><strong>北京时间 21:00</strong><span>每天更新一次</span></div><div><Check size={21}/><strong>免费阅读</strong><span>无需注册</span></div><button onClick={onSources}>查看信息源 <ArrowRight size={17}/></button></div>
   <details className="about-method"><summary>了解筛选与热度依据</summary><div><p>热度按去重后的独立发布者数计算；重要性由 DeepSeek 判断。时效、可靠性单独记录，不相加成总分。</p><p>先用规则过滤明显无关内容，再提炼中文要点、去重和判断事件关系。页面读取已完成的处理结果，保留原文入口。</p><p>以上数量是当前已处理内容与近期来源状态；动画为流程示意。</p></div></details>
  </div>;
 }
