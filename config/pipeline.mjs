@@ -1,6 +1,6 @@
 // All editorial policy, model settings and thresholds are versioned here.
 export const policy = {
-  version: '2026-10-24-v3',
+  version: '2026-10-24-v4',
   model: 'deepseek-flash', baseUrl: 'https://api.deepseek.com',
   dailyBudgetCny: 6, timezone: 'Asia/Shanghai',
   // Conservative peak-price accounting, CNY per million tokens. Off-peak
@@ -8,7 +8,8 @@ export const policy = {
   pricing: { input: 2, cachedInput: 0.04, output: 8,
     checkedAt: '2026-10-24', source: 'https://api-docs.deepseek.com/zh-cn/quick_start/pricing/' },
   batches: { collect: 4, analyze: 6, deduplicate: 24, group: 6 },
-  requestTimeoutMs: 45000, collectionTimeBudgetMs: 25000, leaseMs: 300000, maxOutputTokens: 4500,
+  requestTimeoutMs: 45000, collectionTimeBudgetMs: 25000, modelStageTimeBudgetMs: 25000, leaseMs: 300000, maxOutputTokens: 4500,
+  outputTokens: { analyze: 1200, group: 700 },
   inputExcerptChars: 1800, inputTitleChars: 180, bootstrapLimit: 1800,
   processDays: 14, groupingHours: 72, groupingCandidates: 6,
   mergeConfidence: 0.88, candidateTextOverlap: 0.5, hotHours: 24, dailyMinImportance: 60,

@@ -50,7 +50,7 @@ test('missing key and exhausted budgets never fake AI results',async()=>{
 });
 test('complete pipeline persists every stage, handles mirrors and publishes only derived fields',async()=>{
  const {db,sql}=database();const rawFetch=globalThis.fetch;let modelCalls=0;
- globalThis.fetch=async(url,options)=>{assert.equal(url,'https://api.deepseek.com/chat/completions');assert.equal(options.redirect,'manual');modelCalls++;const body=JSON.parse(options.body),items=JSON.parse(body.messages[1].content).items;
+ globalThis.fetch=async(url,options)=>{assert.equal(url,'https://api.deepseek.com/chat/completions');assert.equal(options.redirect,'manual');modelCalls++;const body=JSON.parse(options.body),items=JSON.parse(body.messages[1].content).items;assert.equal(items.length,1);if(items[0].candidates)assert.ok(items[0].candidates.every(c=>/^candidate-\d+$/.test(c.id)));
    return response(items.map(x=>x.candidates?{id:x.id,eventId:x.candidates[0].id,relation:'same_event',confidence:0.97,reason:'同一具体模型发布'}:analysis(x.id)));};
  try{
    const entries=[entry(),entry('b','two','Independent report on TestModel 9 AI release'),entry('c','mirror'),entry('d','one','优惠券领取')];
@@ -137,4 +137,21 @@ test('grouping uses source evidence and records rejected low-confidence and back
      const result=JSON.parse(sql.prepare("SELECT result FROM pipeline_steps WHERE item_id='b' AND stage='group'").get().result);assert.equal(result.merged,false);assert.equal(result.followUp,false);assert.ok(result.candidateIds.length);
    }finally{globalThis.fetch=original;sql.close();}
  }
+});
+test('time-limited model batches resume without repeating completed paid analyses',async()=>{
+ const {db,sql}=database(),original=globalThis.fetch,priorBudget=policy.modelStageTimeBudgetMs;let calls=0;
+ globalThis.fetch=async(_url,options)=>{calls++;const items=JSON.parse(JSON.parse(options.body).messages[1].content).items;assert.equal(items.length,1);return response(items.map(x=>analysis(x.id)));};
+ try{policy.modelStageTimeBudgetMs=0;await ingest(db,[entry('a'),entry('b','two','A distinct source report')]);
+   const first=await runPipeline(db,sources,{entries:[],health:[]},'test-only','analyze',['a','b']);assert.equal(first.processed,1);assert.equal(first.remainingSelected,1);
+   const next=await runPipeline(db,sources,{entries:[],health:[]},'test-only','analyze',['a','b']);assert.equal(next.remainingSelected,0);assert.equal(calls,2);
+ }finally{policy.modelStageTimeBudgetMs=priorBudget;globalThis.fetch=original;sql.close();}
+});
+test('one invalid candidate reference does not poison other articles in the batch',async()=>{
+ const {db,sql}=database(),original=globalThis.fetch;
+ globalThis.fetch=async(_url,options)=>{const items=JSON.parse(JSON.parse(options.body).messages[1].content).items;assert.equal(items.length,1);const x=items[0];return response([x.candidates?{id:x.id,eventId:x.id==='b'?'candidate-99':x.candidates[0].id,relation:'same_event',confidence:0.96,reason:'test'}:analysis(x.id)]);};
+ try{await ingest(db,[entry('a'),entry('b','two','Second'),entry('c','two','Third')]);for(const stage of ['analyze','deduplicate','group'])await runPipeline(db,sources,{entries:[],health:[]},'test-only',stage);
+   assert.equal(sql.prepare("SELECT status FROM pipeline_items WHERE id='b'").get().status,'error');
+   assert.equal(sql.prepare("SELECT status FROM pipeline_items WHERE id='c'").get().status,'grouped');
+   assert.equal(sql.prepare("SELECT event_id FROM pipeline_items WHERE id='a'").get().event_id,sql.prepare("SELECT event_id FROM pipeline_items WHERE id='c'").get().event_id);
+ }finally{globalThis.fetch=original;sql.close();}
 });
