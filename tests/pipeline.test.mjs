@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
 import fs from 'node:fs';
 import {modelJSON,budgetStatus,chinaDay,usageCost} from '../lib/pipeline-model.mjs';
-import {ingest,runPipeline,getSetting} from '../lib/news-pipeline.mjs';
+import {ingest,runPipeline,getSetting,validSelection} from '../lib/news-pipeline.mjs';
 import {validateAnalyses,validateGroups,scoreGroup,selectHot,editions,ruleFilter} from '../lib/pipeline-editorial.mjs';
 import {policy} from '../config/pipeline.mjs';
 function database(){
@@ -83,4 +83,16 @@ test('public read path does not invoke grouping, scoring or model calls',()=>{
  const file=fs.readFileSync(new URL('../lib/news-store.ts',import.meta.url),'utf8'),body=file.slice(file.indexOf('export async function publicState'),file.indexOf('export async function refreshNews'));
  assert.doesNotMatch(body,/clusterEntries\(|scoreGroup\(|modelJSON\(|buildDailyEditions\(|\.run\(|\.batch\(/);
  assert.match(body,/getSetting\(database\(\),'news_publication_v3'/);
+});
+test('targeted audit processes only requested pending rows and rejects invalid selections',async()=>{
+ const {db,sql}=database(),original=globalThis.fetch;let calls=0;
+ globalThis.fetch=async(_url,options)=>{calls++;const items=JSON.parse(JSON.parse(options.body).messages[1].content).items;assert.deepEqual(items.map(x=>x.id),['older']);return response(items.map(x=>analysis(x.id)));};
+ try{await ingest(db,[entry('newer'),{...entry('older'),publishedAt:new Date(Date.now()-86400000).toISOString()}]);
+   await runPipeline(db,sources,{entries:[],health:[]},'test-only','analyze',['older']);
+   assert.equal(sql.prepare("SELECT status FROM pipeline_items WHERE id='newer'").get().status,'collected');
+   assert.equal(sql.prepare("SELECT status FROM pipeline_items WHERE id='older'").get().status,'analyzed');
+   await runPipeline(db,sources,{entries:[],health:[]},'test-only','analyze',['older']);assert.equal(calls,1);
+   for(const ids of [[],['x','x'],['x\' OR 1=1'],Array.from({length:7},(_,i)=>'x'+i)])assert.equal(validSelection('analyze',ids),false);
+   assert.equal(validSelection('auto',['older']),false);
+ }finally{globalThis.fetch=original;sql.close();}
 });
