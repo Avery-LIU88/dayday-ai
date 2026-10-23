@@ -5,7 +5,7 @@ import type {NewsState} from '../lib/news-store';
 import icons from '../data/source-icons.json';
 const manifest=icons as Record<string,{path:string}>;
 const sourceNodes=[{id:'openai',name:'OpenAI',x:55,y:45},{id:'anthropic',name:'Anthropic',x:140,y:112},{id:'deepmind',name:'Google',x:45,y:183},{id:'36kr',name:'36氪',x:155,y:253},{id:'arxiv',name:'arXiv',x:55,y:315},{id:'github',name:'GitHub',x:213,y:40}];
-const descriptions=[{title:'采集',text:'从公司官方、媒体、论文与开发者平台汇入公开动态。'},{title:'筛选去重',text:'筛选 AI 相关内容，识别重复链接与相近报道。'},{title:'聚合排序',text:'同一事件合并展示，结合讨论热度、重要性、时效与可靠性排序。'},{title:'热点与简报',text:'浏览今日热点，或用日报、周报回顾值得关注的进展。'}];
+const descriptions=[{title:'采集',text:'从公司官方、媒体、论文与开发者平台汇入公开动态。'},{title:'筛选去重',text:'筛选 AI 相关内容，识别重复链接与相近报道。'},{title:'聚合排序',text:'同一事件合并展示，热点按独立信源数排序，简报按重要性选稿。'},{title:'热点与简报',text:'浏览今日热点，或用日报、周报回顾值得关注的进展。'}];
 export default function AboutPanel({data,onBrowse,onSources}:{data:NewsState;onBrowse:()=>void;onSources:()=>void}){
  const [paused,setPaused]=useState(false),[step,setStep]=useState(0);
  const stages=[{...descriptions[0],number:data.stats.healthy,unit:'个近期可用发布者'},{...descriptions[1],number:data.stats.articles,unit:'条已处理动态'},{...descriptions[2],number:data.stats.stories,unit:'个聚合事件'},{...descriptions[3],number:data.daily.length,unit:'期日报归档'}];
@@ -23,6 +23,6 @@ export default function AboutPanel({data,onBrowse,onSources}:{data:NewsState;onB
    <div className="about-stages">{stages.map((stage,i)=><button key={stage.title} onClick={()=>setStep(i)} className={step===i?'active':''} aria-pressed={step===i}><span className="about-stage-top"><small>0{i+1}</small><strong>{stage.title}</strong></span><span className="about-figure">{stage.number.toLocaleString('zh-CN')}<small>{stage.unit}</small></span></button>)}</div><p className="about-stage-description" aria-live="polite">{stages[step].text}</p>
   </section>
   <div className="about-bottom"><div><Radio size={21}/><strong>早 8 点 · 晚 8 点</strong><span>每天更新两次</span></div><div><Check size={21}/><strong>免费阅读</strong><span>无需注册</span></div><button onClick={onSources}>查看信息源 <ArrowRight size={17}/></button></div>
-  <details className="about-method"><summary>了解筛选与热度依据</summary><div><p>事件评分结合讨论热度（40%）、重要性（35%）、时效性（15%）和可靠性（10%）。热度基于去重后的报道覆盖与近期新增报道，尚未接入社媒互动量。</p><p>目前使用规则评分和来源公开摘要；跨语言报道可能尚未合并。今日热点只展示首次报道在过去 24 小时的事件，原文入口保留在每条资讯中。</p><p>以上数量是当前已处理内容与近期来源状态；动画为流程示意。</p></div></details>
+  <details className="about-method"><summary>了解筛选与热度依据</summary><div><p>热度按去重后的独立发布者数计算；重要性由 DeepSeek 判断。时效、可靠性单独记录，不相加成总分。</p><p>先用规则过滤明显无关内容，再提炼中文要点、去重和判断事件关系。页面读取已完成的处理结果，保留原文入口。</p><p>以上数量是当前已处理内容与近期来源状态；动画为流程示意。</p></div></details>
  </div>;
 }
