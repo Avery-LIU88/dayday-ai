@@ -96,3 +96,28 @@ test('nightly delivery isolates readers, gates publication, drains all parts and
   await store.disconnectBot(a);assert.equal((await store.subscriptionState(a)).preferences.enabled,false);
  }finally{globalThis.fetch=originalFetch;deliveryPolicy.minSendIntervalMs=oldDelay;sql.close();delete globalThis.__subscriptionsTestEnv;delete globalThis.__subscriptionsPublication;}
 });
+
+
+test('show artwork comes from channel metadata, never episode artwork',async()=>{
+ const channel=xml.replace('<item>','<itunes:image href="https://images.example.org/show.jpg?a=1&amp;b=2"/><item><itunes:image href="https://images.example.org/episode.jpg"/>');
+ const result=await showFromFeed(feed,{},async()=>new Response(channel));
+ assert.equal(result.show.artwork,'https://images.example.org/show.jpg?a=1&b=2');
+ assert.equal(result.episodes[0].artwork,result.show.artwork);
+ const episodeOnly=xml.replace('<item>','<item><itunes:image href="https://images.example.org/episode.jpg"/>');
+ assert.equal((await showFromFeed(feed,{},async()=>new Response(episodeOnly))).show.artwork,'');
+ const unsafe=xml.replace('<item>','<itunes:image href="javascript:alert(1)"/><item>');
+ assert.equal((await showFromFeed(feed,{artwork:'https://images.example.org/fallback.jpg'},async()=>new Response(unsafe))).show.artwork,'https://images.example.org/fallback.jpg');
+});
+test('Apple artwork is retained when feed has no cover',async()=>{
+ const result=await resolveShow('https://podcasts.apple.com/cn/podcast/id123',[],async u=>u.includes('/lookup')?Response.json({results:[{collectionId:123,feedUrl:feed,artworkUrl600:'https://images.example.org/apple.jpg'}]}):new Response(xml));
+ assert.equal(result.show.artwork,'https://images.example.org/apple.jpg');
+});
+test('YouTube channel avatar survives refresh and unavailable artwork does not block episodes',async()=>{
+ const id='UCabcdefghijklmnopqrstuv',calls=[];
+ const result=await resolveShow('https://www.youtube.com/@example',[],async u=>{calls.push(u);return new Response(u.includes('/feeds/')?xml:`<meta content="https://images.example.org/channel.jpg" property="og:image">{"externalId":"${id}"}`);});
+ assert.equal(result.show.artwork,'https://images.example.org/channel.jpg');assert.equal(calls.length,2);
+ const refreshed=await showFromFeed(result.show.feed,result.show,async u=>{assert.ok(u.includes('/feeds/'));return new Response(xml);});
+ assert.equal(refreshed.show.artwork,result.show.artwork);
+ const unavailable=await showFromFeed(result.show.feed,{platform:'YouTube'},async u=>u.includes('/feeds/')?new Response(xml):new Response('',{status:503}));
+ assert.equal(unavailable.show.artwork,'');assert.equal(unavailable.episodes.length,1);
+});

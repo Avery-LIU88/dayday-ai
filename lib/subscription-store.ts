@@ -15,7 +15,7 @@ const runtime=()=>env as Runtime;
 const db=()=>{if(!runtime().DB)throw Error('数据库暂不可用');return runtime().DB!;};
 type DeliveryKind='activities'|'episodes'|'hot';
 type Reader={id:string;preferences:string;bot:string|null};
-type Show={id:string;name:string;feed:string;website:string;platform:string;language:string;kind:string;color:string};
+type Show={id:string;name:string;feed:string;website:string;platform:string;language:string;kind:string;color:string;artwork?:string};
 type ShowRow={id:string;data:string;checked_at:string;error:string|null};
 type Prefs={version:number;enabled:boolean;activities:boolean;episodes:boolean;hot:boolean};
 async function setting<T>(key:string,fallback:T){const row=await db().prepare('SELECT value FROM settings WHERE key=?').bind(key).first<{value:string}>();return row?JSON.parse(row.value) as T:fallback;}
@@ -42,7 +42,11 @@ async function saveShow(show:Show,episodes:Entry[]){
 }
 export async function subscriptionState(id:string){
  const [r,rows,logs]=await Promise.all([reader(id),db().prepare('SELECT s.data,s.checked_at,s.error,f.followed_at,f.mode FROM subscriptions f JOIN shows s ON s.id=f.show_id WHERE f.reader_id=? ORDER BY f.followed_at DESC').bind(id).all<{data:string;checked_at:string;error:string|null;followed_at:string;mode:string}>(),db().prepare('SELECT id,kind,status,created_at AS createdAt,message FROM notices WHERE reader_id=? ORDER BY created_at DESC LIMIT 20').bind(id).all()]);
- const followed=rows.results.map(x=>({...JSON.parse(x.data) as Show,checkedAt:x.checked_at,error:x.error,followedAt:x.followed_at,mode:x.mode}));
+ const followed=rows.results.map(x=>{
+  const show=JSON.parse(x.data) as Show;
+  const known=catalog.find(s=>s.feed===show.feed);
+  return {...show,artwork:show.artwork||known?.artwork||'',checkedAt:x.checked_at,error:x.error,followedAt:x.followed_at,mode:x.mode};
+ });
  const episodes=await db().prepare("SELECT e.data FROM entries e JOIN subscriptions f ON f.show_id=e.source_id WHERE f.reader_id=? AND e.kind='episode' ORDER BY e.published_at DESC LIMIT 100").bind(id).all<{data:string}>();
  const job=await setting('subscription_job_status',null);
  return {shows:followed,episodes:episodes.results.map(x=>JSON.parse(x.data) as Entry),preferences:normalizedReminderPreferences(r?JSON.parse(r.preferences):{}) as Prefs,connected:!!r?.bot,deliveries:logs.results,job};

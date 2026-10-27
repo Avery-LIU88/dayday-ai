@@ -1,8 +1,8 @@
 'use client';
 import {useEffect,useState} from 'react';
-import {ExternalLink,RefreshCw,Plus,Check,Download} from 'lucide-react';
+import {ExternalLink,RefreshCw,Plus,Check,Download,MoreHorizontal,Bell,Headphones,Video,UserMinus} from 'lucide-react';
 import type {Entry} from '../lib/types';
-type Show={id:string;name:string;website:string;platform:string;checkedAt?:string;error?:string;mode?:string};
+type Show={id:string;name:string;website:string;platform:string;artwork?:string;checkedAt?:string;error?:string;mode?:string};
 type Preferences={version:number;enabled:boolean;activities:boolean;episodes:boolean;hot:boolean};
 type State={shows:Show[];episodes:Entry[];preferences:Preferences;connected:boolean;deliveries:{id:string;kind:string;status:string;createdAt:string;message:string}[];job:{checkedAt:string;phase:string}|null};
 const defaults:Preferences={version:2,enabled:false,activities:true,episodes:true,hot:true};
@@ -11,6 +11,13 @@ function browserKey(){
  let key=localStorage.getItem('dayday-reader-key-v1');
  if(!/^[a-f0-9]{64}$/.test(key||'')){key=Array.from(crypto.getRandomValues(new Uint8Array(32)),x=>x.toString(16).padStart(2,'0')).join('');localStorage.setItem('dayday-reader-key-v1',key);}
  return key!;
+}
+function ShowArtwork({show}:{show:Show}){
+ const [failed,setFailed]=useState('');
+ const initials=show.name.trim().split(/\s+/).slice(0,2).map(word=>Array.from(word)[0]).join('').toUpperCase();
+ return <span className={`show-artwork ${show.platform==='YouTube'?'channel-artwork':''}`}>
+ {show.artwork&&failed!==show.artwork?<img src={show.artwork} alt="" loading="lazy" referrerPolicy="no-referrer" onError={()=>setFailed(show.artwork!)}/>:<span aria-hidden="true">{initials}</span>}
+ </span>;
 }
 export default function SubscriptionPanel({view}:{view:'following'|'settings'}){
  const [state,setState]=useState<State|null>(null),[prefs,setPrefs]=useState(defaults),[url,setUrl]=useState(''),[candidate,setCandidate]=useState<{show:Show;episodes:Entry[]}|null>(null),[busy,setBusy]=useState(''),[message,setMessage]=useState(''),[webhook,setWebhook]=useState(''),[secret,setSecret]=useState(''),[kind,setKind]=useState('hot'),[preview,setPreview]=useState(''),[selected,setSelected]=useState('all'),[loading,setLoading]=useState(true);
@@ -22,7 +29,7 @@ export default function SubscriptionPanel({view}:{view:'following'|'settings'}){
   catch(e){setMessage(e instanceof Error?e.message:'操作失败，请重试');throw e;}finally{setBusy('');}
  }
  async function identify(){try{const result=await action<{show:Show;episodes:Entry[]}>('resolve',{url});setCandidate(result);}catch{setCandidate(null);}}
- async function confirmFollow(){if(!candidate)return;try{await action('follow',{showId:candidate.show.id,active:true,mode:'instant'});setCandidate(null);setUrl('');setMessage('已关注；开启提醒后，只通知后续的新内容');}catch{}}
+ async function confirmFollow(){if(!candidate)return;try{await action('follow',{showId:candidate.show.id,active:true,mode:'instant'});setCandidate(null);setUrl('');setMessage('已关注');}catch{}}
  async function updateFollow(s:Show,active:boolean,mode=s.mode){try{await action('follow',{showId:s.id,active,mode});if(!active&&selected===s.id)setSelected('all');}catch{}}
  async function saveSettings(){try{await action('preferences',{preferences:prefs});setMessage(prefs.enabled?'提醒已开启':'设置已保存，提醒已暂停');}catch{}}
  async function connect(){try{await action('connect',{webhook:webhook.trim(),secret:secret.trim()});setWebhook('');setSecret('');setMessage('机器人已保存，可以发送连接测试');}catch{}}
@@ -33,10 +40,22 @@ export default function SubscriptionPanel({view}:{view:'following'|'settings'}){
  return <div className="subscriptions">
  {message&&<p className="subscription-message" role="status">{message}</p>}
  {!state?<button className="secondary" onClick={load}>重新读取</button>:view==='following'?<>
+ <div className="following-notice"><Bell size={16}/><p>关注后默认提醒，每晚更新完成后通知新内容。{!state.connected?'连接飞书后即可接收。':!prefs.enabled||!prefs.episodes?'当前节目提醒已暂停。':''}</p><a href="#settings">{!state.connected?'连接飞书':'提醒设置'}</a></div>
  <form className="follow-form" onSubmit={e=>{e.preventDefault();identify();}}><label className="sr-only" htmlFor="show-link">节目主页或 RSS 链接</label><input id="show-link" type="url" required maxLength={1800} placeholder="粘贴 Apple Podcasts、YouTube 频道或 RSS 链接" value={url} onChange={e=>{setUrl(e.target.value);setCandidate(null);}}/><button className="primary" disabled={!!busy||!url.trim()} type="submit"><Plus size={17}/>{busy==='resolve'?'识别中…':'添加关注'}</button></form>
- {candidate&&<section className="subscription-box candidate"><div><h2>{candidate.show.name}</h2><p>{candidate.show.platform} · 预览 {candidate.episodes.length} 条最新内容</p>{candidate.episodes[0]&&<p>{candidate.episodes[0].title}</p>}</div><div className="subscription-actions"><button className="secondary" onClick={()=>setCandidate(null)}>取消</button><button className="primary" disabled={!!busy} onClick={confirmFollow}><Check size={16}/>确认关注</button></div></section>}
+ {candidate&&<section className="subscription-box candidate"><div className="candidate-identity"><ShowArtwork show={candidate.show}/><div><h2>{candidate.show.name}</h2><p>{candidate.show.platform} · 预览 {candidate.episodes.length} 条最新内容</p>{candidate.episodes[0]&&<p>{candidate.episodes[0].title}</p>}</div></div><div className="subscription-actions"><button className="secondary" onClick={()=>setCandidate(null)}>取消</button><button className="primary" disabled={!!busy} onClick={confirmFollow}><Check size={16}/>确认关注</button></div></section>}
  {state.shows.length===0?<div className="empty bordered"><h2>关注你想及时看到的节目</h2><p>粘贴节目链接，更新后从这里前往原平台观看或收听。</p></div>:<>
- <div className="follow-grid">{state.shows.map(s=><section className="subscription-box show-card" key={s.id}><h2>{s.name}</h2><p className="show-meta">{s.platform}{s.checkedAt?` · ${date(s.checkedAt)} 检查`:''}</p>{s.error&&<p className="subscription-error">{s.error}；保留已有节目。</p>}<label>更新提醒 <select aria-label={`${s.name}提醒方式`} value={s.mode} disabled={!!busy} onChange={e=>updateFollow(s,true,e.target.value)}><option value="instant">每日更新后提醒</option>{s.mode==='digest'&&<option value="digest">每日更新后提醒</option>}<option value="off">不提醒</option></select></label><div className="subscription-actions"><a href={s.website} target="_blank" rel="noopener noreferrer">节目主页 <ExternalLink size={14}/></a><button aria-label={`检查${s.name}更新`} disabled={!!busy} onClick={async()=>{try{const r=await action('refresh',{showId:s.id});setMessage(r.cached?'刚刚检查过，请稍后再试':'检查完成');}catch{}}}><RefreshCw size={15}/></button><button disabled={!!busy} onClick={()=>updateFollow(s,false)}>取消关注</button></div></section>)}</div>
+ <div className="following-heading"><h2>已关注</h2><span>{state.shows.length} 个节目</span></div>
+ <div className="follow-grid">{state.shows.map(s=><section className="subscription-box show-card" key={s.id}>
+ <a className="show-identity" href={s.website} target="_blank" rel="noopener noreferrer"><ShowArtwork show={s}/><div><h2>{s.name}</h2><p className="show-meta">{s.platform==='YouTube'?<Video size={13}/>:<Headphones size={13}/>} {s.platform}</p></div></a>
+ <details className="show-menu" name="show-actions" onBlur={e=>{if(!e.currentTarget.contains(e.relatedTarget))e.currentTarget.open=false;}} onKeyDown={e=>{if(e.key==='Escape'){e.currentTarget.open=false;e.currentTarget.querySelector('summary')?.focus();}}}>
+ <summary aria-label={`管理${s.name}`}><MoreHorizontal size={20}/></summary><div className="show-menu-items">
+ <button disabled={!!busy} onClick={async e=>{e.currentTarget.closest('details')?.removeAttribute('open');try{const r=await action('refresh',{showId:s.id});setMessage(r.cached?'刚刚检查过，请稍后再试':'检查完成');}catch{}}}><RefreshCw size={15}/>检查更新</button>
+ {s.mode==='off'&&<button disabled={!!busy} onClick={()=>updateFollow(s,true,'instant')}><Bell size={15}/>恢复提醒</button>}
+ <button disabled={!!busy} onClick={()=>updateFollow(s,false)}><UserMinus size={15}/>取消关注</button>
+ </div></details>
+ <div className="show-card-footer">{s.checkedAt&&<span>检查于 {date(s.checkedAt)}</span>}{s.mode==='off'&&<span>已静音</span>}</div>
+ {s.error&&<p className="subscription-error">{s.error}；保留已有节目。</p>}
+ </section>)}</div>
  <div className="section-heading episode-heading"><h2>节目更新</h2><select aria-label="筛选关注节目" value={selected} onChange={e=>setSelected(e.target.value)}><option value="all">全部节目</option>{state.shows.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
  {state.episodes.filter(e=>selected==='all'||e.sourceId===selected).map(e=><article className="article" key={e.id}><div className="meta">{e.source} · {date(e.publishedAt)}{e.duration?` · ${e.duration} 分钟`:''}</div><a className="article-title" href={e.url} target="_blank" rel="noopener noreferrer">{e.title}</a>{e.summary&&<p className="summary">{e.summary}</p>}<footer className="article-footer"><span/><a className="text-button" href={e.url} target="_blank" rel="noopener noreferrer">前往原平台 <ExternalLink size={15}/></a></footer></article>)}
  </>}
@@ -53,6 +72,6 @@ export default function SubscriptionPanel({view}:{view:'following'|'settings'}){
  <section className="subscription-box"><h2>内容分发</h2><div className="subscription-actions"><select aria-label="分发内容" value={kind} onChange={e=>{setKind(e.target.value);setPreview('');}}><option value="activities">活动提醒</option><option value="episodes">订阅更新</option><option value="hot">AI 今日必知</option></select><button className="secondary" disabled={!!busy} onClick={showPreview}>预览</button></div>{preview&&<><pre className="message-preview">{preview}</pre><div className="subscription-actions"><button className="secondary" onClick={download}><Download size={16}/>下载文本</button><button className="primary" disabled={!!busy||!state.connected||preview==='当前没有符合条件的内容'} onClick={()=>send(kind)}>发送到飞书</button></div></>}</section>
  {state.deliveries.length>0&&<section className="subscription-box"><h2>发送记录</h2>{state.deliveries.map(d=><div className="delivery-row" key={d.id}><span>{date(d.createdAt)} · {({test:'连接测试',activities:'活动提醒',hot:'AI 今日必知',daily:'每日简报',weekly:'周报',episodes:'订阅更新',system:'任务'} as Record<string,string>)[d.kind]||d.kind}</span><strong>{({sent:'已发送',failed:'失败',unknown:'待核对',sending:'等待回执',processed:'已处理'} as Record<string,string>)[d.status]||d.status}</strong><p>{d.message}</p></div>)}</section>}
  </>}
- <p className="subscription-help">无需注册，关注和提醒设置归当前浏览器管理。</p>
+ <p className="subscription-help">无需注册，当前浏览器可找回关注记录；暂不支持跨设备同步，清除网站数据后将无法找回。</p>
  </div>;
 }
