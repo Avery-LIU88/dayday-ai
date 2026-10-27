@@ -48,7 +48,7 @@ Cron 将 Cloudflare `scheduledTime` 归到对应 UTC 小时整点，生成固定
 
 ## 恢复
 
-人工业务验收可通过 `wrangler workflows trigger` 传入 `{kind:"daily",scheduledAt:"实际当前 ISO 时间",trigger:"manual",mode:"active"}`。它使用独立的 `manual-<时间>` 轮次，沿用同一 Workflow、预算、内容去重和飞书回执，不消耗当晚 21:00 的正式轮次。不得伪造过去或未来的 21:00 时间；人工启动不能计为真实 Cron 触发验收。
+人工业务验收可通过 `wrangler workflows trigger` 传入 `{kind:"daily",scheduledAt:"实际当前 ISO 时间",trigger:"manual",mode:"active"}`。它使用独立的 `manual-<时间>` 轮次，沿用同一 Workflow、预算、内容去重和飞书回执，不消耗当晚 21:00 的正式轮次。人工日更完成一次信源采集及伴随的有界处理后，发布和推送已有结果；剩余积压原样保留，下一轮仍从新采集开始。状态中的 pending 会如实保留，不能宣称清空积压。正式 Cron 仍按原规则处理。不得伪造过去或未来的 21:00 时间；人工启动不能计为真实 Cron 触发验收。
 
 先将受影响类型 owner 切回 legacy；新 Workflow 的下一次调用会停止推进。等待已在途的有界请求及租约结束，再恢复对应 ChatGPT 任务。保留所有业务游标、模型调用回执和 notices，不重建数据库、不清空去重。
 

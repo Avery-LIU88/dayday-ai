@@ -7,7 +7,7 @@ import {validateActivity,upcomingActivities,deliveryParts,dailyNoticeId,dailyDel
 import {deliveryPolicy} from '../config/delivery.mjs';
 function database(){
  const sql=new DatabaseSync(':memory:');sql.exec('CREATE TABLE settings(key TEXT PRIMARY KEY,value TEXT)');
- const db={prepare(query){let values=[];const p={bind(...v){values=v;return p;},async first(){return sql.prepare(query).get(...values)||null;},async run(){return {meta:{changes:sql.prepare(query).run(...values).changes}};}};return p;}};
+ const db={prepare(query){let values=[];const p={bind(...v){values=v;return p;},async first(){return sql.prepare(query).get(...values)||null;},async run(){return {meta:{changes:sql.prepare(query).run(...values).changes}};}};return p;},batch:queries=>Promise.all(queries.map(x=>x.run()))};
  return {db,sql};
 }
 test('daily digest sections share one message; activity reminders are only for upcoming live events',()=>{
@@ -104,5 +104,24 @@ test('manual acceptance runs at real time, resumes once, and leaves the same-day
   assert.equal(result.complete,false);assert.equal(news,2);
   assert.equal((await getSetting(db,'nightly_update',null)).day,'2026-10-28');
   assert.equal((await runNightlyUpdate(db,actions,time,options)).reason,'previous_run_pending');
+ }finally{sql.close();}
+});
+test('manual acceptance finishes only after a source sweep and preserves backlog for a fresh nightly collection',async()=>{
+ const {db,sql}=database(),time=new Date('2026-10-27T18:25:00Z');let swept=false,sends=0;
+ const options={owner:'cloudflare',expectedRunId:'manual-'+time.toISOString(),manual:true};
+ const at='2026-10-27T18:26:00Z';
+ const actions={news:async()=>({complete:false,nextStage:swept?'analyze':'collect',pending:1300,publishedAt:at}),read:async()=>({processedAt:at,hot:[{id:'real-new-item'}],activities:[]}),models:async()=>{},subscriptions:async()=>{sends++;return {complete:true};}};
+ try{
+  await settingStatement(db,'scheduler_owner_daily','cloudflare').run();
+  assert.equal((await runNightlyUpdate(db,actions,time,options)).phase,'news');
+  assert.equal(await getSetting(db,'nightly_publication',null),null);
+  swept=true;await settingStatement(db,'pipeline_phase','analyze').run();
+  assert.equal((await runNightlyUpdate(db,actions,time,options)).phase,'models');
+  assert.equal(await getSetting(db,'pipeline_phase',''), 'collect');
+  assert.equal((await getSetting(db,'nightly_update',null)).pending,1300);
+  await runNightlyUpdate(db,actions,time,options);
+  const result=await runNightlyUpdate(db,actions,time,options);assert.equal(result.complete,true);assert.equal(result.pending,1300);assert.equal(sends,1);
+  const night=new Date('2026-10-28T13:00:00Z');
+  assert.equal((await runNightlyUpdate(db,actions,night,{owner:'cloudflare',expectedRunId:'2026-10-28'})).phase,'news','scheduled run must not use the manual shortcut');
  }finally{sql.close();}
 });
