@@ -1,0 +1,15 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "dayday-ai-scheduler",
+  "main": "worker.ts",
+  "compatibility_date": "2026-05-15",
+  "workers_dev": false,
+  "preview_urls": false,
+  "observability": {"enabled": true},
+  "vars": {
+    "SITE_ORIGIN": "https://dayday-ai.activecoot128.chatgpt.site",
+    "SCHEDULER_MODE": "probe"
+  },
+  "triggers": {"crons": ["0 * * * *", "0 13 * * *"]},
+  "workflows": [{"binding": "UPDATES", "name": "dayday-ai-updates", "class_name": "DaydayUpdate"}]
+}

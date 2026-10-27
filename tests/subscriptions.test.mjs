@@ -118,6 +118,14 @@ test('daily and hourly delivery stay independent, drain all parts, respect prefe
   await store.follow(a,resolved.show.id,true,'instant');await store.configure(a,{...defaultReminderPreferences,enabled:true,episodes:false});
   pollTime=new Date(pollTime.getTime()+60*60000);await poll();assert.equal(sent.length,quietCount);
   set('subscription_job_lock',Date.now()+60000);assert.equal((await store.runEpisodeJob(pollTime)).busy,true);assert.equal((await store.runSubscriptionJob()).busy,true);sql.prepare("DELETE FROM settings WHERE key='subscription_job_lock'").run();
+  set('scheduler_owner_episodes','cloudflare');
+  assert.equal((await store.runEpisodeJob(pollTime)).skipped,true,'legacy executor must stop after ownership handoff');
+  assert.equal((await store.runEpisodeJob(pollTime,{owner:'cloudflare',expectedRunId:pollTime.toISOString()})).alreadyCompleted,true);
+  const older=new Date(pollTime.getTime()-3600000);
+  assert.equal((await store.runEpisodeJob(older,{owner:'cloudflare',expectedRunId:older.toISOString()})).reason,'superseded','old workflow replay cannot open an older slot');
+  set('episode_poll_run',{id:older.toISOString(),phase:'readers',cursor:'',checked:1,failed:0,sent:0,startedAt:older.toISOString()});
+  assert.equal((await store.runEpisodeJob(pollTime,{owner:'cloudflare',expectedRunId:pollTime.toISOString()})).reason,'previous_run_pending');
+  set('scheduler_owner_episodes','legacy');
   await store.disconnectBot(a);assert.equal((await store.subscriptionState(a)).preferences.enabled,false);
  }finally{globalThis.fetch=originalFetch;deliveryPolicy.minSendIntervalMs=oldDelay;sql.close();delete globalThis.__subscriptionsTestEnv;delete globalThis.__subscriptionsPublication;}
 });

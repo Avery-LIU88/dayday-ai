@@ -210,11 +210,16 @@ export async function runSubscriptionJob(){
 }
 type EpisodeRun={id:string;phase:'shows'|'readers'|'complete';cursor:string;checked:number;failed:number;sent:number;startedAt:string;finishedAt?:string};
 /** One durable run per hourly slot. Unfinished runs resume before a new slot starts. */
-export async function runEpisodeJob(date=new Date()){
+export async function runEpisodeJob(date=new Date(),options:{owner?:string;expectedRunId?:string}={}){
  const slot=new Date(Math.floor(date.getTime()/(deliveryPolicy.episodePollMinutes*60000))*deliveryPolicy.episodePollMinutes*60000).toISOString();
  const lease=await acquireDeliveryLease();if(!lease)return {busy:true,complete:false};
  try{
+  if(await setting('scheduler_owner_episodes','legacy')!==(options.owner||'legacy'))return {complete:true,skipped:true,reason:'managed_by_other_scheduler'};
   let run=await setting<EpisodeRun|null>('episode_poll_run',null);
+  if(options.expectedRunId&&run&&run.id!==options.expectedRunId){
+   if(run.phase!=='complete')return {complete:false,blocked:true,reason:'previous_run_pending'};
+   if(run.id>options.expectedRunId)return {complete:true,skipped:true,reason:'superseded'};
+  }
   if(run?.phase==='complete'&&run.id===slot)return {complete:true,alreadyCompleted:true,runId:run.id,checked:run.checked,failed:run.failed,sent:run.sent};
   if(!run||run.phase==='complete')run={id:slot,phase:'shows',cursor:'',checked:0,failed:0,sent:0,startedAt:date.toISOString()};
   if(run.phase==='shows'){

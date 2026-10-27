@@ -72,3 +72,18 @@ test('message splitting preserves all items and order without a daily part cap',
  for(const part of parts)assert.ok(new TextEncoder().encode(JSON.stringify({msg_type:'text',content:{text:part.text}})).length<=deliveryPolicy.maxMessageBytes);
  assert.deepEqual(deliveryParts([],'hot'),[]);
 });
+
+test('daily ownership and pinned date prevent overlap or opening a new day on replay',async()=>{
+ const {db,sql}=database(),at=new Date('2026-10-27T13:00:00Z');let calls=0;
+ const actions={news:async()=>{calls++;return {complete:false};}};
+ try{
+  await settingStatement(db,'scheduler_owner_daily','cloudflare').run();
+  assert.equal((await runNightlyUpdate(db,actions,at)).skipped,true);assert.equal(calls,0);
+  await settingStatement(db,'nightly_update',{day:'2026-10-27',phase:'complete'}).run();
+  assert.equal((await runNightlyUpdate(db,actions,at,{owner:'cloudflare',expectedRunId:'2026-10-27'})).alreadyCompleted,true);
+  assert.equal((await runNightlyUpdate(db,actions,new Date('2026-10-26T13:00:00Z'),{owner:'cloudflare',expectedRunId:'2026-10-26'})).reason,'superseded');
+  await settingStatement(db,'nightly_update',{day:'2026-10-26',phase:'news'}).run();
+  assert.equal((await runNightlyUpdate(db,actions,at,{owner:'cloudflare',expectedRunId:'2026-10-27'})).reason,'previous_run_pending');
+  assert.equal(calls,0);
+ }finally{sql.close();}
+});
