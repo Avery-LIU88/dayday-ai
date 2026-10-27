@@ -8,7 +8,6 @@ import {publicState} from './news-store';
 import {deliveryParts,deliveryItems,dailyDeliveryItems,dailyDeliveryParts,dailyNoticeId} from './delivery-content.mjs';
 import {deliveryPolicy} from '../config/delivery.mjs';
 import type {Entry} from './types';
-import {getSetting,setSetting} from './settings-json.mjs';
 
 type Runtime={DB?:D1Database;REMINDER_ENCRYPTION_KEY?:string};
 const runtime=()=>env as Runtime;
@@ -19,8 +18,8 @@ type Reader={id:string;preferences:string;bot:string|null};
 type Show={id:string;name:string;feed:string;website:string;platform:string;language:string;kind:string;color:string;artwork?:string};
 type ShowRow={id:string;data:string;checked_at:string;error:string|null};
 type Prefs={version:number;enabled:boolean;activities:boolean;episodes:boolean;hot:boolean};
-async function setting<T>(key:string,fallback:T):Promise<T>{return getSetting(db(),key,fallback);}
-async function set(key:string,value:unknown){await setSetting(db(),key,value);}
+async function setting<T>(key:string,fallback:T){const row=await db().prepare('SELECT value FROM settings WHERE key=?').bind(key).first<{value:string}>();return row?JSON.parse(row.value) as T:fallback;}
+async function set(key:string,value:unknown){await db().prepare('INSERT INTO settings(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').bind(key,JSON.stringify(value)).run();}
 export async function readerId(request:Request){
  const token=request.headers.get('authorization')?.replace(/^Bearer /,'')||'';
  if(!/^[a-f0-9]{64}$/.test(token))throw Error('浏览器关注凭证无效，请刷新页面');

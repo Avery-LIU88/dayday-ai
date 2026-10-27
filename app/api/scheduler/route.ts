@@ -5,7 +5,6 @@ import {runEpisodeJob,runSubscriptionJob} from '../../../lib/subscription-store'
 import {runNightlyUpdate} from '../../../lib/nightly-update.mjs';
 import {schedulerStatus,schedulerStep,setSchedulerOwner} from '../../../lib/scheduler-store.mjs';
 import {validJob} from '../../../lib/scheduler-contract.mjs';
-import {runRetention} from '../../../lib/retention.mjs';
 export const dynamic='force-dynamic';
 const runtime=()=>env as {DB?:D1Database;SCHEDULER_TOKEN?:string};
 const reply=(data:unknown,status=200)=>Response.json(data,{status,headers:{'Cache-Control':'no-store'}});
@@ -29,7 +28,7 @@ export async function POST(request:Request){
   try{validJob(input);}catch{return reply({error:'Invalid or expired job'},422);}
   try{
     const result=await schedulerStep(db,input,{
-      daily:(job:{scheduledAt:string;runId:string;trigger:string})=>runNightlyUpdate(db,{news:(options:{windowEnd:string})=>refreshNews('auto',undefined,undefined,options),read:publicState,models:refreshModelRankings,subscriptions:runSubscriptionJob,maintenance:()=>runRetention(db)},new Date(job.scheduledAt),{owner:'cloudflare',expectedRunId:job.runId,manual:job.trigger==='manual'}),
+      daily:(job:{scheduledAt:string;runId:string;trigger:string})=>runNightlyUpdate(db,{news:(options:{windowEnd:string})=>refreshNews('auto',undefined,undefined,options),read:publicState,models:refreshModelRankings,subscriptions:runSubscriptionJob},new Date(job.scheduledAt),{owner:'cloudflare',expectedRunId:job.runId,manual:job.trigger==='manual'}),
       episodes:(job:{scheduledAt:string;runId:string})=>runEpisodeJob(new Date(job.scheduledAt),{owner:'cloudflare',expectedRunId:job.runId}),
     });
     return reply(result);

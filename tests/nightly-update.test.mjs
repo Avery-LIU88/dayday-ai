@@ -7,7 +7,7 @@ import {validateActivity,upcomingActivities,deliveryParts,dailyNoticeId,dailyDel
 import {deliveryPolicy} from '../config/delivery.mjs';
 function database(){
  const sql=new DatabaseSync(':memory:');sql.exec('CREATE TABLE settings(key TEXT PRIMARY KEY,value TEXT)');
- const db={prepare(query){let values=[];const p={bind(...v){values=v;return p;},async first(){return sql.prepare(query).get(...values)||null;},async all(){return {results:sql.prepare(query).all(...values)};},async run(){return {meta:{changes:sql.prepare(query).run(...values).changes}};}};return p;},batch:queries=>Promise.all(queries.map(x=>x.run()))};
+ const db={prepare(query){let values=[];const p={bind(...v){values=v;return p;},async first(){return sql.prepare(query).get(...values)||null;},async run(){return {meta:{changes:sql.prepare(query).run(...values).changes}};}};return p;},batch:queries=>Promise.all(queries.map(x=>x.run()))};
  return {db,sql};
 }
 test('daily items have independent cards; activity reminders are only for upcoming live events',()=>{
@@ -123,18 +123,5 @@ test('manual acceptance finishes only after a source sweep and preserves backlog
   const result=await runNightlyUpdate(db,actions,time,options);assert.equal(result.complete,true);assert.equal(result.pending,1300);assert.equal(sends,1);
   const night=new Date('2026-10-28T13:00:00Z');
   assert.equal((await runNightlyUpdate(db,actions,night,{owner:'cloudflare',expectedRunId:'2026-10-28'})).phase,'news','scheduled run must not use the manual shortcut');
- }finally{sql.close();}
-});
-
-test('opt-in maintenance resumes after delivery without collecting or sending again',async()=>{
- const {db,sql}=database(),time=new Date('2026-10-28T13:00:00Z');let news=0,sent=0,cleaned=0;
- try{
-  await settingStatement(db,'retention_enabled',true).run();
-  const actions={news:async()=>{news++;return {complete:true,publishedAt:time.toISOString()};},read:async()=>({processedAt:time.toISOString(),hot:[],activities:[]}),models:async()=>{},subscriptions:async()=>{sent++;return {complete:true};},maintenance:async()=>({complete:++cleaned===2})};
-  await runNightlyUpdate(db,actions,time);await runNightlyUpdate(db,actions,time);
-  assert.equal((await runNightlyUpdate(db,actions,time)).phase,'maintenance');
-  assert.equal((await runNightlyUpdate(db,actions,time)).complete,false);
-  assert.equal((await runNightlyUpdate(db,actions,time)).complete,true);
-  assert.deepEqual({news,sent,cleaned},{news:1,sent:1,cleaned:2});
  }finally{sql.close();}
 });

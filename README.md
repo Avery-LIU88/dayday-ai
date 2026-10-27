@@ -55,8 +55,6 @@ DayDay AI 想帮你完成每天的第一轮筛选：**少看重复的信息，�
 
 ## 如何筛选“值得知道”的信息
 
-> 独立托管验收中：[新站](https://dayday-ai.lyc22686756.workers.dev)使用自有 Cloudflare 免费账户和新建 D1，从新数据开始。原定时器尚未切换，当前运行状态见[迁移记录](docs/hosting-migration.md)，独立部署命令见[部署说明](cloudflare/README.md)。
-
 ```mermaid
 flowchart LR
     A[公开信源] --> B[采集]

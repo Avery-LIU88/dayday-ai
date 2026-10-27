@@ -7,15 +7,15 @@ import {fetchMediaSnapshot} from './model-media.mjs';
 import {fetchCostSnapshot} from './model-cost.mjs';
 import {fetchModelSnapshot} from './model-ranking-fetch.mjs';
 import type {ModelSnapshot,ModelHealth} from './model-ranking-types';
-import {getSetting,setSetting} from './settings-json.mjs';
 const db=()=>(env as {DB?:D1Database}).DB;
 const initial=seed as ModelSnapshot;
 async function read<T>(key:string,fallback:T):Promise<T>{
- const database=db();return database?getSetting(database,key,fallback):fallback;
+ const row=await db()?.prepare('SELECT value FROM settings WHERE key=?').bind(key).first<{value:string}>();
+ return row?JSON.parse(row.value):fallback;
 }
 async function write(key:string,value:unknown){
  const database=db();if(!database)throw Error('Database unavailable');
- await setSetting(database,key,value);
+ await database.prepare('INSERT INTO settings(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').bind(key,JSON.stringify(value)).run();
 }
 export async function modelRankings(){
  try{
