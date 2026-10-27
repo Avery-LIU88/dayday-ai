@@ -17,10 +17,16 @@ test('encrypted snapshot preserves all 16 tables, long fields, application secre
   const before=sql.prepare('SELECT total_changes() n').get().n;
   const env={DB:db,ADMIN_TOKEN:auth,DEEPSEEK_API_KEY:'test-model-secret',REMINDER_ENCRYPTION_KEY:'c'.repeat(64),SCHEDULER_TOKEN:'b'.repeat(64)};
   const response=await backupResponse(request(),env,config);assert.equal(response.status,200);assert.match(response.headers.get('Cache-Control'),/no-store/);
-  const sealed=await response.json();assert.ok(!JSON.stringify(sealed).includes('test-model-secret'));
+  const lines=(await response.text()).trim().split('\n').map(JSON.parse),sealed=lines.shift();assert.ok(!JSON.stringify(lines).includes('test-model-secret'));
   const key=privateDecrypt({key:privateKey,padding:constants.RSA_PKCS1_OAEP_PADDING,oaepHash:'sha256'},Buffer.from(sealed.wrappedKey,'base64'));
-  const cipher=Buffer.from(sealed.ciphertext,'base64'),decipher=createDecipheriv('aes-256-gcm',key,Buffer.from(sealed.iv,'base64'));decipher.setAAD(Buffer.from('dayday-backup-v1'));decipher.setAuthTag(cipher.subarray(-16));
-  const data=JSON.parse(Buffer.concat([decipher.update(cipher.subarray(0,-16)),decipher.final()]));
+  let data,complete=false,index=0;
+  for(const line of lines){assert.equal(line.index,index++);const cipher=Buffer.from(line.ciphertext,'base64'),decipher=createDecipheriv('aes-256-gcm',key,Buffer.from(line.iv,'base64'));decipher.setAAD(Buffer.from(sealed.backupId+':'+line.index));decipher.setAuthTag(cipher.subarray(-16));
+   const part=JSON.parse(Buffer.concat([decipher.update(cipher.subarray(0,-16)),decipher.final()]));
+   if(part.type==='manifest')data={...part.metadata,tables:{}};
+   else if(part.type==='rows'){data.tables[part.table]??=[];assert.equal(data.tables[part.table].length,part.offset);data.tables[part.table].push(...part.rows);}
+   else if(part.type==='complete')complete=true;
+  }
+  assert.equal(complete,true);
   assert.deepEqual(Object.keys(data.tables),backupTables);assert.equal(JSON.parse(data.tables.settings[0].value),long);assert.equal(data.tables.notices[0].status,'unknown');
   assert.equal(data.secrets.DEEPSEEK_API_KEY,'test-model-secret');assert.equal(data.secrets.ADMIN_TOKEN,undefined);assert.equal(data.checks.settings.count,1);
   assert.equal(sql.prepare('SELECT total_changes() n').get().n,before);
