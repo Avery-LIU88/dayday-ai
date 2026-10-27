@@ -97,6 +97,16 @@ test('Cron starts only its business kind and duplicate delivery never restarts a
  const created=[],promises=[],ctx={waitUntil:p=>promises.push(p)},bindings={SCHEDULER_MODE:'probe',UPDATES:{create:async args=>created.push(args)}};
  await worker.scheduled({cron:'0 13 * * *',scheduledTime:now},bindings,ctx);await worker.scheduled({cron:'0 * * * *',scheduledTime:now},bindings,ctx);await Promise.all(promises);
  assert.deepEqual(created.map(x=>x.params.kind),['daily','episodes']);assert.ok(created.every(x=>x.params.trigger==='cron'&&x.id.endsWith('-probe')));
+ // Regression: the real 2026-10-28 01:00 Cron carried 16.392 seconds of jitter.
+ promises.length=0;
+ await worker.scheduled({cron:'0 * * * *',scheduledTime:1793120416392},bindings,ctx);
+ await worker.scheduled({cron:'0 * * * *',scheduledTime:1793120416392+60000},bindings,ctx);
+ await worker.scheduled({cron:'0 13 * * *',scheduledTime:now+16392},bindings,ctx);
+ await Promise.all(promises);
+ assert.equal(created[2].params.scheduledAt,'2026-10-27T17:00:00.000Z');
+ assert.equal(created[2].id,created[3].id,'delivery jitter must not create a second hourly run');
+ assert.equal(created[0].id,created[4].id,'daily remains the Beijing 21:00 business slot');
+ await assert.rejects(worker.scheduled({cron:'0 13 * * *',scheduledTime:now+3600000},bindings,ctx),/Invalid scheduled time/);
  let inspected=0;promises.length=0;
  bindings.UPDATES={create:async()=>{throw Error('already exists');},get:async()=>({status:async()=>{inspected++;return {status:'complete'};}})};
  await worker.scheduled({cron:'0 * * * *',scheduledTime:now},bindings,ctx);await Promise.all(promises);assert.equal(inspected,1);

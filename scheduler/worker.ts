@@ -18,7 +18,11 @@ export default {
   async scheduled(controller:ScheduledController,env:Env,ctx:ExecutionContext){
     const kind=cronKinds[controller.cron as keyof typeof cronKinds] as Params['kind']|undefined;
     if(!kind)throw Error('Unexpected cron expression');
-    const job=scheduledJob(kind,controller.scheduledTime),mode=env.SCHEDULER_MODE;
+    // Cloudflare can deliver an hourly Cron with seconds/milliseconds (or a short delay).
+    // Derive identity from its business hour, not the exact delivery timestamp.
+    // Keep the backend's strict slot validation and never use the current wall clock.
+    const slot=Math.floor(controller.scheduledTime/3600000)*3600000;
+    const job=scheduledJob(kind,slot),mode=env.SCHEDULER_MODE;
     if(!['probe','active'].includes(mode))throw Error('Invalid scheduler mode');
     const id=job.id+(mode==='probe'?'-probe':'');
     ctx.waitUntil((async()=>{
@@ -27,7 +31,7 @@ export default {
         // get() alone does not prove an instance exists. Read status before treating a duplicate as success.
         try{await (await env.UPDATES.get(id)).status();}catch{throw error;}
       }
-      console.log(JSON.stringify({event:'cron_trigger',cron:controller.cron,scheduledAt:job.scheduledAt,kind,instanceId:id,mode}));
+      console.log(JSON.stringify({event:'cron_trigger',cron:controller.cron,platformScheduledAt:new Date(controller.scheduledTime).toISOString(),scheduledAt:job.scheduledAt,kind,instanceId:id,mode}));
     })());
   },
   fetch(){return new Response('Not found',{status:404});},
