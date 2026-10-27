@@ -114,7 +114,7 @@ test('source-observed primary citations flow through model validation into persi
 test('targeted audit processes only requested pending rows and rejects invalid selections',async()=>{
  const {db,sql}=database(),original=globalThis.fetch;let calls=0;
  globalThis.fetch=async(_url,options)=>{calls++;const items=JSON.parse(JSON.parse(options.body).messages[1].content).items;assert.deepEqual(items.map(x=>x.id),['older']);return response(items.map(x=>analysis(x.id)));};
- try{await ingest(db,[entry('newer'),{...entry('older'),publishedAt:new Date(Date.now()-86400000).toISOString()}]);
+ try{await ingest(db,[entry('newer'),{...entry('older'),publishedAt:new Date(Date.now()-23*3600000).toISOString()}]);
    await runPipeline(db,sources,{entries:[],health:[]},'test-only','analyze',['older']);
    assert.equal(sql.prepare("SELECT status FROM pipeline_items WHERE id='newer'").get().status,'collected');
    assert.equal(sql.prepare("SELECT status FROM pipeline_items WHERE id='older'").get().status,'analyzed');
@@ -195,5 +195,49 @@ test('calendar intake preserves first-seen, invalidates changed schedules and pu
   await ingest(db,[{...raw,publishedAt:new Date().toISOString()}]);assert.equal(sql.prepare('SELECT status FROM pipeline_items').get().status,'grouped');assert.equal(sql.prepare('SELECT published_at FROM pipeline_items').get().published_at,old);
   await ingest(db,[{...raw,publishedAt:new Date().toISOString(),activityCandidate:{...raw.activityCandidate,location:'北京'}}]);
   const row=sql.prepare('SELECT * FROM pipeline_items').get();assert.equal(row.status,'collected');assert.equal(row.analysis,null);assert.equal(row.published_at,old);
+ }finally{globalThis.fetch=original;sql.close();}
+});
+
+test('intake accepts only the fixed 24-hour news window, including its boundaries, and retains future activity listings',async()=>{
+ const {db,sql}=database(),end='2026-10-28T13:00:00.000Z',start='2026-10-27T13:00:00.000Z';
+ try{
+  const samples=[['start',start],['end',end],['old','2026-10-27T12:59:59.999Z'],['future','2026-10-28T13:00:00.001Z'],['invalid','bad']].map(([id,publishedAt])=>({...entry(id),publishedAt}));
+  samples.push({...entry('activity'),publishedAt:'2020-01-01T00:00:00Z',activityListing:true,activityCandidate:{date:'2026-11-01',url:'https://example.test/activity'}});
+  assert.equal(await ingest(db,samples,{start,end}),3);
+  assert.deepEqual(sql.prepare('SELECT id FROM pipeline_items ORDER BY id').all().map(x=>x.id),['activity','end','start']);
+ }finally{sql.close();}
+});
+test('retiring historical pending news preserves raw data, paid receipts and published archives without network calls',async()=>{
+ const {db,sql}=database(),original=globalThis.fetch;globalThis.fetch=async()=>{throw Error('must not fetch or bill');};
+ try{
+  const oldDate=new Date(Date.now()-7*86400000).toISOString();
+  await ingest(db,[{...entry('old'),publishedAt:oldDate}],{start:oldDate,end:oldDate});
+  sql.prepare("UPDATE pipeline_items SET status='deduplicated',analysis=? WHERE id='old'").run(JSON.stringify(analysis('old')));
+  const before=sql.prepare("SELECT raw,analysis FROM pipeline_items WHERE id='old'").get();
+  await db.batch([settingStatement(db,'news_publication_v3',{processedAt:'original-publication',pipeline:{pending:1},hot:[{id:'published'}],daily:[{id:'archive'}]})]);
+  const result=await runPipeline(db,sources,{entries:[],health:[]},'test-only','archive');
+  assert.equal(result.processed,1);assert.equal(result.pending,0);
+  assert.equal(sql.prepare("SELECT status FROM pipeline_items WHERE id='old'").get().status,'archived');
+  assert.deepEqual(sql.prepare("SELECT raw,analysis FROM pipeline_items WHERE id='old'").get(),before);
+  assert.equal(sql.prepare('SELECT COUNT(*) n FROM pipeline_calls').get().n,0);
+  const snapshot=await getSetting(db,'news_publication_v3',null);assert.equal(snapshot.processedAt,'original-publication');assert.deepEqual(snapshot.daily,[{id:'archive'}]);assert.equal(snapshot.pipeline.pending,0);
+  await runPipeline(db,sources,{entries:[],health:[]},'test-only','reprocess',['old']);
+  await runPipeline(db,sources,{entries:[],health:[]},'test-only','analyze');
+  assert.equal(sql.prepare("SELECT status FROM pipeline_items WHERE id='old'").get().status,'archived');
+ }finally{globalThis.fetch=original;sql.close();}
+});
+test('daily source batches and resumed processing keep one window instead of moving with wall time',async()=>{
+ const {db,sql}=database(),original=globalThis.fetch,end='2026-10-28T13:00:00.000Z',start='2026-10-27T13:00:00.000Z';
+ const catalog=Array.from({length:5},(_,i)=>({id:'feed'+i,name:'Feed',adapter:'rss',feed:'https://feed.test/'+i}));
+ globalThis.fetch=async url=>new Response(`<rss><channel><item><title>优惠券领取</title><link>${url}/inside</link><pubDate>${start}</pubDate></item><item><title>AI old</title><link>${url}/old</link><pubDate>2026-10-26T13:00:00Z</pubDate></item><item><title>AI later</title><link>${url}/later</link><pubDate>2026-10-28T13:01:00Z</pubDate></item></channel></rss>`);
+ try{
+  const seed={entries:[{...entry('old-seed'),publishedAt:'2020-01-01T00:00:00Z'}],health:[]};
+  const first=await runPipeline(db,catalog,seed,'','auto',undefined,undefined,{windowEnd:end});assert.equal(first.complete,false);
+  assert.deepEqual(await getSetting(db,'news_processing_window',null),{start,end});
+  const second=await runPipeline(db,catalog,seed,'','auto',undefined,undefined,{windowEnd:end});assert.equal(second.complete,true);
+  assert.equal(sql.prepare('SELECT COUNT(*) n FROM pipeline_items').get().n,5);
+  assert.ok(sql.prepare('SELECT published_at FROM pipeline_items').all().every(x=>x.published_at===start));
+  assert.equal(sql.prepare('SELECT COUNT(*) n FROM pipeline_calls').get().n,0);
+  assert.equal((await getSetting(db,'news_health',[]))[0].count,1);
  }finally{globalThis.fetch=original;sql.close();}
 });

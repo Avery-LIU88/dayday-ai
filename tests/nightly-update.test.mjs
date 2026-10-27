@@ -29,7 +29,7 @@ test('large daily digests preserve category order and all IDs within the message
 });
 test('only 21:00 starts a run; publication, models, subscriptions run in order and retries do not recollect',async()=>{
  const {db,sql}=database(),calls=[],at='2026-10-24T13:05:00Z';let ready=false,dispatches=0;
- const actions={news:async()=>{calls.push('news');return {complete:ready,publishedAt:at,pending:0};},read:async()=>({processedAt:at,hot:[{id:'one'}],activities:[]}),models:async()=>calls.push('models'),subscriptions:async()=>{calls.push('send');return {complete:++dispatches===2};}};
+ const actions={news:async options=>{assert.equal(options.windowEnd,'2026-10-24T13:00:00.000Z');calls.push('news');return {complete:ready,publishedAt:at,pending:0};},read:async()=>({processedAt:at,hot:[{id:'one'}],activities:[]}),models:async()=>calls.push('models'),subscriptions:async()=>{calls.push('send');return {complete:++dispatches===2};}};
  try{
   for(const hour of ['00','12']){const result=await runNightlyUpdate(db,actions,new Date(`2026-10-24T${hour}:00:00Z`));assert.equal(result.skipped,true);}
   assert.deepEqual(calls,[]);const time=new Date('2026-10-24T13:00:00Z');

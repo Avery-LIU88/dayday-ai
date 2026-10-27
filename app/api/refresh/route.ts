@@ -8,6 +8,6 @@ export async function GET(){return Response.json({purpose:'每天 21:00 完成�
 export async function POST(request:Request){
  if(!authorizedUpdater(request))return Response.json({error:'Unauthorized'},{status:401});
  const db=(env as {DB?:D1Database}).DB;if(!db)return Response.json({error:'数据库未连接'},{status:503});
- try{return Response.json(await runNightlyUpdate(db,{news:()=>refreshNews(),read:publicState,models:refreshModelRankings,subscriptions:runSubscriptionJob}),{headers:{'Cache-Control':'no-store'}});}
+ try{return Response.json(await runNightlyUpdate(db,{news:(options:{windowEnd:string})=>refreshNews('auto',undefined,undefined,options),read:publicState,models:refreshModelRankings,subscriptions:runSubscriptionJob}),{headers:{'Cache-Control':'no-store'}});}
  catch{return Response.json({error:'本轮更新未完成，已有内容和进度保留；未完成发布时不发送飞书'},{status:500});}
 }

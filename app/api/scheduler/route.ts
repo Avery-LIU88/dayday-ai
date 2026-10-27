@@ -28,7 +28,7 @@ export async function POST(request:Request){
   try{validJob(input);}catch{return reply({error:'Invalid or expired job'},422);}
   try{
     const result=await schedulerStep(db,input,{
-      daily:(job:{scheduledAt:string;runId:string;trigger:string})=>runNightlyUpdate(db,{news:()=>refreshNews(),read:publicState,models:refreshModelRankings,subscriptions:runSubscriptionJob},new Date(job.scheduledAt),{owner:'cloudflare',expectedRunId:job.runId,manual:job.trigger==='manual'}),
+      daily:(job:{scheduledAt:string;runId:string;trigger:string})=>runNightlyUpdate(db,{news:(options:{windowEnd:string})=>refreshNews('auto',undefined,undefined,options),read:publicState,models:refreshModelRankings,subscriptions:runSubscriptionJob},new Date(job.scheduledAt),{owner:'cloudflare',expectedRunId:job.runId,manual:job.trigger==='manual'}),
       episodes:(job:{scheduledAt:string;runId:string})=>runEpisodeJob(new Date(job.scheduledAt),{owner:'cloudflare',expectedRunId:job.runId}),
     });
     return reply(result);
