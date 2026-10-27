@@ -59,7 +59,7 @@ test('daily and hourly delivery stay independent, drain all parts, respect prefe
  const store=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
  const {deliveryPolicy}=await import('../config/delivery.mjs');const oldDelay=deliveryPolicy.minSendIntervalMs;deliveryPolicy.minSendIntervalMs=0;
  const originalFetch=globalThis.fetch,sent=[];let receipt={code:0};
- globalThis.fetch=async(url,options)=>{if(String(url).startsWith('https://open.feishu.cn/')){sent.push(JSON.parse(options.body).content.text);return Response.json(receipt);}return new Response(xml);};
+ globalThis.fetch=async(url,options)=>{if(String(url).startsWith('https://open.feishu.cn/')){sent.push(JSON.parse(options.body));return Response.json(receipt);}return new Response(xml);};
  const set=(key,value)=>sql.prepare('INSERT INTO settings(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').run(key,JSON.stringify(value));
  const publication=(runId,hot=[],activities=[])=>{const value={runId,publishedAt:new Date().toISOString(),hot,activities};set('nightly_update',{day:runId,phase:'subscriptions'});set('nightly_publication',value);globalThis.__subscriptionsPublication=value;};
  let pollTime=new Date();pollTime.setUTCMinutes(0,0,0);
@@ -90,26 +90,28 @@ test('daily and hourly delivery stay independent, drain all parts, respect prefe
   const event=id=>({id,title:id,source:'Official',url:'https://example.org/'+id,takeaway:'提炼要点',why:'重要新进展'});
   const hot=[event('rank-one'),event('rank-two')],activities=[{...event('conference'),activity:{date:'2030-10-24',location:'线上',url:'https://example.org/event'}}];
   const nightlyBefore=sent.length;publication('round-2',hot,activities);await run();
-  assert.equal(sent.length,nightlyBefore+1,'daily sections combine into one message');
-  assert.match(sent.at(-1),/【今日热点】/);assert.match(sent.at(-1),/【活动提醒】/);assert.doesNotMatch(sent.at(-1),/我的关注更新/);
+  assert.equal(sent.length,nightlyBefore+3,'each daily item gets one card');
+  assert.deepEqual(sent.slice(nightlyBefore).map(p=>p.card.header.title.content),['rank-one','rank-two','conference']);
+  for(const payload of sent)assert.equal(payload.msg_type,'interactive');
   assert.equal(sql.prepare("SELECT COUNT(*) n FROM notices WHERE kind='episodes'").get().n,0,'nightly must not dispatch episodes');
-  const dailyText=sent.at(-1);
+  const dailyCards=sent.slice(nightlyBefore);
   // Even a blocked nightly pipeline must not delay new episodes.
   set('nightly_update',{day:'round-2',phase:'news'});
   pollTime=new Date(pollTime.getTime()+60*60000);await poll();
   assert.equal((await store.subscriptionJobStatus()).episodes.phase,'complete');
-  assert.ok(sent.slice(nightlyBefore+1).every(text=>text.includes('我的关注更新')&&!text.includes('今日热点')));
+  assert.ok(sent.slice(nightlyBefore+3).every(payload=>JSON.stringify(payload).includes('我的关注更新')&&!JSON.stringify(payload).includes('今日热点')));
   set('nightly_update',{day:'round-2',phase:'complete'});
   assert.ok(sent.length>3,'no cap of three messages per nightly run');
   assert.equal(sql.prepare("SELECT COUNT(*) n FROM notices WHERE kind='episodes' AND status='sent'").get().n,230,'all DB pages must drain');
-  assert.ok(dailyText.indexOf('rank-one')<dailyText.indexOf('rank-two'));
+  assert.equal(dailyCards[0].card.header.title.content,'rank-one');
   const before=sent.length;await run();await poll();assert.equal(sent.length,before);
   publication('round-3',[hot[1],hot[0]],activities);await run();assert.equal(sent.length,before,'same events do not resend on a new day or different rank');
   publication('round-4',[event('follow-up')]);await run();assert.equal(sent.length,before+1,'new material follow-up is delivered');
   receipt={code:19021};publication('round-5',[event('failed')]);await run();const failed=sent.length;await run();assert.equal(sent.length,failed,'failed receipt is retained, never reported sent or looped');
   assert.equal(sql.prepare("SELECT status FROM notices WHERE kind='daily' ORDER BY rowid DESC LIMIT 1").get().status,'failed');
   receipt={code:0};const preview=await store.preparePreview(a,'hot');globalThis.__subscriptionsPublication.hot[0].title='Changed after preview';
-  await store.sendPreview(a,'hot');assert.equal(sent.at(-1),preview.text,'manual send matches exactly previewed content');
+  const savedPreview=JSON.parse(sql.prepare('SELECT value FROM settings WHERE key=?').get('subscription_preview:'+a).value);
+  await store.sendPreview(a,'hot');assert.deepEqual(sent.at(-1),savedPreview.parts[0],'manual send uses the exact saved card');assert.ok(preview.text.includes('failed'));assert.doesNotMatch(JSON.stringify(sent.at(-1)),/Changed after preview/);
   // A new episode is not sent while muted, or when the category is disabled.
   const at=new Date(Date.now()-500).toISOString(),latest={...resolved.episodes[0],id:'muted-new',publishedAt:at};
   sql.prepare("INSERT INTO entries(id,kind,source_id,published_at,discovered_at,data) VALUES(?,'episode',?,?,?,?)").run(latest.id,resolved.show.id,at,at,JSON.stringify(latest));

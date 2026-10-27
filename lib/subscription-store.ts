@@ -13,6 +13,7 @@ type Runtime={DB?:D1Database;REMINDER_ENCRYPTION_KEY?:string};
 const runtime=()=>env as Runtime;
 const db=()=>{if(!runtime().DB)throw Error('数据库暂不可用');return runtime().DB!;};
 type DeliveryKind='activities'|'episodes'|'hot';
+type OutgoingMessage=string|ReturnType<typeof deliveryParts>[number]['message'];
 type Reader={id:string;preferences:string;bot:string|null};
 type Show={id:string;name:string;feed:string;website:string;platform:string;language:string;kind:string;color:string;artwork?:string};
 type ShowRow={id:string;data:string;checked_at:string;error:string|null};
@@ -102,12 +103,13 @@ export async function previewMessage(id:string,kind:string){
 export async function preparePreview(id:string,kind:string){
  const state=kind==='episodes'?await subscriptionState(id):await publicState();
  const items=deliveryItems(state,kind==='episodes'?(state as {episodes:Entry[]}).episodes:[])[kind as DeliveryKind];
- const parts=items?deliveryParts(items,kind).map((p:{text:string})=>p.text):[await previewMessage(id,kind)].filter(Boolean);
- const text=parts.join('\n\n—— 下一条 ——\n\n');
+ const cards=items?deliveryParts(items,kind):[];
+ const parts:OutgoingMessage[]=items?cards.map((p:{message:OutgoingMessage})=>p.message):[await previewMessage(id,kind)].filter(Boolean);
+ const text=items?cards.map((p:{text:string})=>p.text).join('\n\n—— 下一条 ——\n\n'):String(parts[0]||'');
  await set('subscription_preview:'+id,{kind,text,parts,expiresAt:Date.now()+30*60000});
  return {text};
 }
-async function deliver(r:Reader,ids:string[],kind:string,text:string){
+async function deliver(r:Reader,ids:string[],kind:string,message:OutgoingMessage){
  if(!r.bot)throw Error('请先连接飞书机器人');
  const bot=await decryptBot(r.bot,runtime().REMINDER_ENCRYPTION_KEY),at=new Date().toISOString();
  let count=0;
@@ -124,13 +126,13 @@ async function deliver(r:Reader,ids:string[],kind:string,text:string){
  const wait=deliveryPolicy.minSendIntervalMs-(Date.now()-last);if(wait>0)await new Promise(resolve=>setTimeout(resolve,wait));
  await set(throttleKey,Date.now());
  let result;
- try{result=await sendFeishu(bot.webhook,bot.secret,text);}catch{result={status:'unknown',message:'未收到明确回执，请核对飞书群；不会自动重复发送'};}
+ try{result=await sendFeishu(bot.webhook,bot.secret,message);}catch{result={status:'unknown',message:'未收到明确回执，请核对飞书群；不会自动重复发送'};}
  for(let start=0;start<ids.length;start+=50)await db().batch(ids.slice(start,start+50).map(id=>db().prepare('UPDATE notices SET status=?,message=? WHERE id=? AND reader_id=?').bind(result.status,result.message,id,r.id)));
  return {...result,count};
 }
 export async function sendPreview(id:string,kind:string){
  const r=await reader(id);if(!r?.bot)throw Error('请先连接飞书机器人');
- const preview=await setting<{kind:string;text:string;parts?:string[];expiresAt:number}|null>('subscription_preview:'+id,null);
+ const preview=await setting<{kind:string;text:string;parts?:OutgoingMessage[];expiresAt:number}|null>('subscription_preview:'+id,null);
  if(kind!=='test'&&(!preview||preview.kind!==kind||preview.expiresAt<Date.now()))throw Error('请先重新预览，再发送');
  const text=kind==='test'?'DayDay AI · 连接测试\n飞书机器人已连接。\n每天一点，跟上 AI。':preview!.text;
  if(!text)throw Error('当前没有可发送的内容');
@@ -154,7 +156,7 @@ async function dispatchEpisodes(r:Reader){
   AND e.published_at>? AND n.id IS NULL ORDER BY e.published_at ASC LIMIT 200`).bind(r.id,r.id,new Date(Date.now()-deliveryPolicy.episodeLookbackDays*86400000).toISOString()).all<{id:string;data:string}>();
  const parts=deliveryParts(rows.results.map(x=>JSON.parse(x.data)),'episodes');
  for(const part of parts.slice(0,deliveryPolicy.messagesPerRequest)){
-  const result=await deliver(r,part.ids.map((id:string)=>r.id+':episode:'+id),'episodes',part.text);
+  const result=await deliver(r,part.ids.map((id:string)=>r.id+':episode:'+id),'episodes',part.message);
   if(result.status==='sent')sent++;
  }
  return {sent,complete:parts.length<=deliveryPolicy.messagesPerRequest&&rows.results.length<200};
@@ -172,7 +174,7 @@ async function dispatchDaily(r:Reader,publication:Publication){
  }
  const parts=dailyDeliveryParts(groups,at);
  for(const part of parts.slice(0,deliveryPolicy.messagesPerRequest)){
-  const result=await deliver(r,part.ids.map((id:string)=>r.id+':'+id),'daily',part.text);
+  const result=await deliver(r,part.ids.map((id:string)=>r.id+':'+id),'daily',part.message);
   if(result.status==='sent')sent++;
  }
  return {sent,complete:parts.length<=deliveryPolicy.messagesPerRequest};
