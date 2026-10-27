@@ -15,3 +15,13 @@ test("Webhook only allows the exact Feishu bot destination",()=>{assert.equal(va
 test("Feishu HMAC matches the official timestamp-newline-secret algorithm",async()=>{const expected=createHmac("sha256","1599360473\nsecret").update("").digest("base64");assert.equal(await signature("1599360473","secret"),expected);});
 test("HTTP 200 business errors are reported as failures",async()=>{const r=await sendFeishu("https://open.feishu.cn/open-apis/bot/v2/hook/test","secret","test",async()=>Response.json({code:19021,msg:"bad sign"}));assert.equal(r.status,"failed");});
 test("Success requires an explicit successful Feishu receipt",async()=>{const r=await sendFeishu("https://open.feishu.cn/open-apis/bot/v2/hook/test","secret","test",async()=>Response.json({code:0}));assert.equal(r.status,"sent");const unknown=await sendFeishu("https://open.feishu.cn/open-apis/bot/v2/hook/test","secret","test",async()=>new Response("invalid"));assert.equal(unknown.status,"unknown");});
+test("Feishu transport failures stay ambiguous without leaking webhook or signing secrets",async()=>{
+ const url="https://open.feishu.cn/open-apis/bot/v2/hook/private-test-token",secret="private-test-secret";
+ for(const name of ["TypeError","TimeoutError"]){
+  let calls=0;
+  const result=await sendFeishu(url,secret,"test",async()=>{calls++;const e=new Error(`${url} ${secret}`);e.name=name;throw e;});
+  assert.equal(result.status,"unknown");assert.equal(calls,1);
+  assert.match(result.message,name==="TimeoutError"?/超时/:/网络异常/);
+  assert.ok(!JSON.stringify(result).includes("private-test"));
+ }
+});
