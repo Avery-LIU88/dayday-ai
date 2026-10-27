@@ -3,13 +3,30 @@ import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';
 import {runNightlyUpdate,nightlyClock} from '../lib/nightly-update.mjs';
 import {getSetting,settingStatement} from '../lib/news-pipeline.mjs';
-import {validateActivity,upcomingActivities,deliveryParts} from '../lib/delivery-content.mjs';
+import {validateActivity,upcomingActivities,deliveryParts,dailyNoticeId,dailyDeliveryItems,dailyDeliveryParts} from '../lib/delivery-content.mjs';
 import {deliveryPolicy} from '../config/delivery.mjs';
 function database(){
  const sql=new DatabaseSync(':memory:');sql.exec('CREATE TABLE settings(key TEXT PRIMARY KEY,value TEXT)');
  const db={prepare(query){let values=[];const p={bind(...v){values=v;return p;},async first(){return sql.prepare(query).get(...values)||null;},async run(){return {meta:{changes:sql.prepare(query).run(...values).changes}};}};return p;}};
  return {db,sql};
 }
+test('daily digest sections share one message; activity reminders are only for upcoming live events',()=>{
+ const at=Date.parse('2026-10-27T13:00:00Z');
+ const item={id:'event',title:'发布会',source:'Official',activity:{date:'2026-10-28',startAt:'2026-10-28T10:00:00+08:00',url:'https://example.org/event'}};
+ assert.equal(dailyNoticeId('activities',item,at),'activities:event:upcoming');
+ assert.equal(dailyNoticeId('activities',item,at-86400000),'activities:event');
+ const publication={hot:[{id:'hot',title:'新闻',url:'https://example.org/news'}],activities:[item,{...item,id:'cancelled',activity:{...item.activity,status:'cancelled'}},{...item,id:'ended',activity:{...item.activity,date:'2026-10-26',startAt:'2026-10-26T10:00:00+08:00'}}]};
+ const groups=dailyDeliveryItems(publication,at);assert.equal(groups.activities.length,1);
+ const parts=dailyDeliveryParts(groups,at);assert.equal(parts.length,1);
+ assert.deepEqual(parts[0].ids,['hot:hot','activities:event:upcoming']);assert.match(parts[0].text,/【今日热点】/);assert.match(parts[0].text,/【活动提醒】/);
+ assert.deepEqual(dailyDeliveryParts({hot:[],activities:[]},at),[]);
+});
+test('large daily digests preserve category order and all IDs within the message byte limit',()=>{
+ const hot=Array.from({length:80},(_,i)=>({id:'hot-'+i,title:'热点'+i+'长'.repeat(180),url:'https://example.org/'+i}));
+ const parts=dailyDeliveryParts({hot,activities:[]});assert.ok(parts.length>1);
+ assert.deepEqual(parts.flatMap(x=>x.ids),hot.map(x=>'hot:'+x.id));
+ for(const part of parts)assert.ok(new TextEncoder().encode(JSON.stringify({msg_type:'text',content:{text:part.text}})).length<=deliveryPolicy.maxMessageBytes);
+});
 test('only 21:00 starts a run; publication, models, subscriptions run in order and retries do not recollect',async()=>{
  const {db,sql}=database(),calls=[],at='2026-10-24T13:05:00Z';let ready=false,dispatches=0;
  const actions={news:async()=>{calls.push('news');return {complete:ready,publishedAt:at,pending:0};},read:async()=>({processedAt:at,hot:[{id:'one'}],activities:[]}),models:async()=>calls.push('models'),subscriptions:async()=>{calls.push('send');return {complete:++dispatches===2};}};
