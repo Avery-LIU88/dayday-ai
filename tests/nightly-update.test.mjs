@@ -87,3 +87,22 @@ test('daily ownership and pinned date prevent overlap or opening a new day on re
   assert.equal(calls,0);
  }finally{sql.close();}
 });
+test('manual acceptance runs at real time, resumes once, and leaves the same-day 21:00 run available',async()=>{
+ const {db,sql}=database(),time=new Date('2026-10-27T18:25:16.392Z');let sends=0,news=0;
+ const options={owner:'cloudflare',expectedRunId:'manual-'+time.toISOString(),manual:true};
+ const published='2026-10-27T18:26:00Z';
+ const actions={news:async()=>{news++;return {complete:true,publishedAt:published};},read:async()=>({processedAt:published,hot:[],activities:[]}),models:async()=>{},subscriptions:async()=>{sends++;return {complete:true};}};
+ try{
+  await settingStatement(db,'scheduler_owner_daily','cloudflare').run();
+  await runNightlyUpdate(db,actions,time,options);await runNightlyUpdate(db,actions,time,options);
+  assert.equal((await runNightlyUpdate(db,actions,time,options)).complete,true);
+  assert.equal((await runNightlyUpdate(db,actions,time,options)).alreadyCompleted,true);
+  assert.equal(news,1);assert.equal(sends,1);
+  assert.equal((await getSetting(db,'nightly_publication',null)).runId,options.expectedRunId);
+  const night=new Date('2026-10-28T13:00:00Z');
+  const result=await runNightlyUpdate(db,{news:async()=>{news++;return {complete:false};}},night,{owner:'cloudflare',expectedRunId:'2026-10-28'});
+  assert.equal(result.complete,false);assert.equal(news,2);
+  assert.equal((await getSetting(db,'nightly_update',null)).day,'2026-10-28');
+  assert.equal((await runNightlyUpdate(db,actions,time,options)).reason,'previous_run_pending');
+ }finally{sql.close();}
+});

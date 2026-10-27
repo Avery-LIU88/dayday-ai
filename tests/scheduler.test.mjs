@@ -18,6 +18,16 @@ test('business slots use Shanghai date, reject off-schedule, future and stale wo
  for(const x of [{...job(),kind:'other'},{...job(),scheduledAt:'2026-10-27T12:00:00Z'},{...job(),runId:'wrong'}])assert.throws(()=>validJob(x,now));
  assert.throws(()=>validJob(job(),now-120000));assert.throws(()=>validJob(job(),now+5*3600000));
 });
+test('manual daily run uses its real timestamp and cannot impersonate or consume the nightly slot',()=>{
+ const at='2026-10-27T18:25:16.392Z',ms=Date.parse(at);
+ const manual={...scheduledJob('daily',at,'manual'),trigger:'manual',mode:'active'};
+ assert.equal(validJob(manual,ms).runId,'manual-'+at);
+ assert.notEqual(manual.id,scheduledJob('daily','2026-10-28T13:00:00Z').id);
+ assert.throws(()=>validJob({...manual,trigger:'cron'},ms));
+ assert.throws(()=>validJob({...manual,runId:'2026-10-28'},ms));
+ assert.throws(()=>validJob(manual,ms-120000));
+ assert.throws(()=>validJob(manual,ms+5*3600000));
+});
 test('probe records authenticated Cron evidence without processing or changing ownership',async()=>{
  const {db,sql}=database();let calls=0;
  try{const result=await schedulerStep(db,job('daily','probe'),{daily:async()=>calls++},now);assert.equal(result.outcome,'probe');assert.equal(calls,0);const state=await schedulerStatus(db);assert.equal(state.owners.daily,'legacy');assert.equal(state.probes.daily.trigger,'cron');assert.equal(state.daily,null);}

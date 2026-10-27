@@ -2,7 +2,7 @@ import {scheduledJob,schedulerLimits} from '../lib/scheduler-contract.mjs';
 
 // One HTTP call advances a bounded batch. Workflows, not timers, persist the next step.
 export async function advanceWorkflow(payload,step,env,{fetcher=fetch,now=Date.now,fatal=message=>new Error(message)}={}) {
-  const job={...scheduledJob(payload.kind,payload.scheduledAt),trigger:payload.trigger,mode:payload.mode};
+  const job={...scheduledJob(payload.kind,payload.scheduledAt,payload.trigger),trigger:payload.trigger,mode:payload.mode};
   if(!['cron','manual'].includes(job.trigger)||!['probe','active'].includes(job.mode))throw fatal('Invalid workflow payload');
   const origin=new URL(env.SITE_ORIGIN);
   if(origin.protocol!=='https:'||origin.username||origin.password||origin.pathname!=='/'||origin.search||origin.hash)throw fatal('Invalid Site origin');
