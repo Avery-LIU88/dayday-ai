@@ -1,5 +1,5 @@
 export const distribution = {
- origin: 'https://ai-observer-avery.activecoot128.chatgpt.site',
+ origin: 'https://dayday-ai.lyc22686756.workers.dev',
  defaultLimit: 20,
  maxLimit: 50,
  cacheSeconds: 300,
