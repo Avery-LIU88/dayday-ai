@@ -11,7 +11,7 @@ Cron 将 Cloudflare `scheduledTime` 归到对应 UTC 小时整点，生成固定
 
 ## 安全默认值
 
-- 仓库配置 `SCHEDULER_MODE=probe`：真实 Cron 只验证专用鉴权并在 D1 记录触发，不采集、不调用模型、不发消息。
+- 调度模式：`probe` 只验证专用鉴权并在 D1 记录触发；`active` 按 D1 中的 owner 推进业务。当前仓库已在 2026-10-28 02:00 的真实 Cron 验证后改为 `active`；这不代表日更和飞书送达已经完成验收。
 - Sites D1 的 `scheduler_owner_daily`、`scheduler_owner_episodes` 默认 `legacy`，旧 ChatGPT 任务继续处理。读取端和处理端均不会自动切换归属。
 - 专用 `SCHEDULER_TOKEN` 是单独的随机服务端密钥，至少 32 字符；仅允许调度步骤和汇总状态，不能修改归属、指定源 URL 或操作单阶段重处理。不得复用 ADMIN_TOKEN、Sites bypass token、读者 token 或模型密钥。
 - 密钥仅存 Sites Secret 和 Cloudflare Worker Secret，通过隐藏 stdin 配置；不进入仓库、文件、命令行参数、聊天、调度参数和日志。不需要 OAI-Sites-Authorization 或 ChatGPT 登录；前提是本站保持当前 public audience，业务写接口继续要求专用密钥。

@@ -8,7 +8,7 @@
   "observability": {"enabled": true},
   "vars": {
     "SITE_ORIGIN": "https://dayday-ai.activecoot128.chatgpt.site",
-    "SCHEDULER_MODE": "probe"
+    "SCHEDULER_MODE": "active"
   },
   "triggers": {"crons": ["0 * * * *", "0 13 * * *"]},
   "workflows": [{"binding": "UPDATES", "name": "dayday-ai-updates", "class_name": "DaydayUpdate"}]
