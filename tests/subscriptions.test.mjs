@@ -47,7 +47,7 @@ test('brief uses the published edition without reselecting or reranking stories'
  const text=briefText(state,'daily');assert.match(text,/Published/);assert.match(text,/2026-10-19/);assert.doesNotMatch(text,/Unpublished|2026-10-20/);
 });
 
-test('daily and half-hour delivery stay independent, drain all parts, respect preferences and never resend',async()=>{
+test('daily and hourly delivery stay independent, drain all parts, respect preferences and never resend',async()=>{
  const sql=new DatabaseSync(':memory:');
  const {readdir}=await import('node:fs/promises');
  for(const file of (await readdir(new URL('../drizzle/',import.meta.url))).filter(x=>x.endsWith('.sql')).sort())sql.exec(await readFile(new URL('../drizzle/'+file,import.meta.url),'utf8'));
@@ -62,7 +62,7 @@ test('daily and half-hour delivery stay independent, drain all parts, respect pr
  globalThis.fetch=async(url,options)=>{if(String(url).startsWith('https://open.feishu.cn/')){sent.push(JSON.parse(options.body).content.text);return Response.json(receipt);}return new Response(xml);};
  const set=(key,value)=>sql.prepare('INSERT INTO settings(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').run(key,JSON.stringify(value));
  const publication=(runId,hot=[],activities=[])=>{const value={runId,publishedAt:new Date().toISOString(),hot,activities};set('nightly_update',{day:runId,phase:'subscriptions'});set('nightly_publication',value);globalThis.__subscriptionsPublication=value;};
- let pollTime=new Date();
+ let pollTime=new Date();pollTime.setUTCMinutes(0,0,0);
  const poll=async()=>{for(let i=0;i<100;i++){const r=await store.runEpisodeJob(pollTime);if(r.complete)return r;assert.equal(r.busy,undefined);}throw Error('episode job did not finish');};
  const run=async()=>{for(let i=0;i<100;i++){const r=await store.runSubscriptionJob();if(r.complete)return;assert.equal(r.blocked,undefined);}throw Error('job did not finish');};
  try{
@@ -78,9 +78,9 @@ test('daily and half-hour delivery stay independent, drain all parts, respect pr
   assert.equal((await store.runSubscriptionJob()).blocked,true);assert.equal(sent.length,0);
   const partial=await store.runEpisodeJob(pollTime);assert.equal(partial.complete,false);
   // An unfinished slot resumes even if the next timer fires before completion.
-  pollTime=new Date(pollTime.getTime()+30*60000);const resumed=await poll();assert.equal(resumed.runId,partial.runId);
+  pollTime=new Date(pollTime.getTime()+60*60000);const resumed=await poll();assert.equal(resumed.runId,partial.runId);
   await poll();assert.equal(sent.length,0,'polling works without nightly publication, but history must not alert');
-  assert.equal((await store.runEpisodeJob(pollTime)).alreadyCompleted,true);
+  assert.equal((await store.runEpisodeJob(new Date(pollTime.getTime()+30*60000))).alreadyCompleted,true,'a second call in the same hour must skip');
   publication('round-1');await run();assert.equal(sent.length,0,'initial history must not alert');
   sql.prepare('UPDATE subscriptions SET followed_at=? WHERE reader_id=?').run(new Date(Date.now()-3600000).toISOString(),a);
   for(let n=0;n<230;n++){
@@ -96,7 +96,7 @@ test('daily and half-hour delivery stay independent, drain all parts, respect pr
   const dailyText=sent.at(-1);
   // Even a blocked nightly pipeline must not delay new episodes.
   set('nightly_update',{day:'round-2',phase:'news'});
-  pollTime=new Date(pollTime.getTime()+30*60000);await poll();
+  pollTime=new Date(pollTime.getTime()+60*60000);await poll();
   assert.equal((await store.subscriptionJobStatus()).episodes.phase,'complete');
   assert.ok(sent.slice(nightlyBefore+1).every(text=>text.includes('我的关注更新')&&!text.includes('今日热点')));
   set('nightly_update',{day:'round-2',phase:'complete'});
@@ -114,9 +114,9 @@ test('daily and half-hour delivery stay independent, drain all parts, respect pr
   const at=new Date(Date.now()-500).toISOString(),latest={...resolved.episodes[0],id:'muted-new',publishedAt:at};
   sql.prepare("INSERT INTO entries(id,kind,source_id,published_at,discovered_at,data) VALUES(?,'episode',?,?,?,?)").run(latest.id,resolved.show.id,at,at,JSON.stringify(latest));
   await store.follow(a,resolved.show.id,true,'off');let quietCount=sent.length;
-  pollTime=new Date(pollTime.getTime()+30*60000);await poll();assert.equal(sent.length,quietCount);
+  pollTime=new Date(pollTime.getTime()+60*60000);await poll();assert.equal(sent.length,quietCount);
   await store.follow(a,resolved.show.id,true,'instant');await store.configure(a,{...defaultReminderPreferences,enabled:true,episodes:false});
-  pollTime=new Date(pollTime.getTime()+30*60000);await poll();assert.equal(sent.length,quietCount);
+  pollTime=new Date(pollTime.getTime()+60*60000);await poll();assert.equal(sent.length,quietCount);
   set('subscription_job_lock',Date.now()+60000);assert.equal((await store.runEpisodeJob(pollTime)).busy,true);assert.equal((await store.runSubscriptionJob()).busy,true);sql.prepare("DELETE FROM settings WHERE key='subscription_job_lock'").run();
   await store.disconnectBot(a);assert.equal((await store.subscriptionState(a)).preferences.enabled,false);
  }finally{globalThis.fetch=originalFetch;deliveryPolicy.minSendIntervalMs=oldDelay;sql.close();delete globalThis.__subscriptionsTestEnv;delete globalThis.__subscriptionsPublication;}

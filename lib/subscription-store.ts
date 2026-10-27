@@ -209,7 +209,7 @@ export async function runSubscriptionJob(){
  }finally{await releaseDeliveryLease(lease);}
 }
 type EpisodeRun={id:string;phase:'shows'|'readers'|'complete';cursor:string;checked:number;failed:number;sent:number;startedAt:string;finishedAt?:string};
-/** One durable run per 30-minute slot. Unfinished runs resume before a new slot starts. */
+/** One durable run per hourly slot. Unfinished runs resume before a new slot starts. */
 export async function runEpisodeJob(date=new Date()){
  const slot=new Date(Math.floor(date.getTime()/(deliveryPolicy.episodePollMinutes*60000))*deliveryPolicy.episodePollMinutes*60000).toISOString();
  const lease=await acquireDeliveryLease();if(!lease)return {busy:true,complete:false};
